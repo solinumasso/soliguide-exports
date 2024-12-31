@@ -39,7 +39,7 @@ export type CategorySelectorController = {
   navigateToDetail(categoryId: Categories): void;
   navigateBack(): void;
   selectCategory(categoryId: Categories): void;
-  init(): void;
+  init(categorySelected: string | null): void;
 };
 
 export type CategoryBrowserController = {
