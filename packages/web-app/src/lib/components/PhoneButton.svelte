@@ -18,25 +18,24 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { createEventDispatcher, getContext } from 'svelte';
-  import Phone from 'svelte-google-materialdesign-icons/Phone.svelte';
+  import PhoneIcon from 'svelte-google-materialdesign-icons/Phone.svelte';
   import { writable } from 'svelte/store';
   import { Button, ButtonLink } from '@soliguide/design-system';
   import { parsePhoneNumber } from '@soliguide/common';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
   import { THEME_CTX_KEY } from '$lib/theme';
+  import type { Phone } from '$lib/models/types';
+  import type { ThemeDefinition } from '$lib/theme/types';
+  import type { I18nStore } from '$lib/client/types';
 
-  /** @type {import('$lib/models/types').Phone[]} */
-  export let phones = [];
+  export let phones: Phone[] = [];
 
-  /** @type {'primaryFill' | 'neutralOutlined'} */
-  export let type = 'primaryFill';
+  export let type: 'primaryFill' | 'neutralOutlined' = 'primaryFill';
 
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
+  const theme: ThemeDefinition = getContext(THEME_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
 
   const dispatch = createEventDispatcher();
 
@@ -58,12 +57,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       dispatch('click', event);
     }}
   >
-    <Phone variation="filled" slot="icon" />
+    <PhoneIcon variation="filled" slot="icon" />
     {$i18n.t('TO_CALL')}
   </ButtonLink>
 {:else}
   <Button size="small" aria-disabled="true" title={$i18n.t('TO_CALL')} disabled>
-    <Phone variation="filled" slot="icon" />
+    <PhoneIcon variation="filled" slot="icon" />
     {$i18n.t('TO_CALL')}
   </Button>
 {/if}

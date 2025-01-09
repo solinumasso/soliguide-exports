@@ -18,7 +18,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import {
     BabyParcel,
     MedicalServices,
@@ -92,25 +92,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     CarPooling,
     JobCoaching,
     Toilets,
-    SharedKitchen
+    SharedKitchen,
+    type types as DSTypes
   } from '@soliguide/design-system';
   import { Categories } from '@soliguide/common';
+  import type { ComponentType, SvelteComponent } from 'svelte';
 
-  /**
-   * @typedef {import('svelte').ComponentType} ComponentType
-   */
+  export let categoryId: Categories;
 
-  /** @type {Categories} */
-  export let categoryId;
-
-  /** @type {"outlined" | "filled"} */
-  export let variation = 'outlined';
+  export let variation: DSTypes.VariationType = 'outlined';
 
   /**
    * Mapping of categories to their corresponding icons
-   * @type {Record<Categories, ComponentType>}
    */
-  const iconMapping = {
+  const iconMapping: Record<Categories, ComponentType<SvelteComponent>> = {
     // Health Categories
     [Categories.HEALTH]: MedicalServices,
     [Categories.ADDICTION]: SmokeFree,

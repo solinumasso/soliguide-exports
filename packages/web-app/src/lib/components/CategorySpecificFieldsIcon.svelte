@@ -18,7 +18,8 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
+  import type { CategoriesSpecificFields } from '@soliguide/common';
   import {
     DinnerDining,
     SetMeal,
@@ -37,25 +38,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     CleanHands,
     Badge,
     Blind,
-    SportsFootball
+    SportsFootball,
+    type types as DSTypes
   } from '@soliguide/design-system';
+  import type { ComponentType, SvelteComponent } from 'svelte';
 
-  /**
-   * @typedef {import('@soliguide/common').CategoriesSpecificFields} CategoriesSpecificFields
-   * @typedef {import('svelte').ComponentType} ComponentType
-   */
+  export let categorySpecificFields: keyof CategoriesSpecificFields;
 
-  /** @type {keyof CategoriesSpecificFields}*/
-  export let categorySpecificFields;
-
-  /** @type {"outlined" | "filled"} */
-  export let variation = 'outlined';
+  export let variation: DSTypes.VariationType = 'outlined';
 
   /**
    * Mapping of category specific fields to their corresponding icons
-   * @type {Object<keyof CategoriesSpecificFields, ComponentType>}
    */
-  const iconMapping = {
+  const iconMapping: Record<keyof CategoriesSpecificFields, ComponentType<SvelteComponent>> = {
     activityName: SportsFootball,
     availableEquipmentPrecisions: Countertops,
     availableEquipmentType: Countertops,
@@ -66,7 +61,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     dietaryAdaptationsType: SetMeal,
     dietaryRegimesType: SetMeal,
     domiciliationType: Badge,
-    foodProductDegreeOfChoice: ThermostatAuto,
     foodProductType: ShoppingCart,
     otherProductTypePrecisions: ShoppingCart,
     hygieneProductType: CleanHands,

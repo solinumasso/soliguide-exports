@@ -18,19 +18,19 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { Text } from '@soliguide/design-system';
   import Block from 'svelte-google-materialdesign-icons/Block.svelte';
   import { formatDateRangeToLocale } from '$lib/client';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
   import { getContext } from 'svelte';
   import { page } from '$app/stores';
+  import type { I18nStore } from '$lib/client/types';
+  import type { DaysRange } from '$lib/models/types';
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
 
-  /**  @type {import('$lib/models/types').DaysRange}  */
-  export let closingRange;
+  export let closingRange: DaysRange;
 
   $: formatedContent = formatDateRangeToLocale(closingRange, $page.params.lang);
 </script>

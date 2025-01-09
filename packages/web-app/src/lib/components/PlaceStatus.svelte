@@ -18,22 +18,18 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { getContext } from 'svelte';
-  import { Tag } from '@soliguide/design-system';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+  import { Tag, type types as DSTypes } from '@soliguide/design-system';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
+  import type { PlaceOpeningStatus } from '@soliguide/common';
+  import type { I18nStore } from '$lib/client/types';
 
-  /** @type {import('@soliguide/common').PlaceOpeningStatus} */
-  export let status;
+  export let status: PlaceOpeningStatus;
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
 
-  /**
-   * @param state {import('@soliguide/common').PlaceOpeningStatus}
-   * @returns {import('@soliguide/design-system').types.TagVariant}}
-   */
-  const getTagVariant = (state) => {
+  const getTagVariant = (state: PlaceOpeningStatus): DSTypes.TagVariant => {
     switch (state) {
       case 'open':
         return 'success';
@@ -47,11 +43,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     }
   };
 
-  /**
-   * @param state {import('@soliguide/common').PlaceOpeningStatus}
-   * @returns {string}
-   */
-  const getTagLabel = (state) => {
+  const getTagLabel = (state: PlaceOpeningStatus): string => {
     switch (state) {
       case 'open':
         return $i18n.t('OPENED');

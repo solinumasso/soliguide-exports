@@ -18,20 +18,19 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { createEventDispatcher, getContext } from 'svelte';
   import { Modal, Text, Link, ToggleSwitch, Button } from '@soliguide/design-system';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
   import { setZDCookieConsent } from '$lib/client';
-  import { COOKIE_CTX_KEY } from '$lib/client/cookie.js';
+  import { COOKIE_CTX_KEY } from '$lib/client/cookie';
+  import type { CookieConsentStore, I18nStore } from '$lib/client/types';
 
-  export let cookiePolicyLink;
-  export let zendeskChatbotLink;
+  export let cookiePolicyLink: string;
+  export let zendeskChatbotLink: string;
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
-  /** @type {import('$lib/client/types').CookieConsentStore} */
-  const cookieStore = getContext(COOKIE_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
+  const cookieStore: CookieConsentStore = getContext(COOKIE_CTX_KEY);
 
   const dispatch = createEventDispatcher();
   let cookiesEnabled = $cookieStore;
