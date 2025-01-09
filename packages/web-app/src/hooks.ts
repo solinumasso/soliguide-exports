@@ -18,15 +18,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/**
- * Generate random id
- * @returns {string}
- */
-const generateId = () => {
-  if (typeof crypto?.randomUUID === 'function') {
-    return crypto.randomUUID();
-  }
-  return Math.random().toString(36).substring(7);
-};
 
-export { generateId };
+import type { HandleFetch } from '@sveltejs/kit';
+
+/**
+ * Add headers to each request
+ */
+export const handleFetch: HandleFetch = ({ event, request, fetch }) => {
+  request.headers.append('Content-Type', 'application/json');
+  request.headers.append('Origin', event.url.origin);
+  request.headers.append('Referer', event.url.href);
+  return fetch(request);
+};

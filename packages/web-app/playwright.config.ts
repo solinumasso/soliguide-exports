@@ -18,16 +18,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-// See https://kit.svelte.dev/docs/types#app
-// for information about these interfaces
-declare global {
-  namespace App {
-    // interface Error {}
-    // interface Locals {}
-    // interface PageData {}
-    // interface PageState {}
-    // interface Platform {}
-  }
-}
+import type { PlaywrightTestConfig } from '@playwright/test';
 
-export {};
+const config: PlaywrightTestConfig = {
+  webServer: {
+    command: 'npm run build && npm run preview',
+    port: 4173
+  },
+  testDir: 'web-tests',
+  testMatch: /(?<a>.+\.)?(?<b>spec)\.ts/u
+};
+
+export default config;

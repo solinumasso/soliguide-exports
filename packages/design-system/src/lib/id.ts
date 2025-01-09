@@ -19,11 +19,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /**
- * Add headers to each request
- * @type {import('@sveltejs/kit').HandleFetch} */
-export const handleFetch = ({ event, request, fetch }) => {
-  request.headers.append('Content-Type', 'application/json');
-  request.headers.append('Origin', event.url.origin);
-  request.headers.append('Referer', event.url.href);
-  return fetch(request);
+ * Generate random id
+ */
+const generateId = (): string => {
+  if (typeof crypto?.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return Math.random().toString(36).substring(7);
 };
+
+export { generateId };

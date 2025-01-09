@@ -27,6 +27,8 @@ export default defineConfig({
     coverage: {
       reporter: ['text', 'json', 'html', 'cobertura'],
       include: ['src/**/*']
-    }
+    },
+    include: ['src/**/*.spec.ts'],
+    exclude: ['web-tests/**/*.spec.ts']
   }
 });

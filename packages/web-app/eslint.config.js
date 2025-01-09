@@ -23,13 +23,24 @@ import svelte from 'eslint-plugin-svelte';
 import prettier from 'eslint-config-prettier';
 import globals from 'globals';
 import fp from 'eslint-plugin-fp';
+import { fileURLToPath } from 'node:url';
+import { includeIgnoreFile } from '@eslint/compat';
+import tseslint from 'typescript-eslint';
+import svelteParser from 'svelte-eslint-parser';
 
-/** @type {import('eslint').Linter.FlatConfig[]} */
-export default [
+const gitignorePath = fileURLToPath(new URL('./.gitignore', import.meta.url));
+
+export default tseslint.config(
+  includeIgnoreFile(gitignorePath),
+  {
+    ignores: ['dist/']
+  },
   js.configs.all,
   ...svelte.configs['flat/recommended'],
   prettier,
   ...svelte.configs['flat/prettier'],
+  tseslint.configs.recommended,
+  tseslint.configs.stylistic,
   {
     plugins: { fp },
     rules: {
@@ -70,11 +81,36 @@ export default [
     }
   },
   {
-    // + Allow mutations in test files
-    files: ['**/*.svelte', '**/*.spec.js'],
+    files: ['**/*.svelte'],
+    languageOptions: {
+      parser: svelteParser,
+      parserOptions: {
+        parser: {
+          // Specify a parser for each lang.
+          ts: tseslint.parser,
+          js: 'espree',
+          typescript: tseslint.parser
+        },
+        extraFileExtensions: ['.svelte'],
+        tsconfigRootDir: '.svelte-kit/'
+      }
+    },
     rules: {
-      'fp/no-mutation': 'off', // Need mutations for reactive variables
-      'fp/no-let': 'off' // Need let variables for props
+      'fp/no-mutation': 'off',
+      'fp/no-let': 'off',
+      // otherwise it consider variables in types as unused
+      // e.g. {[key of MyType]: string} which is valid but in fact the key is not used
+      'no-unused-vars': 'off'
+    }
+  },
+  {
+    files: ['**/*.spec.ts'],
+    rules: {
+      'fp/no-mutation': 'off',
+      'fp/no-let': 'off',
+      // otherwise it consider variables in types as unused
+      // e.g. {[key of MyType]: string} which is valid but in fact the key is not used
+      'no-unused-vars': 'off'
     }
   },
   {
@@ -88,4 +124,4 @@ export default [
   {
     ignores: ['build/', '.svelte-kit/', 'dist/', 'coverage/']
   }
-];
+);

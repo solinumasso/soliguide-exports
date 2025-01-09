@@ -22,5 +22,5 @@ import { AutoComplete } from "../interfaces/AutoComplete.interface";
 
 export type SearchAutoCompleteSuggestion = Pick<
   AutoComplete,
-  "categoryId" | "expressionId" | "seo"
+  "categoryId" | "expressionId" | "label" | "seo"
 >;
