@@ -18,9 +18,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { locationService, categoryService } from '$lib/services';
-import { getSearchPageController } from './pageController.js';
+import type { PosthogCaptureFunction } from '$lib/services/types';
 
-// expose controller instance with default services
-const pageController = getSearchPageController(locationService, categoryService);
-export default pageController;
+export interface HomePageController {
+  captureEvent: PosthogCaptureFunction;
+}

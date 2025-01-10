@@ -18,7 +18,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { getContext } from 'svelte';
   import Email from 'svelte-google-materialdesign-icons/Mail.svelte';
   import Public from 'svelte-google-materialdesign-icons/Public.svelte';
@@ -30,22 +30,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   import { THEME_CTX_KEY } from '$lib/theme';
   import { parsePhoneNumber } from '@soliguide/common';
   import { getPlaceDetailsPageController } from '../pageController';
+  import type { Phone as PhoneType } from '$lib/models/types';
+  import type { I18nStore } from '$lib/client/types';
+  import type { ThemeDefinition } from '$lib/theme/types';
 
-  /** @type {import('$lib/models/types').Phone[]} */
-  export let phones;
-  /** @type {string} */
-  export let website;
-  /** @type {string} */
-  export let instagram;
-  /** @type {string} */
-  export let facebook;
-  /** @type {string} */
-  export let email;
+  export let phones: PhoneType[];
+  export let website: string;
+  export let instagram: string;
+  export let facebook: string;
+  export let email: string;
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
+  const theme: ThemeDefinition = getContext(THEME_CTX_KEY);
 
   const placeController = getPlaceDetailsPageController();
   const currentCountry = theme.country;

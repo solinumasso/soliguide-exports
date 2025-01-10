@@ -18,26 +18,31 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { json } from '@sveltejs/kit';
-import getPlaceDetailsService from '$lib/server/services/placesService.js';
-import { getHeaders } from '$lib/server/services/headers.js';
+import { json, type RequestEvent } from '@sveltejs/kit';
+import getSearchService from '$lib/server/services/placesService';
+import { getDistanceFromGeoType } from '$lib/models/locationSuggestion';
+import { getHeaders } from '$lib/server/services/headers';
 
 /**
  * Get headers from a request event
- * @param requestEvent {import('@sveltejs/kit').RequestEvent}
- * @returns {Promise<Response>}
  */
-export const POST = async (requestEvent) => {
-  const { identifier, lang } = requestEvent.params;
+export const POST = async (requestEvent: RequestEvent): Promise<Response> => {
+  const { location, category, coordinates, type, options } = await requestEvent.request.json();
+  const { lang } = requestEvent.params;
 
   const headers = getHeaders(requestEvent);
 
-  const placeDetailService = getPlaceDetailsService();
-  const result = await placeDetailService.placeDetails(
-    /**  @type {import('$lib/server/services/types').PlaceDetailsParams} */ ({
-      lang,
-      identifier
-    }),
+  const searchService = getSearchService();
+  const result = await searchService.search(
+    {
+      lang: lang ?? '',
+      location,
+      category,
+      coordinates,
+      type,
+      distance: getDistanceFromGeoType(type),
+      options
+    },
     headers
   );
 

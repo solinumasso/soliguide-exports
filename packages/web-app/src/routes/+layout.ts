@@ -23,7 +23,6 @@ import { isLangValid, isLanguageSelected, getCurrentLangInStorage, getRoutes } f
 import { browser } from '$app/environment';
 import { resolveTheme } from '$lib/theme';
 
-/** @type {import('./$types').LayoutLoad} */
 export const load = ({ route, params, url }) => {
   const theme = resolveTheme(url.origin);
   if (!theme) {

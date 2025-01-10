@@ -19,27 +19,24 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<script>
+<script lang="ts">
   import { getContext, onMount, onDestroy } from 'svelte';
   import { goto, beforeNavigate, afterNavigate } from '$app/navigation';
   import { ROUTES_CTX_KEY } from '$lib/client';
   import { zendeskService } from '$lib/services';
-  import { COOKIE_CTX_KEY } from '$lib/client/cookie.js';
-  import { THEME_CTX_KEY } from '$lib/theme/index.js';
+  import { COOKIE_CTX_KEY } from '$lib/client/cookie';
+  import { THEME_CTX_KEY } from '$lib/theme/index';
+  import type { ThemeDefinition } from '$lib/theme/types';
+  import type { CookieConsentStore, RoutingStore } from '$lib/client/types';
 
-  /** @type {import('$lib/client/types').RoutingStore} */
-  const routes = getContext(ROUTES_CTX_KEY);
-  /** @type {import('$lib/client/types').CookieConsentStore} */
-  const cookieConsent = getContext(COOKIE_CTX_KEY);
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
+  const routes: RoutingStore = getContext(ROUTES_CTX_KEY);
+  const cookieConsent: CookieConsentStore = getContext(COOKIE_CTX_KEY);
+  const theme: ThemeDefinition = getContext(THEME_CTX_KEY);
 
   $: useChat = !!theme.chatWebsiteId;
 
-  /** @type {string} */
-  let previousPage;
-  /** @type {string} */
-  let nextPage;
+  let previousPage: string;
+  let nextPage: string;
 
   beforeNavigate((beforeData) => {
     // Used when we navigate via the menu (large screens)

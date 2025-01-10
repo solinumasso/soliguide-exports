@@ -23,16 +23,11 @@ import { ALL_SUPPORTED_LANGUAGES_NAME, SupportedLanguagesCode } from '@soliguide
 import { EsCt, Fr, Gb, Es, Ir, Ge, Af, Ro, Ru, Ua, Xx } from 'svelte-circle-flags';
 import { posthogService } from '$lib/services/posthogService';
 import ArabicLanguage from './ArabicLanguage.svelte';
+import type { LanguageOption, LanguagePageController, PageState } from './types';
+import type { ComponentType, SvelteComponent } from 'svelte';
+import type { PosthogCaptureFunction } from '$lib/services/types';
 
-/**
- * @typedef {import('./types').LanguageOption} LanguageOption
- * @typedef {import('./types').PageState} PageState
- * @typedef {import('./types').LanguagePageController} LanguagePageController
- * @typedef {import('$lib/services/types').PosthogProperties} PosthogProperties
- */
-
-/** @type {Record<SupportedLanguagesCode, any>} */
-const flagsMap = {
+const flagsMap: Record<SupportedLanguagesCode, ComponentType<SvelteComponent>> = {
   [SupportedLanguagesCode.FR]: Fr,
   [SupportedLanguagesCode.AR]: ArabicLanguage,
   [SupportedLanguagesCode.CA]: EsCt,
@@ -46,8 +41,7 @@ const flagsMap = {
   [SupportedLanguagesCode.UK]: Ua
 };
 
-/** @type {PageState} */
-const initialState = {
+const initialState: PageState = {
   availableLanguages: [],
   selectedLanguage: null,
   canSubmit: false
@@ -58,13 +52,13 @@ const initialState = {
  * We show only languages supported by the theme
  * They follow the order of theme's supporter languages,
  * with theme's default language in first place
- * @param supportedLanguages {SupportedLanguagesCode[]}
- * @param defaultLanguage {SupportedLanguagesCode}
- * @returns {LanguageOption[]}
  */
-const buildAvailableOptions = (supportedLanguages, defaultLanguage) => {
+const buildAvailableOptions = (
+  supportedLanguages: SupportedLanguagesCode[],
+  defaultLanguage: SupportedLanguagesCode
+): LanguageOption[] => {
   return supportedLanguages
-    .map((/** @type {SupportedLanguagesCode} */ supportedLanguage) => {
+    .map((supportedLanguage): LanguageOption => {
       if (!flagsMap[supportedLanguage]) {
         console.warn('Flag has not been found for lang', supportedLanguage);
       }
@@ -75,21 +69,19 @@ const buildAvailableOptions = (supportedLanguages, defaultLanguage) => {
       };
     })
     .filter((item) => !!item)
-    .reduce((acc, lang) => {
+    .reduce((acc: LanguageOption[], lang: LanguageOption) => {
       // Put theme's defaultLanguage in first place
       return lang.code === defaultLanguage ? [lang, ...acc] : [...acc, lang];
-    }, /** @type {LanguageOption[]} */ ([]));
+    }, []);
 };
 
-/**
- * @returns {LanguagePageController}
- */
-export const getController = () => {
-  /** @type { import('svelte/store').Writable<PageState>} */
+export const getController = (): LanguagePageController => {
   const myPageStore = writable(initialState);
 
-  /** @type {import('./types').LanguagePageController['init']} */
-  const init = (supportedLanguages, defaultLanguage) => {
+  const init = (
+    supportedLanguages: SupportedLanguagesCode[],
+    defaultLanguage: SupportedLanguagesCode
+  ) => {
     myPageStore.set({
       ...initialState,
       availableLanguages: buildAvailableOptions(supportedLanguages, defaultLanguage)
@@ -98,25 +90,22 @@ export const getController = () => {
 
   /**
    * Change selected language. If a lang is selected again, it becomes unselected
-   * @param lang {SupportedLanguagesCode}
    */
-  const changeSelection = (lang) => {
-    myPageStore.update((oldState) => {
+  const changeSelection = (lang: SupportedLanguagesCode) => {
+    myPageStore.update((oldState): PageState => {
       const newLang = oldState.selectedLanguage === lang ? null : lang;
-      return /** @type {PageState} */ ({
+      return {
         ...oldState,
         selectedLanguage: newLang,
         canSubmit: !!newLang
-      });
+      };
     });
   };
 
   /**
    * Capture an event with a prefix for route context
-   * @param {string} eventName The name of the event to capture
-   * @param {PosthogProperties} [properties] Optional properties to include with the event
    */
-  const captureEvent = (eventName, properties) => {
+  const captureEvent: PosthogCaptureFunction = (eventName, properties) => {
     posthogService.capture(`languages-${eventName}`, properties);
   };
 

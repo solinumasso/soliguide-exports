@@ -18,7 +18,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { getContext } from 'svelte';
   import ScreenSearchDesktop from 'svelte-google-materialdesign-icons/Screen_search_desktop.svelte';
   import Transcribe from 'svelte-google-materialdesign-icons/Transcribe.svelte';
@@ -31,17 +31,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   import { CookieModal } from '$lib/components';
   import ColoredCard from './ColoredCard.svelte';
   import { Text, BasicCard, ListItem } from '@soliguide/design-system';
-  import { getPageController } from './pageController.js';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+  import { getPageController } from './pageController';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
   import { THEME_CTX_KEY } from '$lib/theme';
-  import { ROUTES_CTX_KEY } from '$lib/client/index.js';
+  import { ROUTES_CTX_KEY } from '$lib/client/index';
+  import type { I18nStore, RoutingStore } from '$lib/client/types';
+  import type { ThemeDefinition } from '$lib/theme/types';
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
-  /** @type {import('$lib/client/types').RoutingStore} */
-  const routes = getContext(ROUTES_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
+  const theme: ThemeDefinition = getContext(THEME_CTX_KEY);
+  const routes: RoutingStore = getContext(ROUTES_CTX_KEY);
 
   const links = {
     fichesPratiquesLink: theme.links.fichesPratiques,
@@ -61,11 +60,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     console.log('Open cookie dialog');
     pageState.openCookieModal();
   };
-  /**
-   *
-   * @param url {string}
-   */
-  const navigateToExternal = (url) => {
+
+  const navigateToExternal = (url: string) => {
     window.open(url, '_blank');
   };
 </script>

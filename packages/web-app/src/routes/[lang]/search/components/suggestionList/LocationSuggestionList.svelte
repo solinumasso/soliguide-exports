@@ -18,19 +18,19 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { createEventDispatcher, getContext } from 'svelte';
   import PinDrop from 'svelte-google-materialdesign-icons/Pin_drop.svelte';
   import { Text, ListItem, AppIcon, PageLoader } from '@soliguide/design-system';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
   import { capitalize } from '@soliguide/common';
+  import type { LocationSuggestion } from '$lib/models/locationSuggestion';
+  import type { I18nStore } from '$lib/client/types';
 
-  /** @type {import('$lib/models/types').LocationSuggestion[]} */
-  export let items = [];
+  export let items: LocationSuggestion[] = [];
   export let loading = false;
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
   const dispatch = createEventDispatcher();
 </script>
 

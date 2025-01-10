@@ -18,29 +18,25 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { Text } from '@soliguide/design-system';
   import { PhoneButton, PlaceStatus, TodayInfo } from '$lib/components';
   import GoToButton from './GoToButton.svelte';
   import { getPlaceDetailsPageController } from '../pageController';
+  import type { Phone, TodayInfo as TodayInfoType } from '$lib/models/types';
+  import type { PlaceOpeningStatus } from '@soliguide/common';
 
-  /** @type {import('$lib/models/types').TodayInfo} */
-  export let todayInfo = {};
+  export let todayInfo: TodayInfoType = {};
 
-  /** @type {string} */
-  export let name;
+  export let name: string;
 
-  /** @type {import('@soliguide/common').PlaceOpeningStatus} */
-  export let status;
+  export let status: PlaceOpeningStatus;
 
-  /** @type {import('$lib/models/types').Phone[]} */
-  export let phones;
+  export let phones: Phone[];
 
-  /** @type {string} */
-  export let address;
+  export let address: string;
 
-  /** @type {boolean} */
-  export let onOrientation;
+  export let onOrientation: boolean;
 
   const placeController = getPlaceDetailsPageController();
 </script>

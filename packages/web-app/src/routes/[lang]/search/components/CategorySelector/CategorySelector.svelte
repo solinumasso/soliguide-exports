@@ -18,26 +18,24 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { createEventDispatcher, getContext } from 'svelte';
-  import {
-    categoryBrowserState,
-    getCategorySelectorController
-  } from './CategorySelectorController.js';
-  import getCategoryService from '$lib/services/categoryService.js';
+  import { getCategorySelectorController } from './CategorySelectorController';
+  import getCategoryService from '$lib/services/categoryService';
   import { THEME_CTX_KEY } from '$lib/theme';
   import CategoryButton from './CategoryButton.svelte';
   import CategoryBrowser from './CategoryBrowser.svelte';
+  import type { ThemeDefinition } from '$lib/theme/types';
+  import type { Categories } from '@soliguide/common';
+  import { CategoryBrowserState } from './types';
 
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
+  const theme: ThemeDefinition = getContext(THEME_CTX_KEY);
   const pageStore = getCategorySelectorController(getCategoryService(theme.name));
   const dispatch = createEventDispatcher();
 
   pageStore.init();
 
-  /** @type {(category: import('@soliguide/common').Categories) => void} */
-  const selectCategory = (category) => {
+  const selectCategory = (category: Categories): void => {
     pageStore.selectCategory(category);
     dispatch('selectCategory', category);
   };
@@ -50,7 +48,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <CategoryButton on:click={() => pageStore.openCategoryBrowser()} />
 </div>
 
-{#if $pageStore.browserState !== categoryBrowserState.CLOSED}
+{#if $pageStore.browserState !== CategoryBrowserState.CLOSED}
   <CategoryBrowser
     state={$pageStore.browserState}
     categories={$pageStore.categories}

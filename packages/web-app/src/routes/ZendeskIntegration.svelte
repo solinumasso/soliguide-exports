@@ -18,21 +18,20 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { getContext } from 'svelte';
-  import { THEME_CTX_KEY } from '$lib/theme/index.js';
-  import { ROUTES_CTX_KEY } from '$lib/client/index.js';
+  import { THEME_CTX_KEY } from '$lib/theme/index';
+  import { ROUTES_CTX_KEY } from '$lib/client/index';
   import { zendeskService } from '$lib/services';
   import { beforeNavigate, goto } from '$app/navigation';
-  import { COOKIE_CTX_KEY } from '$lib/client/cookie.js';
+  import { COOKIE_CTX_KEY } from '$lib/client/cookie';
   import { CookieModal } from '$lib/components';
+  import type { ThemeDefinition } from '$lib/theme/types';
+  import type { CookieConsentStore, RoutingStore } from '$lib/client/types';
 
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
-  /** @type {import('$lib/client/types').RoutingStore} */
-  const routes = getContext(ROUTES_CTX_KEY);
-  /** @type {import('$lib/client/types').CookieConsentStore} */
-  const cookieConsent = getContext(COOKIE_CTX_KEY);
+  const theme: ThemeDefinition = getContext(THEME_CTX_KEY);
+  const routes: RoutingStore = getContext(ROUTES_CTX_KEY);
+  const cookieConsent: CookieConsentStore = getContext(COOKIE_CTX_KEY);
 
   let ready = false;
   let showCookieModal = false;

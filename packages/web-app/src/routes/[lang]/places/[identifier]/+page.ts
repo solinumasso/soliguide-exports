@@ -19,21 +19,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { wrapSveltekitFetch } from '$lib/client';
-import getPlacesService from '$lib/services/placesService.js';
+import type { PlaceDetails } from '$lib/models/types';
+import getPlacesService from '$lib/services/placesService';
+import type { PlaceDetailsParams } from '$lib/services/types';
 
-/** @type {import('./$types').PageLoad} */
-export const load = ({ params, fetch }) => {
+export const load = ({ params, fetch }): Promise<PlaceDetails> => {
   const lang = String(params.lang);
   const identifier = String(params.identifier);
 
   // Use service with this version of fetch, works with SSR
-  const sveltekitFetchImpl = wrapSveltekitFetch(fetch);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const sveltekitFetchImpl = wrapSveltekitFetch<any>(fetch);
   const placesService = getPlacesService(sveltekitFetchImpl);
 
-  return placesService.placeDetails(
-    /** @type {{lang:import('@soliguide/common').SupportedLanguagesCode, identifier:string}} */ ({
-      lang,
-      identifier
-    })
-  );
+  return placesService.placeDetails({
+    lang,
+    identifier
+  } as PlaceDetailsParams);
 };

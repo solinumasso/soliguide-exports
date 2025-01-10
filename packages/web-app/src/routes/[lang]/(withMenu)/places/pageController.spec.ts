@@ -26,14 +26,14 @@ import {
   searchParamsMock,
   searchResultMock
 } from '$lib/services/placesService.mock';
-import { fakeFetch } from '$lib/client/index.js';
-import getSearchService from '$lib/services/placesService.js';
+import { fakeFetch } from '$lib/client/index';
+import getSearchService from '$lib/services/placesService';
 import { posthogService } from '$lib/services/posthogService';
+import type { GetSearchResultPageController } from './types';
 
 describe('ListPageController', () => {
-  /** @type {import('./types').GetSearchResultPageController} */
   // skipcq: JS-0119
-  let pageState;
+  let pageState: GetSearchResultPageController;
 
   beforeEach(() => {
     pageState = getSearchResultPageController(fakePlacesService());

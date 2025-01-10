@@ -19,16 +19,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { posthogService } from '$lib/services/posthogService';
+import { type PosthogCaptureFunction } from '$lib/services/types';
 import { writable } from 'svelte/store';
+import type { PageController, PageLinks, PageState } from './types';
 
-/**
- * @typedef {import('./types').PageState} PageState
- * @typedef {import('./types').PageLinks} PageLinks
- * * @typedef {import('$lib/services/types').PosthogProperties} PosthogProperties
- * */
-
-/** @type {PageLinks} */
-const initialLinks = {
+const initialLinks: PageLinks = {
   fichesPratiquesLink: '#',
   solinumSiteLink: '#',
   becomeTranslatorLink: '#',
@@ -41,15 +36,13 @@ const initialLinks = {
 
 /**
  * Avoid null values
- * @type {PageState} */
-const initialState = {
+ */
+const initialState: PageState = {
   ...initialLinks,
   cookieModalOpen: false
 };
 
-/** @type {() => import('./types').PageController} */
-export const getPageController = () => {
-  /** @type { import('svelte/store').Writable<PageState>} */
+export const getPageController = (): PageController => {
   const pageStore = writable(initialState);
 
   const init = (links = initialLinks) => {
@@ -57,23 +50,17 @@ export const getPageController = () => {
   };
 
   const openCookieModal = () => {
-    pageStore.update(
-      (oldValue) => /** @type {PageState} */ ({ ...oldValue, cookieModalOpen: true })
-    );
+    pageStore.update((oldValue): PageState => ({ ...oldValue, cookieModalOpen: true }));
   };
 
   const closeCookieModal = () => {
-    pageStore.update(
-      (oldValue) => /** @type {PageState} */ ({ ...oldValue, cookieModalOpen: false })
-    );
+    pageStore.update((oldValue): PageState => ({ ...oldValue, cookieModalOpen: false }));
   };
 
   /**
    * Capture an event with a prefix for route context
-   * @param {string} eventName The name of the event to capture
-   * @param {PosthogProperties} [properties] Optional properties to include with the event
    */
-  const captureEvent = (eventName, properties) => {
+  const captureEvent: PosthogCaptureFunction = (eventName, properties) => {
     posthogService.capture(`more-options-${eventName}`, properties);
   };
 

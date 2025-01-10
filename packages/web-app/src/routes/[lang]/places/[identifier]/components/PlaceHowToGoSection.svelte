@@ -18,7 +18,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { getContext } from 'svelte';
   import Map from 'svelte-google-materialdesign-icons/Map.svelte';
   // Visibility will be added in V2
@@ -29,17 +29,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   import { getMapLink } from '$lib/client';
   import PlaceDetailsSection from './PlaceDetailsSection.svelte';
   import { getPlaceDetailsPageController } from '../pageController';
+  import type { I18nStore } from '$lib/client/types';
 
-  /**
-   * @type {string}
-   */
-  export let address;
+  export let address: string;
 
-  /** @type {boolean} */
-  export let onOrientation;
-
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
+  export let onOrientation: boolean;
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
   const placeController = getPlaceDetailsPageController();
 
   const gotoLink = () => {

@@ -21,19 +21,17 @@
 import { beforeEach, describe, it, expect } from 'vitest';
 import { get } from 'svelte/store';
 import { Categories, Themes } from '@soliguide/common';
-import { categoryBrowserState, getCategorySelectorController } from './CategorySelectorController';
+import { getCategorySelectorController } from './CategorySelectorController';
 import getCategoryService from '$lib/services/categoryService';
+import { CategoryBrowserState, type CategorySelectorController } from './types';
 
 describe('Category selector widget', () => {
-  /** @type {import('./types').CategorySelectorController} */
   // skipcq: JS-0119
-  let pageState;
+  let pageState: CategorySelectorController;
   const service = getCategoryService(Themes.SOLIGUIDE_FR);
 
   beforeEach(() => {
-    pageState = getCategorySelectorController(
-      /** @type {import('$lib/services/types').CategoryService} */ (service)
-    );
+    pageState = getCategorySelectorController(service);
   });
 
   describe('When the navigator is not open', () => {
@@ -42,19 +40,19 @@ describe('Category selector widget', () => {
     });
 
     it('the navigator is not open', () => {
-      expect(get(pageState).browserState).toEqual(categoryBrowserState.CLOSED);
+      expect(get(pageState).browserState).toEqual(CategoryBrowserState.CLOSED);
     });
 
     it('When we click on ALL button, the navigator is opened and we have the list of root categories', () => {
       pageState.openCategoryBrowser();
-      expect(get(pageState).browserState).toEqual(categoryBrowserState.OPEN_ROOT_CATEGORIES);
+      expect(get(pageState).browserState).toEqual(CategoryBrowserState.OPEN_ROOT_CATEGORIES);
     });
 
     it('If I select a category from a button, it is marked selected', () => {
       const category = Categories.COUNSELING;
       pageState.selectCategory(category);
       expect(get(pageState).selectedCategory).toEqual(category);
-      expect(get(pageState).browserState).toEqual(categoryBrowserState.CLOSED); // was already
+      expect(get(pageState).browserState).toEqual(CategoryBrowserState.CLOSED); // was already
       expect(get(pageState).categories).toEqual([]);
     });
   });
@@ -66,41 +64,41 @@ describe('Category selector widget', () => {
 
     describe('When I want to go back from the topbar (navigate up/back)', () => {
       it('If I navigate from the root categories page, the navigator is closed', () => {
-        expect(get(pageState).browserState).toEqual(categoryBrowserState.OPEN_ROOT_CATEGORIES);
+        expect(get(pageState).browserState).toEqual(CategoryBrowserState.OPEN_ROOT_CATEGORIES);
         pageState.navigateBack();
-        expect(get(pageState).browserState).toEqual(categoryBrowserState.CLOSED);
+        expect(get(pageState).browserState).toEqual(CategoryBrowserState.CLOSED);
       });
 
       it('If I navigate from a category detail page, the browser stays open and the root categories page is displayed', () => {
         const rootCategory = Categories.FOOD;
         const parentCategories = get(pageState).categories;
         pageState.navigateToDetail(rootCategory);
-        expect(get(pageState).browserState).toEqual(categoryBrowserState.OPEN_CATEGORY_DETAIL);
+        expect(get(pageState).browserState).toEqual(CategoryBrowserState.OPEN_CATEGORY_DETAIL);
         expect(get(pageState).parentCategory).toEqual(rootCategory);
         expect(get(pageState).categories).not.toEqual(parentCategories);
         pageState.navigateBack();
-        expect(get(pageState).browserState).toEqual(categoryBrowserState.OPEN_ROOT_CATEGORIES);
+        expect(get(pageState).browserState).toEqual(CategoryBrowserState.OPEN_ROOT_CATEGORIES);
         expect(get(pageState).categories).toEqual(parentCategories);
       });
     });
 
     describe('When I click on a category (navigate down)', () => {
       it('If I navigate from the root categories page, I see a new list of categories', () => {
-        expect(get(pageState).browserState).toEqual(categoryBrowserState.OPEN_ROOT_CATEGORIES);
+        expect(get(pageState).browserState).toEqual(CategoryBrowserState.OPEN_ROOT_CATEGORIES);
         const { categories } = get(pageState);
         const category = Categories.FOOD;
 
         pageState.navigateToDetail(category);
-        expect(get(pageState).browserState).toEqual(categoryBrowserState.OPEN_CATEGORY_DETAIL);
+        expect(get(pageState).browserState).toEqual(CategoryBrowserState.OPEN_CATEGORY_DETAIL);
         expect(get(pageState).categories).not.toEqual(categories);
         expect(get(pageState).parentCategory).toEqual(category);
       });
 
       it('If I navigate from a category detail page, it has no effect', () => {
-        expect(get(pageState).browserState).toEqual(categoryBrowserState.OPEN_ROOT_CATEGORIES);
+        expect(get(pageState).browserState).toEqual(CategoryBrowserState.OPEN_ROOT_CATEGORIES);
 
         pageState.navigateToDetail(Categories.FOOD);
-        expect(get(pageState).browserState).toEqual(categoryBrowserState.OPEN_CATEGORY_DETAIL);
+        expect(get(pageState).browserState).toEqual(CategoryBrowserState.OPEN_CATEGORY_DETAIL);
 
         const category = Categories.COOKING_WORKSHOP;
         const previousState = get(pageState);
@@ -115,7 +113,7 @@ describe('Category selector widget', () => {
         const category = Categories.COOKING_WORKSHOP;
         pageState.selectCategory(category);
         expect(get(pageState).selectedCategory).toEqual(category);
-        expect(get(pageState).browserState).toEqual(categoryBrowserState.CLOSED);
+        expect(get(pageState).browserState).toEqual(CategoryBrowserState.CLOSED);
         expect(get(pageState).categories).toEqual([]);
       });
     });

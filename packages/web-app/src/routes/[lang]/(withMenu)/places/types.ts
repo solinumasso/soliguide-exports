@@ -18,12 +18,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Writable } from 'svelte/store';
-import { SearchResult } from '$lib/models/types';
-import { SearchParams } from '$lib/services/types';
+import type { Writable } from 'svelte/store';
+import type { SearchResult } from '$lib/models/types';
+import type { PosthogCaptureFunction, SearchParams } from '$lib/services/types';
 
 // Similar to SearchPageParams (search page), but all url params are strings
-export type PageParams = {
+export interface PageParams {
   lang: string;
   location: string;
   latitude: string;
@@ -31,9 +31,9 @@ export type PageParams = {
   type: string;
   label: string;
   category: string;
-};
+}
 
-export type PageState = {
+export interface PageState {
   isLoading: boolean;
   initializing: boolean;
   adressLabel: string;
@@ -42,12 +42,12 @@ export type PageState = {
   searchError: string | null;
   hasMorePages: boolean;
   urlParams: PageParams | null;
-};
+}
 
 /** Exposes the state in readonly and functions to act on it */
-export type GetSearchResultPageController = {
+export interface GetSearchResultPageController {
   subscribe: Writable<PageState>['subscribe'];
   init(urlParams: PageParams): void;
   getNextResults(): void;
-  captureEvent(eventName: string, properties?: PosthogProperties): void;
-};
+  captureEvent: PosthogCaptureFunction;
+}

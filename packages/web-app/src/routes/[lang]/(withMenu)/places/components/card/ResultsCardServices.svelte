@@ -18,23 +18,19 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { Text, Badge } from '@soliguide/design-system';
   import { getContext } from 'svelte';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
   import { CategoryIcon } from '$lib/components';
+  import type { I18nStore } from '$lib/client/types';
+  import type { Categories } from '@soliguide/common';
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
 
-  /** @typedef {import('@soliguide/common').Categories[]} CategoriesArray */
-
-  /** @type {CategoriesArray} */
-  export let services;
-  /** @type {CategoriesArray} */
-  let servicesToDisplay;
-  /** @type {CategoriesArray} */
-  let servicesHidden;
+  export let services: Categories[] = [];
+  let servicesToDisplay: Categories[];
+  let servicesHidden: Categories[];
 
   $: {
     servicesToDisplay = services.slice(0, 3);

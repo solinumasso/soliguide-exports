@@ -18,7 +18,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { getContext, onMount, setContext } from 'svelte';
   import { goto } from '$app/navigation';
 
@@ -33,13 +33,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     PlaceContact,
     PlaceServices
   } from './components';
-  import { getPlaceDetailsPageController } from './pageController.js';
-  import { ROUTES_CTX_KEY } from '$lib/client/index.js';
+  import { getPlaceDetailsPageController } from './pageController';
+  import { ROUTES_CTX_KEY } from '$lib/client/index';
+  import type { PageData } from './$types';
+  import type { RoutingStore } from '$lib/client/types';
 
-  /** @type {import('./$types').PageData} */
-  export let data;
+  export let data: PageData;
 
-  /** @type {import('./types').PageController} */
   const pageStore = getPlaceDetailsPageController();
   pageStore.init(data);
 
@@ -49,8 +49,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   let scrolled = false;
 
   onMount(() => {
-    // /** @type {any} */
-    // (window).TallyConfig = {
+    // (window).TallyConfig:any = {
     //   formId: 'waKgXX',
     //   popup: {
     //     width: 340,
@@ -74,8 +73,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     return () => window.removeEventListener('scroll', handleScroll);
   });
 
-  /** @type {import('$lib/client/types').RoutingStore} */
-  const routes = getContext(ROUTES_CTX_KEY);
+  const routes: RoutingStore = getContext(ROUTES_CTX_KEY);
 
   const goBack = () => {
     pageStore.captureEvent('go-back', { fromPlace: $pageStore.placeDetails.id });

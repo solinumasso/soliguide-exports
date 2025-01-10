@@ -18,7 +18,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { page } from '$app/stores';
   import { getContext, setContext } from 'svelte';
   import {
@@ -33,17 +33,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     IconBurgerOn
   } from '@soliguide/design-system';
   import { ROUTES_CTX_KEY } from '$lib/client';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
-  import { THEME_CTX_KEY } from '$lib/theme/index.js';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
+  import { THEME_CTX_KEY } from '$lib/theme/index';
+  import type { I18nStore, RoutingStore } from '$lib/client/types';
+  import type { ThemeDefinition } from '$lib/theme/types';
   import { getHomePageController } from './pageController';
   import { zendeskService } from '$lib/services';
 
-  /** @type {import('$lib/client/types').RoutingStore} */
-  const routes = getContext(ROUTES_CTX_KEY);
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
+  const routes: RoutingStore = getContext(ROUTES_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
+  const theme: ThemeDefinition = getContext(THEME_CTX_KEY);
   const pageStore = getHomePageController();
 
   setContext('CAPTURE_FCTN_CTX_KEY', pageStore.captureEvent);
@@ -97,12 +96,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       route: $routes.ROUTE_MORE_OPTIONS
     }
   ];
-  /**
-   * @param {{ detail: { item: any; }; }} event
-   */
-  const handleMenuClick = (event) => {
+
+  const handleMenuClick = (event: { detail: { item: string } }) => {
     const clickedItem = event.detail.item;
-    pageStore.captureEvent('menu-clicked', { clicked: clickedItem });
+    pageStore.captureEvent('menu-clicked', { clickedItem });
   };
 </script>
 

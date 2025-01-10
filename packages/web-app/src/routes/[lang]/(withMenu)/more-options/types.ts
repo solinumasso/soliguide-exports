@@ -18,13 +18,28 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-export { default as OpeningHoursSection } from './OpeningHoursSection.svelte';
-export { default as PlaceDescriptionSection } from './PlaceDescriptionSection.svelte';
-export { default as PlaceHeader } from './PlaceHeader.svelte';
-export { default as PlaceFooter } from './PlaceFooter.svelte';
-export { default as PlaceInfoSection } from './PlaceInfoSection.svelte';
-export { default as PlaceHowToGoSection } from './PlaceHowToGoSection.svelte';
-export { default as PlaceContact } from './PlaceContact.svelte';
-export { default as PlaceServices } from './PlaceServices.svelte';
-export { default as ServiceHours } from './ServiceHours.svelte';
-export { default as ServiceInfos } from './ServiceInfos.svelte';
+import type { PosthogCaptureFunction } from '$lib/services/types';
+import type { Writable } from 'svelte/store';
+
+export interface PageLinks {
+  fichesPratiquesLink: string;
+  solinumSiteLink: string;
+  becomeTranslatorLink: string;
+  cookiePolicyLink: string;
+  privacyPolicyLink: string;
+  dataProtectionAgreementLink: string;
+  legalNoticeLink: string;
+  termsAndConditionsLink: string;
+}
+
+export interface PageState extends PageLinks {
+  cookieModalOpen: boolean;
+}
+
+export interface PageController {
+  subscribe: Writable<PageState>['subscribe'];
+  init(links: PageLinks): void;
+  openCookieModal(): void;
+  closeCookieModal(): void;
+  captureEvent: PosthogCaptureFunction;
+}

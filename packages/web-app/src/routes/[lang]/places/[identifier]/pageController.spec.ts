@@ -22,9 +22,10 @@ import { describe, expect, it, beforeEach, vi } from 'vitest';
 import { getPlaceDetailsPageController } from './pageController';
 import { PlaceOpeningStatus } from '@soliguide/common';
 import { get } from 'svelte/store';
+import type { PlaceDetails } from '$lib/models/types';
+import type { PageController } from './types';
 
-/** @type import('$lib/models/types').PlaceDetails */
-const defaultState = {
+const defaultState: PlaceDetails = {
   id: 7,
   address: '',
   description: '',
@@ -46,9 +47,8 @@ const defaultState = {
 
 describe('PlaceDetailsPageController', () => {
   const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-  /** @type {import('./types').PageController} */
   // skipcq: JS-0119
-  let pageState;
+  let pageState: PageController;
 
   beforeEach(() => {
     pageState = getPlaceDetailsPageController();

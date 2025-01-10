@@ -18,9 +18,22 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Categories } from '@soliguide/common';
-import { Writable } from 'svelte/store';
+import { posthogService } from '$lib/services/posthogService';
+import type { PosthogCaptureFunction } from '$lib/services/types';
+import type { CategoryBrowserController } from './types';
 
-export type HomePageController = {
-  captureEvent(eventName: string, properties?: PosthogProperties): void;
+/**
+ * Returns an instance of the service
+ */
+export const getCategoryBrowserController = (): CategoryBrowserController => {
+  /**
+   * Capture an event with a prefix for route context
+   */
+  const captureEvent: PosthogCaptureFunction = (eventName, properties) => {
+    posthogService.capture(`search-page-${eventName}`, properties);
+  };
+
+  return {
+    captureEvent
+  };
 };

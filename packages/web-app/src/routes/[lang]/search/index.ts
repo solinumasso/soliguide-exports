@@ -18,29 +18,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/**
- * Shorthands
- * @typedef {import('./types').CategoryBrowserController} CategoryBrowserController
- * @typedef {import('$lib/services/types').PosthogProperties} PosthogProperties
- */
+import { locationService, categoryService } from '$lib/services';
+import { getSearchPageController } from './pageController';
 
-import { posthogService } from '$lib/services/posthogService';
-
-/**
- * Returns an instance of the service
- * @returns {CategoryBrowserController}
- */
-export const getCategoryBrowserController = () => {
-  /**
-   * Capture an event with a prefix for route context
-   * @param {string} eventName The name of the event to capture
-   * @param {PosthogProperties} [properties] Optional properties to include with the event
-   */
-  const captureEvent = (eventName, properties) => {
-    posthogService.capture(`search-page-${eventName}`, properties);
-  };
-
-  return {
-    captureEvent
-  };
-};
+// expose controller instance with default services
+const pageController = getSearchPageController(locationService, categoryService);
+export default pageController;

@@ -19,27 +19,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { writable } from 'svelte/store';
-import { PlaceOpeningStatus, WEEK_DAYS } from '@soliguide/common';
+import { PlaceOpeningStatus, WEEK_DAYS, type DayName } from '@soliguide/common';
+import type { PlaceDetails, PlaceDetailsOpeningHours } from '$lib/models/types';
 import { posthogService } from '$lib/services/posthogService';
+import type { PageController, PageState } from './types';
+import type { PosthogCaptureFunction } from '$lib/services/types';
 
-/**
- * @typedef {import('$lib/services/types').PosthogProperties} PosthogProperties
- */
-
-const getCurrentDay = () => {
-  return new Date().toLocaleString('en-us', { weekday: 'long' }).toLowerCase();
+const getCurrentDay = (): DayName => {
+  return new Date().toLocaleString('en-us', { weekday: 'long' }).toLowerCase() as DayName;
 };
 
-const getCurrentDayIndex = () => {
+const getCurrentDayIndex = (): number => {
   return (new Date().getDay() + 6) % 7;
 };
 
-/**
- *
- * @param {import('$lib/models/types').PlaceDetailsOpeningHours} hours
- * @returns {import('$lib/models/types').PlaceDetailsOpeningHours}
- */
-const reorderedDays = (hours) => {
+const reorderedDays = (hours: PlaceDetailsOpeningHours): PlaceDetailsOpeningHours => {
   const currentDayIndex = getCurrentDayIndex();
   const orderedDays = [...WEEK_DAYS.slice(currentDayIndex), ...WEEK_DAYS.slice(0, currentDayIndex)];
 
@@ -52,8 +46,7 @@ const reorderedDays = (hours) => {
   );
 };
 
-/** @type {Partial<import('./types').PageState>} */
-const initialValue = {
+const initialValue: PageState = {
   placeDetails: {
     // lieu_id 7 does not exist in the database
     id: 7,
@@ -74,29 +67,27 @@ const initialValue = {
     todayInfo: {},
     website: ''
   },
-  error: null
+  error: null,
+  currentDay: getCurrentDay()
 };
 
-/**
- * Capture an event with a prefix for route context
- * @param {string} eventName The name of the event to capture
- * @param {PosthogProperties} [properties] Optional properties to include with the event
- */
-const captureEvent = (eventName, properties) => {
+const captureEvent: PosthogCaptureFunction = (eventName, properties) => {
   posthogService.capture(`place-page-${eventName}`, properties);
 };
 
-export const getPlaceDetailsPageController = () => {
-  const pageStore = writable();
-  /** @type {import('./types').PageController['init']} */
-  const init = (placeData) => {
+export const getPlaceDetailsPageController = (): PageController => {
+  const pageStore = writable(initialValue);
+
+  const init = (placeData: PlaceDetails): void => {
     const { hours } = placeData;
+
     pageStore.set({
       ...initialValue,
       placeDetails: { ...placeData, hours: reorderedDays(hours) },
       currentDay: getCurrentDay()
     });
   };
+
   return {
     subscribe: pageStore.subscribe,
     init,

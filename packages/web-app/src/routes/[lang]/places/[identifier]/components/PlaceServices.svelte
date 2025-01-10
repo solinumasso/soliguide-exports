@@ -18,7 +18,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { getContext } from 'svelte';
   import {
     Accordion,
@@ -28,22 +28,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     Text,
     TextClamper
   } from '@soliguide/design-system';
-
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
   import PlaceDetailsSection from './PlaceDetailsSection.svelte';
   import ServiceHours from './ServiceHours.svelte';
-  import ServiceInfos from './ServiceInfos.svelte';
+  import ServiceInfoSection from './ServiceInfoSection.svelte';
   import { CategoryIcon } from '$lib/components';
   import DOMPurify from 'dompurify';
   import Warning from 'svelte-google-materialdesign-icons/Warning_amber.svelte';
+  import type { Service } from '$lib/models/types';
+  import type { DayName } from '@soliguide/common';
+  import type { I18nStore } from '$lib/client/types';
 
-  /** @type {import('$lib/models/types').Service[]} */
-  export let services;
-  /** @type {import('@soliguide/common').DayName}*/
-  export let currentDay;
+  export let services: Service[];
+  export let currentDay: DayName;
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
 </script>
 
 <PlaceDetailsSection>
@@ -92,7 +91,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                   {/if}
 
                   {#if info.length}
-                    <ServiceInfos {info} />
+                    <ServiceInfoSection {info} />
                   {/if}
 
                   {#if hours}

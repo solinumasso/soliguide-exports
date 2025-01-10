@@ -18,29 +18,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-/**
- * Shorthands
- * @typedef {import('./types').HomePageController} HomePageController
- * @typedef {import('$lib/services/types').PosthogProperties} PosthogProperties
- */
-
+import { beforeEach, describe, it, expect, vitest } from 'vitest';
+import { getHomePageController } from './pageController';
 import { posthogService } from '$lib/services/posthogService';
+import type { HomePageController } from './types';
 
-/**
- * Returns an instance of the service
- * @returns {HomePageController}
- */
-export const getHomePageController = () => {
-  /**
-   * Capture an event with a prefix for route context
-   * @param {string} eventName The name of the event to capture
-   * @param {PosthogProperties} [properties] Optional properties to include with the event
-   */
-  const captureEvent = (eventName, properties) => {
-    posthogService.capture(`homepage-${eventName}`, properties);
-  };
+describe('Home page controller', () => {
+  // skipcq: JS-0119
+  let pageState: HomePageController;
 
-  return {
-    captureEvent
-  };
-};
+  beforeEach(() => {
+    pageState = getHomePageController();
+  });
+
+  describe('Posthog capture events', () => {
+    it('should call the posthogService with good prefix when capturing event', () => {
+      vitest.spyOn(posthogService, 'capture');
+
+      pageState.captureEvent('test', {});
+
+      expect(posthogService.capture).toHaveBeenCalledWith('homepage-test', {});
+    });
+  });
+});

@@ -20,18 +20,11 @@
  */
 import { posthogService } from '$lib/services/posthogService';
 import { writable, get } from 'svelte/store';
+import type { GetSearchResultPageController, PageParams, PageState } from './types';
+import type { PlacesService, PosthogCaptureFunction } from '$lib/services/types';
+import { getErrorValue } from '$lib/ts';
 
-/**
- * Shorthand
- * @typedef {import('./types').PageState} PageState
- * @typedef {import('$lib/models/types').SearchResult} SearchResult
- * @typedef {import('$lib/services/types').SearchParams} SearchParams
- * @typedef {import('$lib/services/types').PosthogProperties} PosthogProperties
- * @typedef {import('@soliguide/common').Categories} Categories
- */
-
-/** @type {PageState} */
-const initialState = {
+const initialState: PageState = {
   isLoading: false,
   initializing: false,
   searchResult: { nbResults: 0, places: [] },
@@ -50,26 +43,21 @@ const initialState = {
   urlParams: null
 };
 
-/**
- * @param searchService {import('$lib/services/types').PlacesService}
- * @returns {import('./types').GetSearchResultPageController}
- */
-export const getSearchResultPageController = (searchService) => {
-  /** @type { import('svelte/store').Writable<PageState>} */
+export const getSearchResultPageController = (
+  searchService: PlacesService
+): GetSearchResultPageController => {
   const myPageStore = writable(initialState);
 
   /**
    * Update seachResult by adding new fetched places
-   * @type {import('./types').GetSearchResultPageController['getNextResults']}
    */
-  const getNextResults = async () => {
+  const getNextResults = async (): Promise<void> => {
     // Set loading to true and increment page
     myPageStore.update(
-      (oldValue) =>
-        /** @type {PageState} */ ({
-          ...oldValue,
-          isLoading: true
-        })
+      (oldValue): PageState => ({
+        ...oldValue,
+        isLoading: true
+      })
     );
 
     // Get the current search in the store
@@ -81,43 +69,45 @@ export const getSearchResultPageController = (searchService) => {
 
       // If no more places to fetch, we notify the store
       myPageStore.update(
-        (oldValue) =>
-          /** @type {PageState} */ ({
-            ...oldValue,
-            hasMorePages: result.places.length > 0,
-            search: { ...oldValue.search, options: newOptions },
-            searchResult: {
-              nbResults: result.nbResults,
-              places: [...oldValue.searchResult.places, ...result.places]
-            }
-          })
+        (oldValue): PageState => ({
+          ...oldValue,
+          hasMorePages: result.places.length > 0,
+          search: { ...oldValue.search, options: newOptions },
+          searchResult: {
+            nbResults: result.nbResults,
+            places: [...oldValue.searchResult.places, ...result.places]
+          }
+        })
       );
-    } catch (/** @type {any} */ error) {
+    } catch (error: unknown) {
       console.log('Error while fetching places', error);
+
+      const errorValue = getErrorValue(error);
+
       myPageStore.update(
-        (oldValue) =>
-          /** @type {PageState} */ ({
-            ...oldValue,
-            searchError: error.message
-          })
+        (oldValue): PageState => ({
+          ...oldValue,
+          searchError:
+            typeof errorValue !== 'string' && errorValue?.message
+              ? errorValue.message
+              : 'SEARCH_ERROR'
+        })
       );
     } finally {
       myPageStore.update(
-        (oldValue) =>
-          /** @type {PageState} */ ({
-            ...oldValue,
-            isLoading: false,
-            initializing: false
-          })
+        (oldValue): PageState => ({
+          ...oldValue,
+          isLoading: false,
+          initializing: false
+        })
       );
     }
   };
 
   /**
    * Init the page with the url params from search page and the search result
-   * @type {import('./types').GetSearchResultPageController['init']}
    */
-  const init = async (urlParams) => {
+  const init = async (urlParams: PageParams): Promise<void> => {
     const { location, category, lang, latitude, longitude, type, label } = urlParams;
 
     if (location && category && lang && latitude && longitude && type && label) {
@@ -141,10 +131,8 @@ export const getSearchResultPageController = (searchService) => {
 
   /**
    * Capture an event with a prefix for route context
-   * @param {string} eventName The name of the event to capture
-   * @param {PosthogProperties} [properties] Optional properties to include with the event
    */
-  const captureEvent = (eventName, properties) => {
+  const captureEvent: PosthogCaptureFunction = (eventName, properties) => {
     posthogService.capture(`search-${eventName}`, properties);
   };
 

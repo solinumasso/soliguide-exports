@@ -19,25 +19,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { beforeEach, describe, it, expect, vitest } from 'vitest';
-import { getHomePageController } from './pageController';
+import { getCategoryBrowserController } from './CategoryBrowserController';
 import { posthogService } from '$lib/services/posthogService';
+import { Categories } from '@soliguide/common';
+import type { CategoryBrowserController } from './types';
 
-describe('Home page controller', () => {
-  /** @type {import('./types').HomePageController} */
+describe('Category browser widget', () => {
   // skipcq: JS-0119
-  let pageState;
+  let pageState: CategoryBrowserController;
 
   beforeEach(() => {
-    pageState = getHomePageController();
+    pageState = getCategoryBrowserController();
   });
 
   describe('Posthog capture events', () => {
     it('should call the posthogService with good prefix when capturing event', () => {
       vitest.spyOn(posthogService, 'capture');
 
-      pageState.captureEvent('test', {});
+      pageState.captureEvent('test', {
+        category: Categories.ACCESS_TO_HOUSING
+      });
 
-      expect(posthogService.capture).toHaveBeenCalledWith('homepage-test', {});
+      expect(posthogService.capture).toHaveBeenCalledWith('search-page-test', {
+        category: Categories.ACCESS_TO_HOUSING
+      });
     });
   });
 });

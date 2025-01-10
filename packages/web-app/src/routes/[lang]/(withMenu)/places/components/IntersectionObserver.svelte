@@ -18,16 +18,14 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { onMount, createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
 
-  /** @type {IntersectionObserver} */
-  let observer;
+  let observer: IntersectionObserver;
 
-  /** @type {HTMLElement | null} */
-  let elementToObserve = null;
+  let elementToObserve: HTMLElement | null = null;
 
   /**
    * Sets up the Intersection Observer
@@ -53,9 +51,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
   /**
    * Updates the element to observe reference
-   * @param {HTMLElement} node
    */
-  const updateElementToObserve = (node) => {
+  const updateElementToObserve = (node: HTMLElement) => {
     if (observer) {
       observer.disconnect();
       observer.observe(node);

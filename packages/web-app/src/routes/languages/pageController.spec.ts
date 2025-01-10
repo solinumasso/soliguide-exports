@@ -21,11 +21,10 @@
 import { describe, it, expect, beforeEach, vitest } from 'vitest';
 import { get } from 'svelte/store';
 import { SUPPORTED_LANGUAGES, SupportedLanguagesCode } from '@soliguide/common';
-import { getController } from './pageController.js';
-import { posthogService } from '$lib/services/posthogService.js';
+import { posthogService } from '$lib/services/posthogService';
+import { getController } from './pageController';
 
 describe('Choose language page', () => {
-  /** @type {import('./types').LanguagePageController} */
   let state = getController();
 
   beforeEach(() => {
@@ -71,11 +70,7 @@ describe('Choose language page', () => {
       SupportedLanguagesCode.PS
     ];
     state.init(supportedLangs1, SupportedLanguagesCode.CA);
-    expect(
-      get(state).availableLanguages.map(
-        (/** @type {import('./types').LanguageOption} */ obj) => obj.code
-      )
-    ).toEqual([
+    expect(get(state).availableLanguages.map((obj) => obj.code)).toEqual([
       SupportedLanguagesCode.CA,
       SupportedLanguagesCode.EN,
       SupportedLanguagesCode.RU,
@@ -90,11 +85,7 @@ describe('Choose language page', () => {
       SupportedLanguagesCode.UK
     ];
     state.init(supportedLanguages2, SupportedLanguagesCode.UK);
-    expect(
-      get(state).availableLanguages.map(
-        (/** @type {import('./types').LanguageOption} */ obj) => obj.code
-      )
-    ).toEqual([
+    expect(get(state).availableLanguages.map((obj) => obj.code)).toEqual([
       SupportedLanguagesCode.UK,
       SupportedLanguagesCode.ES,
       SupportedLanguagesCode.EN,

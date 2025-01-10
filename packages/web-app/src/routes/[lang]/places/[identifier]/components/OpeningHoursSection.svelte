@@ -18,28 +18,25 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { getContext } from 'svelte';
   import { Text } from '@soliguide/design-system';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
   import PlaceDetailsSection from './PlaceDetailsSection.svelte';
   import { formatTimeRangeToLocale } from '$lib/client';
-  import { PlaceOpeningStatus } from '@soliguide/common';
+  import { PlaceOpeningStatus, type DayName } from '@soliguide/common';
+  import type { HoursRange, PlaceDetailsOpeningHours } from '$lib/models/types';
+  import type { I18nStore } from '$lib/client/types';
 
-  /** @type {import('@soliguide/common').PlaceOpeningStatus} */
-  export let status;
+  export let status: PlaceOpeningStatus;
 
-  /** @type  {import('$lib/models/types').PlaceDetailsOpeningHours} */
-  export let openHours = {};
+  export let openHours: PlaceDetailsOpeningHours = {};
 
-  /** @type {import('@soliguide/common').DayName} */
-  export let currentDay;
+  export let currentDay: DayName;
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
 
-  /** @param  {import('$lib/models/types').HoursRange[]} hours */
-  const convertHours = (hours) =>
+  const convertHours = (hours: HoursRange[]) =>
     formatTimeRangeToLocale(hours)
       .map((range) => `${$i18n.t('OPENING_RANGE', { start: range.start, end: range.end })}`)
       .join(' - ');

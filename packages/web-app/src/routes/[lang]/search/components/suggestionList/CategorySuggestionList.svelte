@@ -18,18 +18,18 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { createEventDispatcher, getContext } from 'svelte';
   import { Text, ListItem, PageLoader } from '@soliguide/design-system';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
   import { CategoryIcon } from '$lib/components';
+  import type { Categories } from '@soliguide/common';
+  import type { I18nStore } from '$lib/client/types';
 
-  /** @type {import('$lib/models/types').CategorySuggestion[]} */
-  export let items = [];
+  export let items: Categories[] = [];
   export let loading = false;
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
   const dispatch = createEventDispatcher();
 </script>
 

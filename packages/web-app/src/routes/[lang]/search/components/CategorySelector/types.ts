@@ -19,29 +19,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Categories } from '@soliguide/common';
-import { Writable } from 'svelte/store';
-import { categoryBrowserState } from './CategorySelectorController';
-import type { PosthogProperties } from '$lib/services/types';
+import { type Writable } from 'svelte/store';
+import type { PosthogCaptureFunction } from '$lib/services/types';
 
-export type BrowserState = (typeof categoryBrowserState)[keyof typeof categoryBrowserState];
+export enum CategoryBrowserState {
+  CLOSED = 'closed',
+  OPEN_ROOT_CATEGORIES = 'open with root categories',
+  OPEN_CATEGORY_DETAIL = 'open with a category detail'
+}
 
-export type PageState = {
+export interface PageState {
   categoryButtons: Categories[];
   parentCategory: Categories | null;
   categories: Categories[];
-  browserState: BrowserState;
+  browserState: CategoryBrowserState;
   selectedCategory: Categories | null;
-};
+}
 
-export type CategorySelectorController = {
+export interface CategorySelectorController {
   subscribe: Writable<PageState>['subscribe'];
   openCategoryBrowser(): void;
   navigateToDetail(categoryId: Categories): void;
   navigateBack(): void;
   selectCategory(categoryId: Categories): void;
   init(): void;
-};
+  captureEvent: PosthogCaptureFunction;
+}
 
-export type CategoryBrowserController = {
-  captureEvent(eventName: string, properties?: PosthogProperties): void;
-};
+export interface CategoryBrowserController {
+  captureEvent: PosthogCaptureFunction;
+}

@@ -18,31 +18,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Writable } from 'svelte/store';
-import { SupportedLanguagesCode } from '@soliguide/common';
-import type { PosthogProperties } from '$lib/services/types';
+import type { Writable } from 'svelte/store';
+import type { SupportedLanguagesCode } from '@soliguide/common';
+import type { ComponentType, SvelteComponent } from 'svelte';
+import type { PosthogCaptureFunction } from '$lib/services/types';
 
 // flag should be of type `import('svelte').SvelteComponent`
 // but it uses the deprecated type `SvelteComponentType`
-export type LanguageOption = {
+export interface LanguageOption {
   code: string;
   name: string;
   nativeName: string;
-  flag: any;
-};
+  flag: ComponentType<SvelteComponent>;
+}
 
-export type PageState = {
+export interface PageState {
   availableLanguages: LanguageOption[];
   selectedLanguage: SupportedLanguagesCode | null;
   canSubmit: boolean;
-};
+}
 
-export type LanguagePageController = {
+export interface LanguagePageController {
   subscribe: Writable<PageState>['subscribe'];
-  init(
-    supportedLanguages: AllSupportedLanguagesCode[],
-    defaultLanguage: AllSupportedLanguagesCode
-  ): void;
-  changeSelection(lang: AllSupportedLanguagesCode): void;
-  captureEvent(eventName: string, properties?: PosthogProperties): void;
-};
+  init(supportedLanguages: SupportedLanguagesCode[], defaultLanguage: SupportedLanguagesCode): void;
+  changeSelection(lang: SupportedLanguagesCode): void;
+  captureEvent: PosthogCaptureFunction;
+}

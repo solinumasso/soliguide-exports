@@ -18,25 +18,23 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { goto } from '$app/navigation';
   import { Button, Text } from '@soliguide/design-system';
   import { THEME_CTX_KEY } from '$lib/theme';
   import { ROUTES_CTX_KEY } from '$lib/client';
   import { getContext } from 'svelte';
+  import type { ThemeDefinition } from '$lib/theme/types';
+  import type { RoutingStore } from '$lib/client/types';
 
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
-  /** @type {import('$lib/client/types').RoutingStore} */
-  const routes = getContext(ROUTES_CTX_KEY);
+  const theme: ThemeDefinition = getContext(THEME_CTX_KEY);
+  const routes: RoutingStore = getContext(ROUTES_CTX_KEY);
 
-  /** @type {() => void} */
-  const skip = () => {
+  const skip = (): void => {
     goto($routes.ROUTE_HOME);
   };
 
-  /** @type {() => void} */
-  const next = () => {
+  const next = (): void => {
     console.log('Go next page');
   };
 </script>

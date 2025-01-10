@@ -19,27 +19,39 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {
-  SupportedLanguagesCode,
+  type SupportedLanguagesCode,
   Categories,
   GeoTypes,
-  SoliguideCountries
+  type SoliguideCountries
 } from '@soliguide/common';
-import { steps, focus } from './pageController';
-import { LocationSuggestion } from '$lib/models/types';
-import { Writable } from 'svelte/store';
-import type { PosthogProperties } from '$lib/services/types';
+import type { CategoriesErrors, LocationErrors, PosthogCaptureFunction } from '$lib/services/types';
+import type { LocationSuggestion } from '$lib/models/locationSuggestion';
+import type { Writable } from 'svelte/store';
 
-export type CurrentStep = (typeof steps)[keyof typeof steps];
+/**
+ * Enum describing the current step of the search form
+ */
+export enum Steps {
+  STEP_LOCATION = 'searchLocationStep',
+  STEP_CATEGORY = 'searchCategoryStep',
+  HOME = 'home'
+}
 
-/** Tells which input has the focus: Location, Category, None */
-export type FocusState = (typeof focus)[keyof typeof focus];
+/**
+ * Enum describing the controlled focus possibilities of the page
+ */
+export enum Focus {
+  FOCUS_NONE = 'focusNone',
+  FOCUS_LOCATION = 'focusLocationInput',
+  FOCUS_CATEGORY = 'focusCategoryInput'
+}
 
 /**
  * used for query string in search results page
  * location is the location geoValue
  * category is the category id
  * */
-export type SearchPageParams = {
+export interface SearchPageParams {
   lang: string;
   location: string;
   latitude: string;
@@ -47,48 +59,50 @@ export type SearchPageParams = {
   type: GeoTypes;
   label: string;
   category: string;
-};
+}
 
-export type PageOptions = {
+export interface PageOptions {
   geoValue?: string | null;
   label?: string | null;
   category?: string | null;
-};
+}
 
 /** State, visible to subscribers through the controller */
-export type PageState = {
+export interface PageState {
   country: SoliguideCountries;
   lang: SupportedLanguagesCode;
-  currentStep: CurrentStep;
+  currentStep: Steps;
   locationSuggestions: LocationSuggestion[];
   locationLabel: string;
   selectedLocationSuggestion: LocationSuggestion | null;
-  locationSuggestionError: any;
-  currentPositionError: any;
+  locationSuggestionError: LocationErrors;
+  currentPositionError: string | null;
   categorySuggestions: Categories[];
   selectedCategory: Categories | null;
-  categorySuggestionError: any;
+  categorySuggestionError: CategoriesErrors;
   searchParams: SearchPageParams | null;
-  focus: FocusState;
+  focus: Focus;
   loading: boolean;
   loadingLocationSuggestions: boolean;
   loadingCategorySuggestions: boolean;
   loadingGeolocation: boolean;
-};
+}
 
 /** exposes the state in readonly and functions to act on it */
-export type SearchPageController = {
+export interface SearchPageController {
   subscribe: Writable<PageState>['subscribe'];
   selectLocationSuggestion(locationSuggestion: LocationSuggestion | null): void;
-  getLocationSuggestions(searchString: string): void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getLocationSuggestions(event: any): void;
   useCurrentLocation(geolocation: () => Promise<GeolocationPosition>): Promise<void>;
   clearLocation(): void;
   clearCategory(): void;
   goToPreviousStep(): void;
   editLocation(): void;
   init(country: SoliguideCountries, lang: SupportedLanguagesCode, options: PageOptions): void;
-  getPreviousStep(): CurrentStep;
+  getPreviousStep(): Steps;
   selectCategorySuggestion(categorySuggestion: Categories): void;
-  getCategorySuggestions(searchString: string): void;
-  captureEvent(eventName: string, properties?: PosthogProperties): void;
-};
+  captureEvent: PosthogCaptureFunction;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getCategorySuggestions(event: any): void;
+}
