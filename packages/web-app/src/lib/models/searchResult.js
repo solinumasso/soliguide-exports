@@ -21,11 +21,13 @@
 import { PlaceStatus, GeoTypes, computePlaceOpeningStatus } from '@soliguide/common';
 import { sort } from '$lib/js';
 import { computeTodayInfo, computeAddress } from './place';
+import { sortServicesByRelevance } from '../utils';
 
 /**
  * @typedef {import('@soliguide/common').CommonPlacePosition} Position
  * @typedef {import('./types').SearchResultItem} SearchResultItem
  * @typedef {import('./types').SearchResult} SearchResult
+ * @typedef {import('@soliguide/common').Categories} Categories
  *
  * @typedef {{
  *   geoType: string;
@@ -41,9 +43,10 @@ import { computeTodayInfo, computeAddress } from './place';
  * Transformation
  * @param place {ApiPlace}
  * @param locationParams {SearchLocationParams}
+ * @param category {Categories}
  * @returns {SearchResultItem}
  */
-const buildSearchResultItem = (place, locationParams) => {
+const buildSearchResultItem = (place, locationParams, category) => {
   const onOrientation = !!place.modalities.orientation.checked;
 
   const distance =
@@ -57,13 +60,15 @@ const buildSearchResultItem = (place, locationParams) => {
 
   const status = computePlaceOpeningStatus(place);
 
+  const sortedServices = sortServicesByRelevance(place.services_all, category);
+
   return {
     id: place.lieu_id,
     seoUrl: place.seo_url,
     name: place.name,
     address: computeAddress(place.position, onOrientation),
     distance,
-    services: place.services_all.map((service) => service?.category).filter((svc) => !!svc),
+    services: sortedServices.map((service) => service?.category).filter((svc) => !!svc),
     phones: [...place.entity.phones],
     status,
     banners: {
@@ -112,19 +117,28 @@ const sortPlacesByDistance = (places) => {
 /**
  * Merges result from two queries : places and itineraries.
  * Itinerary items contain steps, each one of them will become a SearchResultItem
- * @param placesResult {ApiSearchResults}
- * @param itineraryResult {ApiSearchResults}
- * @param searchLocationParams {SearchLocationParams}
+ * @typedef {Object} SearchResultsParams
+ * @property {ApiSearchResults} placesResult - The search results for places.
+ * @property {ApiSearchResults} itineraryResult - The search results for itineraries.
+ *
+ * @param {SearchResultsParams} results
+ * @param {SearchLocationParams} searchLocationParams
+ * @param {Categories} category
+ *
  * @returns {SearchResult}
  */
-const buildSearchResultWithParcours = (placesResult, itineraryResult, searchLocationParams) => {
+const buildSearchResultWithParcours = (
+  { placesResult, itineraryResult },
+  searchLocationParams,
+  category
+) => {
   const placesResultItems = placesResult.places.map((place) =>
-    buildSearchResultItem(place, searchLocationParams)
+    buildSearchResultItem(place, searchLocationParams, category)
   );
   const itineraryResultItems = itineraryResult.places.flatMap((place) => {
     const extractedSteps = extractStepsFromItineraryPlace(place);
     return extractedSteps.map((extractedStep) =>
-      buildSearchResultItem(extractedStep, searchLocationParams)
+      buildSearchResultItem(extractedStep, searchLocationParams, category)
     );
   });
 
@@ -139,13 +153,14 @@ const buildSearchResultWithParcours = (placesResult, itineraryResult, searchLoca
 
 /**
  * Builds a search result from a places query
- * @param placesResult {ApiSearchResults}
- * @param searchLocationParams {SearchLocationParams}
+ * @param {ApiSearchResults} placesResult
+ * @param {SearchLocationParams} searchLocationParams
+ * @param {Categories} category
  * @returns {SearchResult}
  */
-const buildSearchResult = (placesResult, searchLocationParams) => {
+const buildSearchResult = (placesResult, searchLocationParams, category) => {
   const placesResultItems = placesResult.places.map((place) =>
-    buildSearchResultItem(place, searchLocationParams)
+    buildSearchResultItem(place, searchLocationParams, category)
   );
 
   const sortedPlaces = sortPlacesByDistance(placesResultItems);
