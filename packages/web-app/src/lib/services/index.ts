@@ -19,12 +19,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { fetch } from '$lib/client';
-import getLocationService from './locationService';
-import getCategoryService from './categoryService';
-import getSearchService from './placesService';
-import { Themes } from '@soliguide/common';
+import getLocationService from './locationService.js';
+import getSearchService from './placesService.js';
 
-export { zendeskService } from './zendeskService';
+export { zendeskService } from './zendeskService.js';
 export const locationService = getLocationService(fetch);
-export const categoryService = getCategoryService(Themes.SOLIGUIDE_FR, fetch);
 export const searchService = getSearchService(fetch);

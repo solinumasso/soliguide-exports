@@ -20,10 +20,10 @@
  */
 import { describe, it, expect, beforeEach, afterEach, vi, vitest } from 'vitest';
 import { get } from 'svelte/store';
-import { getSearchPageController } from './pageController';
-import getLocationService from '$lib/services/locationService';
-import getCategoryService from '$lib/services/categoryService';
-import { fakeFetch } from '$lib/client/index';
+import { getSearchPageController } from './pageController.js';
+import getLocationService from '$lib/services/locationService.js';
+import { getCategoryService } from '$lib/services/categoryService.js';
+import { fakeFetch } from '$lib/client/index.js';
 import {
   GeoTypes,
   Categories,

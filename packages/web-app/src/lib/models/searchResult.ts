@@ -24,19 +24,23 @@ import {
   computePlaceOpeningStatus,
   type ApiPlace,
   CountryCodes,
+  Categories,
   type Phone as CommonPhone,
   type ApiSearchResults
 } from '@soliguide/common';
 import { sort } from '$lib/ts';
 import { computeTodayInfo, computeAddress, buildSources } from './place';
 import type { SearchLocationParams, SearchResult, SearchResultItem } from './types';
+import { sortServicesByRelevance } from '../utils';
+import { categoryService } from '$lib/services/categoryService';
 
 /**
  * Transformation
  */
 const buildSearchResultItem = (
   place: ApiPlace,
-  locationParams: SearchLocationParams
+  locationParams: SearchLocationParams,
+  categorySearched: Categories
 ): SearchResultItem => {
   const onOrientation = Boolean(place.modalities.orientation.checked);
 
@@ -50,6 +54,14 @@ const buildSearchResultItem = (
       : -1;
 
   const status = computePlaceOpeningStatus(place);
+
+  const allCategoriesByTheme = categoryService.getAllCategories();
+
+  const sortedServices = sortServicesByRelevance(
+    place.services_all,
+    categorySearched,
+    allCategoriesByTheme
+  );
 
   return {
     address: computeAddress(place.position, onOrientation),
@@ -75,7 +87,7 @@ const buildSearchResultItem = (
       }))
     ],
     seoUrl: place.seo_url,
-    services: place.services_all
+    services: sortedServices
       .map((service) => service?.category)
       .filter((category) => typeof category !== 'undefined'),
     sources: buildSources(place.sources),
@@ -115,17 +127,17 @@ const sortPlacesByDistance = (places: SearchResultItem[]): SearchResultItem[] =>
  * Itinerary items contain steps, each one of them will become a SearchResultItem
  */
 const buildSearchResultWithParcours = (
-  placesResult: ApiSearchResults,
-  itineraryResult: ApiSearchResults,
-  searchLocationParams: SearchLocationParams
+  results: { placesResult: ApiSearchResults; itineraryResult: ApiSearchResults },
+  searchLocationParams: SearchLocationParams,
+  category: Categories
 ): SearchResult => {
-  const placesResultItems = placesResult.places.map((place) =>
-    buildSearchResultItem(place, searchLocationParams)
+  const placesResultItems = results.placesResult.places.map((place) =>
+    buildSearchResultItem(place, searchLocationParams, category)
   );
-  const itineraryResultItems = itineraryResult.places.flatMap((place) => {
+  const itineraryResultItems = results.itineraryResult.places.flatMap((place) => {
     const extractedSteps = extractStepsFromItineraryPlace(place);
     return extractedSteps.map((extractedStep) =>
-      buildSearchResultItem(extractedStep, searchLocationParams)
+      buildSearchResultItem(extractedStep, searchLocationParams, category)
     );
   });
 
@@ -133,7 +145,7 @@ const buildSearchResultWithParcours = (
 
   return {
     // NB: Impossible to calculate nbResults of itineraries, we should have the sum of nb steps of each
-    nbResults: placesResult.nbResults + itineraryResult.nbResults,
+    nbResults: results.placesResult.nbResults + results.itineraryResult.nbResults,
     places: sortedPlaces
   };
 };
@@ -143,10 +155,11 @@ const buildSearchResultWithParcours = (
  */
 const buildSearchResult = (
   placesResult: ApiSearchResults,
-  searchLocationParams: SearchLocationParams
+  searchLocationParams: SearchLocationParams,
+  category: Categories
 ): SearchResult => {
   const placesResultItems = placesResult.places.map((place) =>
-    buildSearchResultItem(place, searchLocationParams)
+    buildSearchResultItem(place, searchLocationParams, category)
   );
 
   return {
