@@ -106,7 +106,7 @@ export class PublicsFormComponent implements OnInit, OnDestroy {
                   this.translateService.instant("EDITING_WELCOMED_PUBLIC")
                 );
                 this.place = place;
-
+                console.log(this.place.languages);
                 this.oldPublics = JSON.stringify(place.publics);
                 this.oldLanguages = JSON.stringify(place.languages);
               },
