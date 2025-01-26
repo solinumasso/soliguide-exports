@@ -56,7 +56,7 @@
 }
 
 // See SoliguideCountries for supported countries
-$countries: "es", "fr", "ca";
+$countries: "es", "fr", "ad";
 
 @each $country in $countries {
   .home_search_background_#{$country} {
@@ -65,6 +65,8 @@ $countries: "es", "fr", "ca";
         rgba(62, 58, 113, 0.95)
       ),
       url("/assets/images/homepage/background-home-search-#{$country}.jpg");
+    background-size: cover;
+    width: 100%;
   }
 }
 
