@@ -22,6 +22,7 @@ import { PlaceStatus, GeoTypes, computePlaceOpeningStatus } from '@soliguide/com
 import { sort } from '$lib/js';
 import { computeTodayInfo, computeAddress } from './place';
 import { sortServicesByRelevance } from '../utils';
+import { categoryService } from '$lib/services';
 
 /**
  * @typedef {import('@soliguide/common').CommonPlacePosition} Position
@@ -60,7 +61,12 @@ const buildSearchResultItem = (place, locationParams, category) => {
 
   const status = computePlaceOpeningStatus(place);
 
-  const sortedServices = sortServicesByRelevance(place.services_all, category);
+  const allCategoriesByTheme = categoryService.getAllCategories();
+  const sortedServices = sortServicesByRelevance(
+    place.services_all,
+    category,
+    allCategoriesByTheme
+  );
 
   return {
     id: place.lieu_id,

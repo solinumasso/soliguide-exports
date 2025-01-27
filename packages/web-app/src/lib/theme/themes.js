@@ -26,6 +26,11 @@ import {
   SupportedLanguagesCode,
   Themes
 } from '@soliguide/common';
+import { readonly, writable } from 'svelte/store';
+
+/**
+ * @typedef {import('./types').ThemeDefinition | null} ThemeDefinition
+ */
 
 const themesConfig = [
   { theme: Themes.SOLIGUIDE_FR, hostname: env.PUBLIC_SOLIGUIDE_FR_DOMAIN_NAME },
@@ -85,6 +90,7 @@ const themeDefinitions = [
  * @param hostname {string}
  * @returns {import('./types').ThemeDefinition | null}
  */
+
 const resolveTheme = (hostname) => {
   const configTheme = themesConfig.find((item) => item.hostname === hostname)?.theme;
 
@@ -92,12 +98,35 @@ const resolveTheme = (hostname) => {
     console.warn('No theme found for hostname', hostname);
     return null;
   }
-
   const theme = themeDefinitions.find((themeItem) => themeItem.name === configTheme);
+
   // Allows the theme to be partially defined
   return { ...defaultTheme, ...theme };
 };
 
+const getThemeStore = () => {
+  const themeStore = writable({ ...defaultTheme });
+  /**
+   * Resolve theme from current host origin
+   * @param {string} hostname
+   */
+  const init = (hostname) => {
+    const theme = resolveTheme(hostname);
+    if (!theme) return null;
+
+    themeStore.update((oldTheme) => ({ oldTheme, ...theme }));
+  };
+
+  const getTheme = () => {
+    return readonly(themeStore);
+  };
+
+  return {
+    init,
+    getTheme
+  };
+};
+
 const THEME_CTX_KEY = Symbol('themeContext');
 
-export { resolveTheme, THEME_CTX_KEY };
+export { THEME_CTX_KEY, resolveTheme, getThemeStore };

@@ -22,8 +22,11 @@ import { fetch } from '$lib/client';
 import getLocationService from './locationService.js';
 import getCategoryService from './categoryService.js';
 import getSearchService from './placesService.js';
+import { themeStore } from '../theme/index.js';
+import { get } from 'svelte/store';
 
+const theme = get(themeStore.getTheme());
 export { zendeskService } from './zendeskService.js';
 export const locationService = getLocationService(fetch);
-export const categoryService = getCategoryService(fetch);
+export const categoryService = getCategoryService(theme.name, fetch);
 export const searchService = getSearchService(fetch);

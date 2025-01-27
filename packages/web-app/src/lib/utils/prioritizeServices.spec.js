@@ -19,8 +19,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { describe, expect, it } from 'vitest';
-import { Categories } from '@soliguide/common';
+import { Categories, Themes } from '@soliguide/common';
 import { sortServicesByRelevance } from './prioritizeServices';
+
+import getCategoryService from '$lib/services/categoryService.js';
+
+const categoriesThemeFr = getCategoryService(Themes.SOLIGUIDE_FR).getAllCategories();
+const categoriesThemeEs = getCategoryService(Themes.SOLIGUIA_ES).getAllCategories();
+const categoriesThemeAd = getCategoryService(Themes.SOLIGUIA_AD).getAllCategories();
 
 describe('applyWeightRules', () => {
   it('Category searched by user should be first in the list', () => {
@@ -43,7 +49,7 @@ describe('applyWeightRules', () => {
       { category: Categories.DAY_HOSTING }
     ];
 
-    const result = sortServicesByRelevance(services, categorySearchedByUser);
+    const result = sortServicesByRelevance(services, categorySearchedByUser, categoriesThemeFr);
 
     expect(result).toEqual(expected);
   });
@@ -68,7 +74,7 @@ describe('applyWeightRules', () => {
       { category: Categories.DAY_HOSTING }
     ];
 
-    const result = sortServicesByRelevance(services, categorySearchedByUser);
+    const result = sortServicesByRelevance(services, categorySearchedByUser, categoriesThemeFr);
 
     expect(result).toEqual(expected);
   });
@@ -93,7 +99,7 @@ describe('applyWeightRules', () => {
       { category: Categories.DAY_HOSTING }
     ];
 
-    const result = sortServicesByRelevance(services, categorySearchedByUser);
+    const result = sortServicesByRelevance(services, categorySearchedByUser, categoriesThemeFr);
 
     expect(result).toEqual(expected);
   });
@@ -118,7 +124,7 @@ describe('applyWeightRules', () => {
       { category: Categories.DAY_HOSTING }
     ];
 
-    const result = sortServicesByRelevance(services, categorySearchedByUser);
+    const result = sortServicesByRelevance(services, categorySearchedByUser, categoriesThemeFr);
 
     expect(result).toEqual(expected);
   });
@@ -145,7 +151,92 @@ describe('applyWeightRules', () => {
       { category: Categories.DAY_HOSTING }
     ];
 
-    const result = sortServicesByRelevance(services, categorySearchedByUser);
+    const result = sortServicesByRelevance(services, categorySearchedByUser, categoriesThemeFr);
+
+    expect(result).toEqual(expected);
+  });
+
+  it('Should be able to sort with French Course category if theme is soliguide_fr ', () => {
+    const categorySearchedByUser = Categories.FRENCH_COURSE;
+
+    /** @type {Partial<import('@soliguide/common').CommonNewPlaceService>[]} */
+    const services = [
+      { category: Categories.BUDGET_ADVICE },
+      { category: Categories.ADDICTION },
+      { category: Categories.DAY_HOSTING },
+      { category: Categories.FRENCH_COURSE },
+      { category: Categories.JOB_COACHING },
+      { category: Categories.ECHOGRAPHY }
+    ];
+
+    const expected = [
+      { category: Categories.FRENCH_COURSE },
+      { category: Categories.JOB_COACHING },
+      { category: Categories.BUDGET_ADVICE },
+      { category: Categories.ADDICTION },
+      { category: Categories.DAY_HOSTING },
+      { category: Categories.ECHOGRAPHY }
+    ];
+
+    const result = sortServicesByRelevance(services, categorySearchedByUser, categoriesThemeFr);
+
+    expect(result).toEqual(expected);
+  });
+
+  it('Should be able to sort with Spanish and Catalan Courses categories if theme is soliguide_es', () => {
+    const categorySearchedByUser = Categories.SPANISH_COURSE;
+
+    /** @type {Partial<import('@soliguide/common').CommonNewPlaceService>[]} */
+    const services = [
+      { category: Categories.BUDGET_ADVICE },
+      { category: Categories.ADDICTION },
+      { category: Categories.DAY_HOSTING },
+      { category: Categories.SPANISH_COURSE },
+      { category: Categories.CATALAN_COURSE },
+      { category: Categories.JOB_COACHING },
+      { category: Categories.ECHOGRAPHY }
+    ];
+
+    const expected = [
+      { category: Categories.SPANISH_COURSE },
+      { category: Categories.CATALAN_COURSE },
+      { category: Categories.JOB_COACHING },
+      { category: Categories.BUDGET_ADVICE },
+      { category: Categories.ADDICTION },
+      { category: Categories.DAY_HOSTING },
+      { category: Categories.ECHOGRAPHY }
+    ];
+
+    const result = sortServicesByRelevance(services, categorySearchedByUser, categoriesThemeEs);
+
+    expect(result).toEqual(expected);
+  });
+
+  it('Should be able to sort with Spanish and Catalan Courses categories if theme is soliguide_ad', () => {
+    const categorySearchedByUser = Categories.CATALAN_COURSE;
+
+    /** @type {Partial<import('@soliguide/common').CommonNewPlaceService>[]} */
+    const services = [
+      { category: Categories.BUDGET_ADVICE },
+      { category: Categories.ADDICTION },
+      { category: Categories.DAY_HOSTING },
+      { category: Categories.SPANISH_COURSE },
+      { category: Categories.CATALAN_COURSE },
+      { category: Categories.JOB_COACHING },
+      { category: Categories.ECHOGRAPHY }
+    ];
+
+    const expected = [
+      { category: Categories.CATALAN_COURSE },
+      { category: Categories.SPANISH_COURSE },
+      { category: Categories.JOB_COACHING },
+      { category: Categories.BUDGET_ADVICE },
+      { category: Categories.ADDICTION },
+      { category: Categories.DAY_HOSTING },
+      { category: Categories.ECHOGRAPHY }
+    ];
+
+    const result = sortServicesByRelevance(services, categorySearchedByUser, categoriesThemeAd);
 
     expect(result).toEqual(expected);
   });

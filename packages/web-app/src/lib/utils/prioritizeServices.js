@@ -18,11 +18,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { CATEGORIES, ROOT_CATEGORIES } from '@soliguide/common';
+import { Categories, ROOT_CATEGORIES } from '@soliguide/common';
 
 /**
  * @typedef {import('@soliguide/common').Categories} CategoriesType
  * @typedef {import('@soliguide/common').CommonNewPlaceService} CommonNewPlaceService
+ * @typedef {import('@soliguide/common').FlatCategoriesTreeNode} FlatCategoriesTreeNode
  */
 
 const CategoryWeights = {
@@ -35,15 +36,17 @@ const CategoryWeights = {
 /**
  * Find parent category of a given category
  * @param {CategoriesType | null} category
+ * @param {FlatCategoriesTreeNode[]} categoriesFromTheme
  * @returns {CategoriesType | null}
  */
-const findImmediateParent = (category) => {
+const findImmediateParent = (category, categoriesFromTheme) => {
   const isRootCategories = ROOT_CATEGORIES.some((root) => root.id === category);
 
   if (isRootCategories) return category;
 
-  const parent = CATEGORIES.find((cat) => cat.children.some((child) => child.id === category));
-
+  const parent = categoriesFromTheme.find((cat) =>
+    cat.children.some((child) => child.id === category)
+  );
   if (!parent) {
     throw new Error(`Category ${category} doesn't exist`);
   }
@@ -55,19 +58,20 @@ const findImmediateParent = (category) => {
  * Calculates the additional weight based on the relationship between categories
  * @param {CategoriesType} serviceCategory
  * @param {CategoriesType} targetCategory
+ * @param {FlatCategoriesTreeNode[]} allCategoriesByTheme
  */
-const calculateAdditionalWeight = (serviceCategory, targetCategory) => {
+const calculateAdditionalWeight = (serviceCategory, targetCategory, allCategoriesByTheme) => {
   if (serviceCategory === targetCategory) return CategoryWeights.SAME_CATEGORY;
 
-  const serviceParent = findImmediateParent(serviceCategory);
-  const targetParent = findImmediateParent(targetCategory);
+  const serviceParent = findImmediateParent(serviceCategory, allCategoriesByTheme);
+  const targetParent = findImmediateParent(targetCategory, allCategoriesByTheme);
 
   // Same parent, notice that it works only if a place have maximum 99 services, should be increased if needed
   if (serviceParent === targetParent) return CategoryWeights.SAME_PARENT;
 
   // Look for grand parents
-  const serviceGrandParent = findImmediateParent(serviceParent);
-  const targetGrandParent = findImmediateParent(targetParent);
+  const serviceGrandParent = findImmediateParent(serviceParent, allCategoriesByTheme);
+  const targetGrandParent = findImmediateParent(targetParent, allCategoriesByTheme);
 
   // Same grand parents (only in Health case)
   if (serviceCategory && serviceGrandParent === targetGrandParent)
@@ -84,9 +88,10 @@ const calculateAdditionalWeight = (serviceCategory, targetCategory) => {
  * Sort services by relevance based on the category searched by the user
  * @param {ServiceWithCategory[]} services
  * @param {CategoriesType} category
+ * @param {FlatCategoriesTreeNode[]} allCategoriesByTheme
  * @returns {ServiceWithCategory[]}
  */
-const sortServicesByRelevance = (services, category) => {
+const sortServicesByRelevance = (services, category, allCategoriesByTheme) => {
   return (
     // eslint-disable-next-line fp/no-mutating-methods
     services
@@ -94,7 +99,11 @@ const sortServicesByRelevance = (services, category) => {
         ...service,
         weight:
           index +
-          calculateAdditionalWeight(/** @type {CategoriesType} */ (service.category), category)
+          calculateAdditionalWeight(
+            /** @type {CategoriesType} */ (service.category),
+            category,
+            allCategoriesByTheme
+          )
       }))
       .sort((service1, service2) => service1.weight - service2.weight)
       .map((service) =>

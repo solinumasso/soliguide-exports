@@ -24,7 +24,12 @@ import type {
   SearchResult,
   PlaceDetails
 } from '$lib/models/types';
-import { Categories, SoliguideCountries, type AllSupportedLanguagesCode } from '@soliguide/common';
+import {
+  Categories,
+  SoliguideCountries,
+  type AllSupportedLanguagesCode,
+  type FlatCategoriesTreeNode
+} from '@soliguide/common';
 
 export interface LocationService {
   getLocationSuggestions(
@@ -39,6 +44,7 @@ export interface LocationService {
 }
 
 export interface CategoryService {
+  getAllCategories(): FlatCategoriesTreeNode[];
   getRootCategories(): Categories[];
   getChildrenCategories(categoryId: Categories): Categories[];
   isCategoryRoot(categoryId: Categories): boolean;
