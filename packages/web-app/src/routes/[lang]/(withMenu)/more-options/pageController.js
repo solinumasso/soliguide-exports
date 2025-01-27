@@ -18,11 +18,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import { posthogService } from '$lib/services/posthogService';
 import { writable } from 'svelte/store';
 
 /**
  * @typedef {import('./types').PageState} PageState
  * @typedef {import('./types').PageLinks} PageLinks
+ * * @typedef {import('$lib/services/types').PosthogProperties} PosthogProperties
  * */
 
 /** @type {PageLinks} */
@@ -66,10 +68,20 @@ export const getPageController = () => {
     );
   };
 
+  /**
+   * Capture an event with a prefix for route context
+   * @param {string} eventName The name of the event to capture
+   * @param {PosthogProperties} [properties] Optional properties to include with the event
+   */
+  const captureEvent = (eventName, properties) => {
+    posthogService.capture(`place-page-${eventName}`, properties);
+  };
+
   return {
     subscribe: pageStore.subscribe,
     init,
     openCookieModal,
-    closeCookieModal
+    closeCookieModal,
+    captureEvent
   };
 };

@@ -28,6 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   import { I18N_CTX_KEY } from '$lib/client/i18n';
   import { getMapLink } from '$lib/client';
   import PlaceDetailsSection from './PlaceDetailsSection.svelte';
+  import { getPlaceDetailsPageController } from '../pageController';
 
   /**
    * @type {string}
@@ -37,16 +38,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   /** @type {boolean} */
   export let onOrientation;
 
+  /** @type {import('$lib/client/types').I18nStore} */
+  const i18n = getContext(I18N_CTX_KEY);
+  const placeController = getPlaceDetailsPageController();
+
   const gotoLink = () => {
+    placeController.captureEvent('see-on-map', { placeAddress: address });
     window.open(getMapLink(address), '_blank', 'noopener,noreferrer');
   };
 
   const copyText = () => {
+    placeController.captureEvent('copy-address', { placeAddress: address });
     navigator.clipboard.writeText(address);
   };
-
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
 </script>
 
 <PlaceDetailsSection>

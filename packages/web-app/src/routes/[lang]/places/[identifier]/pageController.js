@@ -20,6 +20,11 @@
  */
 import { writable } from 'svelte/store';
 import { PlaceOpeningStatus, WEEK_DAYS } from '@soliguide/common';
+import { posthogService } from '$lib/services/posthogService';
+
+/**
+ * @typedef {import('$lib/services/types').PosthogProperties} PosthogProperties
+ */
 
 const getCurrentDay = () => {
   return new Date().toLocaleString('en-us', { weekday: 'long' }).toLowerCase();
@@ -72,6 +77,15 @@ const initialValue = {
   error: null
 };
 
+/**
+ * Capture an event with a prefix for route context
+ * @param {string} eventName The name of the event to capture
+ * @param {PosthogProperties} [properties] Optional properties to include with the event
+ */
+const captureEvent = (eventName, properties) => {
+  posthogService.capture(`place-page-${eventName}`, properties);
+};
+
 export const getPlaceDetailsPageController = () => {
   const pageStore = writable();
   /** @type {import('./types').PageController['init']} */
@@ -85,6 +99,7 @@ export const getPlaceDetailsPageController = () => {
   };
   return {
     subscribe: pageStore.subscribe,
-    init
+    init,
+    captureEvent
   };
 };

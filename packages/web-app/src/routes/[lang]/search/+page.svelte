@@ -101,7 +101,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       $pageStore.categorySuggestions.length > 0 &&
       $pageStore.currentStep === steps.STEP_CATEGORY
     ) {
-      pageStore.captureEvent('category-selected', {
+      pageStore.captureEvent('select-showcased-category', {
         category: categorySuggestion
       });
     }

@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 <script lang="ts">
   import { sizeMapping, typeMapping } from './buttonsMapping';
   import type { ButtonShape, ButtonSize, ButtonType, IconPosition } from '../../types/Button';
+  import { createEventDispatcher } from 'svelte';
 
   export let size: ButtonSize = 'medium';
   export let href: string;
@@ -34,6 +35,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   // Shape is forced for icon buttons
   $: btnShapeIsRounded = iconPosition === 'iconOnly' || shape === 'rounded';
   $: btnClass = `btn ${sizeMapping[size]} ${typeMapping[type]}`;
+
+  const dispatch = createEventDispatcher();
 </script>
 
 <a
@@ -46,6 +49,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   class:btn-rounded={btnShapeIsRounded}
   class:btn-icon={iconPosition === 'iconOnly'}
   {...$$restProps}
+  on:click={(event) => {
+    dispatch('click', event);
+  }}
 >
   <span class="btn-content-container" class:reversed={iconPosition === 'reversed'}>
     {#if $$slots.icon}

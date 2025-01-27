@@ -38,4 +38,5 @@ export type PageController = {
   init(links: PageLinks): void;
   openCookieModal(): void;
   closeCookieModal(): void;
+  captureEvent(eventName: string, properties?: PosthogProperties): void;
 };
