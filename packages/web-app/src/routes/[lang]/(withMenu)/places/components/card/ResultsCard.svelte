@@ -34,15 +34,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   } from '@soliguide/design-system';
   import NearMe from 'svelte-google-materialdesign-icons/Near_me.svelte';
   import PinDrop from 'svelte-google-materialdesign-icons/Pin_drop.svelte';
-  import { PhoneButton, TodayInfo, PlaceStatus } from '$lib/components';
+  import { TodayInfo, PlaceStatus } from '$lib/components';
+  import PhoneButton from '$lib/components/PhoneButton.svelte';
   import ResultsCardServices from './ResultsCardServices.svelte';
   import { kmOrMeters } from '@soliguide/common';
-
+  import { getSearchResultPageController } from '../../pageController.js';
+  import { searchService } from '$lib/services';
   /** @type {import('$lib/client/types').RoutingStore} */
   const routes = getContext(ROUTES_CTX_KEY);
   /** @type {import('$lib/client/types').I18nStore} */
   const i18n = getContext(I18N_CTX_KEY);
 
+  const { captureEvent } = getSearchResultPageController(searchService);
   /**
    * @type {import('$lib/models/types').SearchResultItem}
    */
@@ -58,13 +61,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
    * @param {string} seoUrl
    */
   const gotoPlace = (seoUrl) => {
+    captureEvent('card-info-click', { place: place.id });
     goto(`${$routes.ROUTE_PLACES}/${seoUrl}`);
   };
 </script>
 
 <Card>
   <a {id} class="card-link" href={`${$routes.ROUTE_PLACES}/${place.seoUrl}`}>
-    <CardHeader>
+    <CardHeader
+      on:click={() => {
+        captureEvent('card-header-click', { place: place.id });
+      }}
+    >
       <div class="card-header-container">
         {#if place?.source}
           <div class="card-header-source">
@@ -99,7 +107,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           iconPosition="iconOnly"
           type="primaryOutline"
           href={getMapLink(place.address)}
-          disabled={place.banners.orientation}><NearMe slot="icon" /></ButtonLink
+          disabled={place.banners.orientation}
+          ><NearMe
+            slot="icon"
+            on:click={() => {
+              captureEvent('go-to-click');
+            }}
+          /></ButtonLink
         >
       </div>
       <ResultsCardServices services={place.services} />
@@ -107,7 +121,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   </CardBody>
   <CardFooter>
     <div class="card-footer">
-      <PhoneButton type="neutralOutlined" phones={place.phones} />
+      <PhoneButton
+        type="neutralOutlined"
+        phones={place.phones}
+        on:click={() => {
+          captureEvent('phone-click');
+        }}
+      />
       <Button
         role="link"
         on:click={() => gotoPlace(place.seoUrl)}

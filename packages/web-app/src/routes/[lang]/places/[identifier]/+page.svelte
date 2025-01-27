@@ -19,7 +19,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <script>
-  import { getContext, onMount } from 'svelte';
+  import { getContext, onMount, setContext } from 'svelte';
   import { goto } from '$app/navigation';
 
   import { Topbar } from '@soliguide/design-system';
@@ -42,6 +42,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   /** @type {import('./types').PageController} */
   const pageStore = getPlaceDetailsPageController();
   pageStore.init(data);
+
+  setContext('CAPTURE_FCTN_CTX_KEY', pageStore.captureEvent);
 
   let headerHeight = 0;
   let scrolled = false;
@@ -76,6 +78,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   const routes = getContext(ROUTES_CTX_KEY);
 
   const goBack = () => {
+    pageStore.captureEvent('go-back', { fromPlace: $pageStore.placeDetails.id });
     goto(`${$routes.ROUTE_PLACES}#${$pageStore.placeDetails.id}`);
   };
 </script>

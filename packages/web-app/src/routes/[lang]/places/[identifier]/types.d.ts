@@ -38,6 +38,7 @@ export type PageState = {
 export type PageController = {
   subscribe: Writable<PageState>['subscribe'];
   init(s: PlaceDetails): void;
+  captureEvent(eventName: string, properties?: PosthogProperties): void;
 };
 
 export type TitleAndIcon = {

@@ -25,6 +25,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   import ListItemContainer from './ListItemContainer.svelte';
   import type { ListItemSize, ListItemType, ListItemShape } from '$lib/types/ListItem';
   import type { TextType } from '$lib/types/Text';
+  import { createEventDispatcher } from 'svelte';
 
   export let size: ListItemSize = 'medium';
   export let type: ListItemType = 'display';
@@ -51,10 +52,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   };
 
   $: itemClass = `item ${shape} ${type}`;
+
+  const dispatch = createEventDispatcher();
+  const handleClick = (event: Event) => {
+    dispatch('click', event); // Forward click event
+  };
 </script>
 
 <li class={itemClass} class:disabled role="list">
-  <ListItemContainer on:click {href} {type} {disabled}>
+  <ListItemContainer on:click={handleClick} {href} {type} {disabled}>
     {#if $$slots.icon}
       <span aria-hidden="true" class="item-icon-container left-icon-container">
         <slot name="icon" />
@@ -69,7 +75,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
     {#if type === 'actionRight'}
       <span class="action-btn">
-        <Button size="xsmall" iconPosition="iconOnly" on:click type="shy" {disabled}>
+        <Button size="xsmall" iconPosition="iconOnly" on:click={handleClick} type="shy" {disabled}>
           <slot name="actionIcon" slot="icon" />
         </Button>
       </span>

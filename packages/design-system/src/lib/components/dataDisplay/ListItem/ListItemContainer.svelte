@@ -20,10 +20,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <script lang="ts">
   import type { ListItemType } from '$lib/types/ListItem';
+  import { createEventDispatcher } from 'svelte';
 
   export let type: ListItemType;
   export let href: string | null = null;
   export let disabled = false;
+
+  const dispatch = createEventDispatcher();
 </script>
 
 {#if href && (type === 'link' || type === 'externalLink')}
@@ -32,11 +35,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     target={type === 'externalLink' ? '_blank' : '_self'}
     class="item-container"
     class:disabled
+    on:click={() => dispatch('click')}
   >
     <slot />
   </a>
 {:else if type === 'actionFull'}
-  <button on:click class="item-container" {disabled}>
+  <button on:click={() => dispatch('click')} class="item-container" {disabled}>
     <slot />
   </button>
 {:else}

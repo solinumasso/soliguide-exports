@@ -22,6 +22,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   import { Text } from '@soliguide/design-system';
   import { PhoneButton, PlaceStatus, TodayInfo } from '$lib/components';
   import GoToButton from './GoToButton.svelte';
+  import { getPlaceDetailsPageController } from '../pageController';
 
   /** @type {import('$lib/models/types').TodayInfo} */
   export let todayInfo = {};
@@ -40,6 +41,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
   /** @type {boolean} */
   export let onOrientation;
+
+  const placeController = getPlaceDetailsPageController();
 </script>
 
 <header class="card-header">
@@ -54,8 +57,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   </div>
 
   <div class="actions">
-    <GoToButton {address} {onOrientation} reversed />
-    <PhoneButton {phones} />
+    <GoToButton
+      {address}
+      {onOrientation}
+      reversed
+      on:click={() => {
+        placeController.captureEvent('header-go-to-click');
+      }}
+    />
+    <PhoneButton
+      {phones}
+      on:click={() => {
+        placeController.captureEvent('header-phone-click');
+      }}
+    />
   </div>
 </header>
 

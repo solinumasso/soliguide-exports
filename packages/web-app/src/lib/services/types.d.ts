@@ -89,6 +89,11 @@ export type PosthogProperties = {
   searchTerm?: string;
   category?: Categories;
   fromStep?: 'location' | 'category';
+  placeAddress?: string;
+  phoneNumber?: string | null;
+  email?: string;
+  website?: string;
+  isClickable?: boolean;
 };
 
 export type ZendeskState = {

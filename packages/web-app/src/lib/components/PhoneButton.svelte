@@ -19,7 +19,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <script>
-  import { getContext } from 'svelte';
+  import { createEventDispatcher, getContext } from 'svelte';
   import Phone from 'svelte-google-materialdesign-icons/Phone.svelte';
   import { writable } from 'svelte/store';
   import { Button, ButtonLink } from '@soliguide/design-system';
@@ -38,6 +38,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   /** @type {import('$lib/client/types').I18nStore} */
   const i18n = getContext(I18N_CTX_KEY);
 
+  const dispatch = createEventDispatcher();
+
   const currentCountry = theme.country;
   $: hasValidPhone = phones.length && phones[0].phoneNumber;
   $: phoneHref = writable(
@@ -46,7 +48,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 </script>
 
 {#if hasValidPhone}
-  <ButtonLink icon size="small" {type} href={$phoneHref} title={$i18n.t('TO_CALL')}>
+  <ButtonLink
+    icon
+    size="small"
+    {type}
+    href={$phoneHref}
+    title={$i18n.t('TO_CALL')}
+    on:click={(event) => {
+      dispatch('click', event);
+    }}
+  >
     <Phone variation="filled" slot="icon" />
     {$i18n.t('TO_CALL')}
   </ButtonLink>

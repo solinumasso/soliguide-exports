@@ -85,7 +85,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     description={$i18n.t('FICHES_PRATIQUES_DESCRIPTION')}
     actionName={$i18n.t('PLUS_INFOS')}
     imgUrl="/images/paper.svg"
-    on:action={() => navigateToExternal($pageState.fichesPratiquesLink)}
+    on:action={() => {
+      pageState.captureEvent('click-access-practical-files');
+      navigateToExternal($pageState.fichesPratiquesLink);
+    }}
   />
 
   <BasicCard>
@@ -97,6 +100,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         size="small"
         title={$i18n.t('SEE_SOLINUM_SITE')}
         href={$pageState.solinumSiteLink}
+        on:click={() => pageState.captureEvent('click-access-solinum')}
       >
         <ScreenSearchDesktop variation="filled" slot="icon" size="16" />
       </ListItem>
@@ -105,6 +109,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         size="small"
         title={$i18n.t('BECOME_TRANSLATOR')}
         href={$pageState.becomeTranslatorLink}
+        on:click={() => pageState.captureEvent('click-become-translator')}
       >
         <Transcribe variation="filled" slot="icon" size="16" />
       </ListItem>
@@ -120,7 +125,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           shape="bordered"
           size="small"
           title={$i18n.t('MANAGE_COOKIES')}
-          on:click={openCookieDialog}
+          on:click={() => {
+            pageState.captureEvent('click-manage-cookies');
+            openCookieDialog();
+          }}
         >
           <Cookie variation="filled" slot="icon" size="16" />
         </ListItem>
@@ -131,6 +139,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         size="small"
         title={$i18n.t('COOKIE_POLICY')}
         href={$pageState.cookiePolicyLink}
+        on:click={() => pageState.captureEvent('click-cookie-policy')}
       >
         <MenuBook variation="filled" slot="icon" size="16" />
       </ListItem>
@@ -140,6 +149,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         size="small"
         title={$i18n.t('PRIVACY_POLICY')}
         href={$pageState.privacyPolicyLink}
+        on:click={() => pageState.captureEvent('click-privacy-policy')}
       >
         <Https variation="filled" slot="icon" size="16" />
       </ListItem>
@@ -149,6 +159,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         size="small"
         title={$i18n.t('DATA_PROTECTION_AGREEMENT')}
         href={$pageState.dataProtectionAgreementLink}
+        on:click={() => pageState.captureEvent('click-data-protection-agreement')}
       >
         <Gavel variation="filled" slot="icon" size="16" />
       </ListItem>
@@ -158,6 +169,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         size="small"
         title={$i18n.t('LEGAL_NOTICE')}
         href={$pageState.legalNoticeLink}
+        on:click={() => pageState.captureEvent('click-legal-notice')}
       >
         <Security variation="filled" slot="icon" size="16" />
       </ListItem>
@@ -166,6 +178,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         size="small"
         title={$i18n.t('GCU')}
         href={$pageState.termsAndConditionsLink}
+        on:click={() => pageState.captureEvent('click-terms-and-conditions')}
       >
         <Mouse variation="filled" slot="icon" size="16" />
       </ListItem>

@@ -19,7 +19,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <script>
-  import { getContext } from 'svelte';
+  import { createEventDispatcher, getContext } from 'svelte';
   import Near from 'svelte-google-materialdesign-icons/Near_me.svelte';
   import { Button } from '@soliguide/design-system';
   import { getMapLink } from '$lib/client/index.js';
@@ -42,10 +42,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       window.open(getMapLink(address), '_blank', 'noopener,noreferrer');
     }
   };
+
+  const dispatch = createEventDispatcher();
 </script>
 
 <Button
-  on:click={gotoLink}
+  on:click={(event) => {
+    gotoLink();
+    dispatch('click', event);
+  }}
   size="small"
   type={reversed ? 'reversed' : 'neutralOutlined'}
   {disabled}

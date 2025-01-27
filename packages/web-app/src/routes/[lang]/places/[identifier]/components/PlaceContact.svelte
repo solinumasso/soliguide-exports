@@ -29,6 +29,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   import PlaceDetailsSection from './PlaceDetailsSection.svelte';
   import { THEME_CTX_KEY } from '$lib/theme';
   import { parsePhoneNumber } from '@soliguide/common';
+  import { getPlaceDetailsPageController } from '../pageController';
 
   /** @type {import('$lib/models/types').Phone[]} */
   export let phones;
@@ -46,6 +47,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   /** @type {import('$lib/theme/types').ThemeDefinition} */
   const theme = getContext(THEME_CTX_KEY);
 
+  const placeController = getPlaceDetailsPageController();
   const currentCountry = theme.country;
 
   $: formattedPhones = phones?.map((phone) => ({
@@ -68,6 +70,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             size="small"
             shape={email || website || facebook || instagram ? 'bordered' : 'default'}
             href={`tel:${formattedNumber}`}
+            on:click={() => {
+              placeController.captureEvent('call', {
+                isClickable: !!formattedNumber
+              });
+            }}
           >
             <Phone size="16" slot="icon" />
           </ListItem>
@@ -81,6 +88,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           size="small"
           shape={website || facebook || instagram ? 'bordered' : 'default'}
           href={`mailto:${email}`}
+          on:click={() => {
+            placeController.captureEvent('email');
+          }}
         >
           <Email variation="filled" size="16" slot="icon" />
         </ListItem>
@@ -93,6 +103,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           size="small"
           shape={facebook || instagram ? 'bordered' : 'default'}
           href={website}
+          on:click={() => {
+            placeController.captureEvent('website');
+          }}
         >
           <Public size="16" slot="icon" />
         </ListItem>
@@ -105,6 +118,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           size="small"
           shape={instagram ? 'bordered' : 'default'}
           href={facebook}
+          on:click={() => {
+            placeController.captureEvent('facebook');
+          }}
         >
           <Smartphone size="16" slot="icon" variation="filled" />
         </ListItem>
@@ -117,6 +133,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           size="small"
           shape="default"
           href={instagram}
+          on:click={() => {
+            placeController.captureEvent('instagram');
+          }}
         >
           <Smartphone size="16" slot="icon" variation="filled" />
         </ListItem>

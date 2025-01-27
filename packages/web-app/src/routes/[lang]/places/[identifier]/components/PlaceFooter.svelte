@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <script>
   import { PhoneButton } from '$lib/components';
+  import { getPlaceDetailsPageController } from '../pageController';
   import GoToButton from './GoToButton.svelte';
 
   /** @type {import('$lib/models/types').Phone[]} */
@@ -30,11 +31,24 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
   /** @type {boolean} */
   export let onOrientation;
+
+  const placeController = getPlaceDetailsPageController();
 </script>
 
 <div class="footer">
-  <GoToButton {address} {onOrientation} />
-  <PhoneButton {phones} />
+  <GoToButton
+    {address}
+    {onOrientation}
+    on:click={() => {
+      placeController.captureEvent('footer-go-to-click');
+    }}
+  />
+  <PhoneButton
+    {phones}
+    on:click={() => {
+      placeController.captureEvent('footer-phone-click');
+    }}
+  />
 </div>
 
 <style lang="scss">
