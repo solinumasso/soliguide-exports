@@ -22,6 +22,8 @@ import { env } from '$env/dynamic/public';
 import { CategoriesService, Categories } from '@soliguide/common';
 import { fetch } from '$lib/client';
 import { buildCategorySuggestion } from '$lib/models/categorySuggestion.js';
+import { get } from 'svelte/store';
+import { themeStore } from '$lib/theme';
 
 const apiUrl = env.PUBLIC_API_URL;
 
@@ -75,7 +77,7 @@ const removeSpecialistsFromCategories = (categories) => {
  * @param  {import('$lib/client/transport.js').Fetcher} fetcher
  * @returns {import('./types').CategoryService}
  */
-export default (currentThemeName, fetcher = fetch) => {
+export const getCategoryService = (currentThemeName, fetcher = fetch) => {
   const svc = new CategoriesService(currentThemeName);
 
   const allCategories = svc.getCategories();
@@ -145,3 +147,6 @@ export default (currentThemeName, fetcher = fetch) => {
     getCategorySuggestions
   };
 };
+
+const themeName = get(themeStore.getTheme()).name;
+export const categoryService = getCategoryService(themeName, fetch);

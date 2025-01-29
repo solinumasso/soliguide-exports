@@ -22,7 +22,7 @@ import { PlaceStatus, GeoTypes, computePlaceOpeningStatus } from '@soliguide/com
 import { sort } from '$lib/js';
 import { computeTodayInfo, computeAddress } from './place';
 import { sortServicesByRelevance } from '../utils';
-import { categoryService } from '$lib/services';
+import { categoryService } from '$lib/services/categoryService';
 
 /**
  * @typedef {import('@soliguide/common').CommonPlacePosition} Position

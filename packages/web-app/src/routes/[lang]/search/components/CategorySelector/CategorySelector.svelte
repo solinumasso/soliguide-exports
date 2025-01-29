@@ -27,7 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   } from './CategorySelectorController.js';
   import CategoryButton from './CategoryButton.svelte';
   import CategoryBrowser from './CategoryBrowser.svelte';
-  import { categoryService } from '$lib/services/index.js';
+  import { categoryService } from '$lib/services/categoryService.js';
 
   const pageStore = getCategorySelectorController(categoryService);
   const dispatch = createEventDispatcher();

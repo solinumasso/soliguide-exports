@@ -22,7 +22,7 @@ import { describe, expect, it } from 'vitest';
 import { Categories, Themes } from '@soliguide/common';
 import { sortServicesByRelevance } from './prioritizeServices';
 
-import getCategoryService from '$lib/services/categoryService.js';
+import { getCategoryService } from '$lib/services/categoryService.js';
 
 const categoriesThemeFr = getCategoryService(Themes.SOLIGUIDE_FR).getAllCategories();
 const categoriesThemeEs = getCategoryService(Themes.SOLIGUIA_ES).getAllCategories();
