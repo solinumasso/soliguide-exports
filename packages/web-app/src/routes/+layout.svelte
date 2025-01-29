@@ -35,7 +35,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     changeDesignSystemLocale
   } from '@soliguide/design-system';
   import '../assets/styles/main.scss';
-  import { THEME_CTX_KEY } from '$lib/theme';
   import { I18N_CTX_KEY, getI18nStore } from '$lib/client/i18n.js';
   import { ROUTES_CTX_KEY, getRoutes, isLanguageSelected, getZDCookieConsent } from '$lib/client';
   import { cookieConsent, COOKIE_CTX_KEY } from '$lib/client/cookie.js';
@@ -74,7 +73,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   setContext(I18N_CTX_KEY, i18nStore);
   setContext(ROUTES_CTX_KEY, routesStore);
   setContext(COOKIE_CTX_KEY, cookieConsent);
-  setContext(THEME_CTX_KEY, theme);
 
   if (browser) {
     beforeNavigate(() => posthogService.capture('$pageleave'));

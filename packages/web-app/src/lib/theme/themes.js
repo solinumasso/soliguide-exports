@@ -112,11 +112,14 @@ const getThemeStore = () => {
    */
   const init = (hostname) => {
     const theme = resolveTheme(hostname);
-    if (!theme) return null;
+    if (!theme) return;
 
     themeStore.update((oldTheme) => ({ oldTheme, ...theme }));
   };
 
+  /**
+   * @returns {import('svelte/store').Readable<import('./types').ThemeDefinition>}
+   */
   const getTheme = () => {
     return readonly(themeStore);
   };
@@ -127,6 +130,4 @@ const getThemeStore = () => {
   };
 };
 
-const THEME_CTX_KEY = Symbol('themeContext');
-
-export { THEME_CTX_KEY, resolveTheme, getThemeStore };
+export { resolveTheme, getThemeStore };

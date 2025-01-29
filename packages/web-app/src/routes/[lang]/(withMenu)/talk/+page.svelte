@@ -25,14 +25,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   import { ROUTES_CTX_KEY } from '$lib/client';
   import { zendeskService } from '$lib/services';
   import { COOKIE_CTX_KEY } from '$lib/client/cookie.js';
-  import { THEME_CTX_KEY } from '$lib/theme/index.js';
+  import { themeStore } from '$lib/theme/index.js';
+  import { get } from 'svelte/store';
 
   /** @type {import('$lib/client/types').RoutingStore} */
   const routes = getContext(ROUTES_CTX_KEY);
   /** @type {import('$lib/client/types').CookieConsentStore} */
   const cookieConsent = getContext(COOKIE_CTX_KEY);
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
+  const theme = get(themeStore.getTheme());
 
   $: useChat = !!theme.chatWebsiteId;
 

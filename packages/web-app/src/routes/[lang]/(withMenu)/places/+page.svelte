@@ -25,19 +25,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   import IntersectionObserver from './components/IntersectionObserver.svelte';
   import pageStore from './index.js';
   import { I18N_CTX_KEY } from '$lib/client/i18n.js';
-  import { THEME_CTX_KEY } from '$lib/theme/themes.js';
   import { ROUTES_CTX_KEY } from '$lib/client';
   import { Text, PageLoader } from '@soliguide/design-system';
   import Card from './components/card/ResultsCard.svelte';
   import ResultsTopBar from './components/ResultsTopBar.svelte';
+  import { get } from 'svelte/store';
+  import { themeStore } from '$lib/theme';
 
   const { url } = $page;
   /** @type {import('$lib/client/types').RoutingStore} */
   const routes = getContext(ROUTES_CTX_KEY);
   /** @type {import('$lib/client/types').I18nStore} */
   const i18n = getContext(I18N_CTX_KEY);
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
+  const theme = get(themeStore.getTheme());
 
   setContext('CAPTURE_FCTN_CTX_KEY', pageStore.captureEvent);
 

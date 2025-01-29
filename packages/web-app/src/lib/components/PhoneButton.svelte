@@ -21,11 +21,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 <script>
   import { createEventDispatcher, getContext } from 'svelte';
   import Phone from 'svelte-google-materialdesign-icons/Phone.svelte';
-  import { writable } from 'svelte/store';
+  import { get, writable } from 'svelte/store';
   import { Button, ButtonLink } from '@soliguide/design-system';
   import { parsePhoneNumber } from '@soliguide/common';
   import { I18N_CTX_KEY } from '$lib/client/i18n.js';
-  import { THEME_CTX_KEY } from '$lib/theme';
+  import { themeStore } from '$lib/theme';
 
   /** @type {import('$lib/models/types').Phone[]} */
   export let phones = [];
@@ -33,8 +33,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   /** @type {'primaryFill' | 'neutralOutlined'} */
   export let type = 'primaryFill';
 
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
+  const theme = get(themeStore.getTheme());
   /** @type {import('$lib/client/types').I18nStore} */
   const i18n = getContext(I18N_CTX_KEY);
 

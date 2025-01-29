@@ -34,16 +34,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   } from '@soliguide/design-system';
   import { ROUTES_CTX_KEY } from '$lib/client';
   import { I18N_CTX_KEY } from '$lib/client/i18n.js';
-  import { THEME_CTX_KEY } from '$lib/theme/index.js';
+  import { themeStore } from '$lib/theme/index.js';
   import { getHomePageController } from './pageController';
   import { zendeskService } from '$lib/services';
+  import { get } from 'svelte/store';
 
   /** @type {import('$lib/client/types').RoutingStore} */
   const routes = getContext(ROUTES_CTX_KEY);
   /** @type {import('$lib/client/types').I18nStore} */
   const i18n = getContext(I18N_CTX_KEY);
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
+  const theme = get(themeStore.getTheme());
+
   const pageStore = getHomePageController();
 
   setContext('CAPTURE_FCTN_CTX_KEY', pageStore.captureEvent);
