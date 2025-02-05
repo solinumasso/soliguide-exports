@@ -62,11 +62,12 @@ jobs:
       tag: ${{ steps.compute_tag.outputs.tag }}
     needs:
       - docker_meta
+    permissions: {}
     steps:
       # If we're deploying a tag we use it, otherwise we compute the tag with _docker-meta.yml
       - id: compute_tag
         run: |
-          [ -n "${{ inputs.tag }}" ] && echo 'tag=${{ inputs.tag }}' >> "$GITHUB_OUTPUT" || echo 'tag=${{ needs.docker_meta.outputs.tags }}' >> "$GITHUB_OUTPUT"
+          [ -n "${{ inputs.tag }}" ] && echo 'tag=${{ inputs.tag }}' >> "$GITHUB_OUTPUT" || echo 'tag=${{ fromJSON(needs.docker_meta.outputs.json).tags[0] }}' >> "$GITHUB_OUTPUT"
 
   tag-container-images:
     name: Tag container images for ${{ inputs.environment }}
