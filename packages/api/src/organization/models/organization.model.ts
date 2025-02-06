@@ -1,0 +1,304 @@
+/*
+ * Soliguide: Useful information for those who need it
+ *
+ * SPDX-FileCopyrightText: © 2024 Solinum
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { ApiOrganization, CampaignStatus, RELATIONS } from "@soliguide/common";
+import mongoose, { model } from "mongoose";
+import { PhoneSchema } from "../../place/models";
+import { ModelWithId } from "../../_models";
+
+/**
+ * @swagger
+ * definitions:
+ *   Organization:
+ */
+const OrganizationSchema = new mongoose.Schema<ModelWithId<ApiOrganization>>(
+  {
+    areas: {
+      type: Object,
+    },
+    campaigns: {
+      MAJ_ETE_2022: {
+        autonomyRate: { default: 0, type: Number },
+        endDate: {
+          default: null,
+          type: Date,
+        },
+        startDate: {
+          default: null,
+          type: Date,
+        },
+        status: {
+          default: CampaignStatus.TO_DO,
+          enum: CampaignStatus,
+          type: String,
+          uppercase: true,
+        },
+        toUpdate: {
+          default: false,
+          required: true,
+          type: Boolean,
+        },
+      },
+      MAJ_ETE_2023: {
+        autonomyRate: { default: 0, type: Number },
+        endDate: {
+          default: null,
+          type: Date,
+        },
+        startDate: {
+          default: null,
+          type: Date,
+        },
+        status: {
+          default: CampaignStatus.TO_DO,
+          enum: CampaignStatus,
+          type: String,
+          uppercase: true,
+        },
+        toUpdate: {
+          default: false,
+          required: true,
+          type: Boolean,
+        },
+      },
+      MAJ_ETE_2024: {
+        autonomyRate: { default: 0, type: Number },
+        endDate: {
+          default: null,
+          type: Date,
+        },
+        startDate: {
+          default: null,
+          type: Date,
+        },
+        status: {
+          default: CampaignStatus.TO_DO,
+          enum: CampaignStatus,
+          type: String,
+          uppercase: true,
+        },
+        toUpdate: {
+          default: false,
+          required: true,
+          type: Boolean,
+        },
+      },
+      MAJ_HIVER_2022: {
+        autonomyRate: { default: 0, type: Number },
+        endDate: {
+          default: null,
+          type: Date,
+        },
+        startDate: {
+          default: null,
+          type: Date,
+        },
+        status: {
+          default: CampaignStatus.TO_DO,
+          enum: CampaignStatus,
+          type: String,
+          uppercase: true,
+        },
+        toUpdate: {
+          default: false,
+          required: true,
+          type: Boolean,
+        },
+      },
+      MAJ_HIVER_2023: {
+        autonomyRate: { default: 0, type: Number },
+        endDate: {
+          default: null,
+          type: Date,
+        },
+        startDate: {
+          default: null,
+          type: Date,
+        },
+        status: {
+          default: CampaignStatus.TO_DO,
+          enum: CampaignStatus,
+          type: String,
+          uppercase: true,
+        },
+        toUpdate: {
+          default: false,
+          required: true,
+          type: Boolean,
+        },
+      },
+      END_YEAR_2024: {
+        autonomyRate: { default: 0, type: Number },
+        endDate: {
+          default: null,
+          type: Date,
+        },
+        startDate: {
+          default: null,
+          type: Date,
+        },
+        status: {
+          default: CampaignStatus.TO_DO,
+          enum: CampaignStatus,
+          type: String,
+          uppercase: true,
+        },
+        toUpdate: {
+          default: false,
+          required: true,
+          type: Boolean,
+        },
+      },
+      UKRAINE_2022: {
+        endDate: {
+          default: null,
+          type: Date,
+        },
+        startDate: {
+          default: null,
+          type: Date,
+        },
+        status: {
+          default: CampaignStatus.TO_DO,
+          enum: CampaignStatus,
+          type: String,
+        },
+      },
+    },
+    counters: {
+      default: {
+        invitations: {
+          EDITOR: 0,
+          OWNER: 0,
+          READER: 0,
+          TOTAL: 0,
+        },
+        users: {
+          EDITOR: 0,
+          OWNER: 0,
+          READER: 0,
+          TOTAL: 0,
+        },
+      },
+      type: {
+        invitations: {
+          EDITOR: { default: 0, type: Number },
+          OWNER: { default: 0, type: Number },
+          READER: { default: 0, type: Number },
+          TOTAL: { default: 0, type: Number },
+        },
+        users: {
+          EDITOR: { default: 0, type: Number },
+          OWNER: { default: 0, type: Number },
+          READER: { default: 0, type: Number },
+          TOTAL: { default: 0, type: Number },
+        },
+      },
+    },
+    description: {
+      default: null,
+      type: String,
+    },
+    facebook: {
+      default: null,
+      type: String,
+    },
+    fax: {
+      default: null,
+      type: String,
+    },
+    // Linked invitations list
+    invitations: [
+      {
+        ref: "Invitation",
+        type: mongoose.Schema.Types.ObjectId,
+      },
+    ],
+    logo: {
+      default: null,
+      type: String,
+    },
+    mail: {
+      index: true,
+      default: null,
+      lowercase: true,
+      trim: true,
+      type: String,
+    },
+
+    name: {
+      index: true,
+      required: true,
+      type: String,
+    },
+    // ID as a number
+    organization_id: {
+      index: true,
+      type: Number,
+      unique: true,
+    },
+    phone: { default: null, type: PhoneSchema },
+    // Places belonging to the organization
+    places: [
+      {
+        ref: "Place",
+        type: mongoose.Schema.Types.ObjectId,
+      },
+    ],
+    priority: {
+      index: true,
+      default: false,
+      type: Boolean,
+    },
+    relations: {
+      default: [],
+      type: [{ enum: RELATIONS, type: String }],
+    },
+    territories: { default: [], type: [String] },
+
+    users: [
+      {
+        ref: "User",
+        type: mongoose.Schema.Types.ObjectId,
+      },
+    ],
+    verified: {
+      date: { default: null, type: Date },
+      status: { default: false, type: Boolean },
+    },
+    website: {
+      default: null,
+      type: String,
+    },
+  },
+  {
+    strict: true,
+    timestamps: true,
+  }
+);
+
+OrganizationSchema.index({ places: 1 }, { sparse: true });
+
+export const OrganizationModel = model(
+  "Organization",
+  OrganizationSchema,
+  "organization"
+);

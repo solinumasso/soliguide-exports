@@ -1,0 +1,54 @@
+/*
+ * Soliguide: Useful information for those who need it
+ *
+ * SPDX-FileCopyrightText: © 2024 Solinum
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+const log = (message) => print(`${new Date().toISOString()} - ${message}`);
+
+const updateMany = async (collection, message, filter, update, options) => {
+  log(`Anonymizing ${message}...`);
+  // Useful for debugging
+  // log(JSON.stringify(filter, null, 2));
+  // log(JSON.stringify(update, null, 2));
+  // log(JSON.stringify(options, null, 2));
+  const result = await collection.updateMany(filter, update, options);
+  log(`${message} anonymized. ${result.modifiedCount} documents modified`);
+};
+
+const fax = "0123456789";
+const phoneNumber = "123456789";
+
+const emailAggregate = (emailField, id) => {
+  return {
+    [emailField]: {
+      $concat: [
+        "email.",
+        {
+          $toString: id,
+        },
+        "@email.com",
+      ],
+    },
+  };
+};
+
+const stringFieldFilter = (field) => {
+  return {
+    $and: [{ [field]: { $ne: null } }, { [field]: { $ne: "" } }],
+  };
+};

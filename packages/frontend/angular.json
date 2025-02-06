@@ -1,0 +1,197 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "frontend": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:application": {
+          "strict": true
+        },
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/soliguide",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "./tsconfig.app.json",
+            "assets": [
+              "src/favicon.ico",
+              "src/robots.txt",
+              "src/assets",
+              "src/assets/locales",
+              "src/head.prod.html.tpl"
+            ],
+            "styles": [
+              "src/styles.scss",
+              "src/assets/css/print.css",
+              "src/assets/css/main.scss",
+              "src/assets/css/svg.css",
+              "src/assets/css/fonts.css",
+              "src/assets/css/forms.scss",
+              "src/assets/css/tables.scss",
+              "src/assets/css/categories-icons.scss",
+              "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/ngx-sharebuttons/themes/default.scss",
+              "node_modules/intl-tel-input/build/css/intlTelInput.css",
+              "node_modules/@algolia/autocomplete-theme-classic/dist/theme.min.css"
+            ],
+            "scripts": [],
+            "aot": true,
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": true,
+            "sourceMap": true,
+            "optimization": {
+              "scripts": true,
+              "styles": {
+                "minify": true,
+                "inlineCritical": false
+              },
+              "fonts": true
+            },
+            "namedChunks": true,
+            "preserveSymlinks": true
+          },
+          "configurations": {
+            "analyze": {
+              "optimization": true,
+              "outputHashing": "all",
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "4mb",
+                  "maximumError": "6mb"
+                }
+              ]
+            },
+            "production": {
+              "index": {
+                "input": "src/index.prod.html",
+                "output": "index.html"
+              },
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "development_fr": {
+              "outputPath": "dist/soliguide_fr",
+              "index": "src/index.soliguide.fr.html",
+              "optimization": false,
+              "extractLicenses": true,
+              "buildOptimizer": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "6mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            },
+            "development_ad": {
+              "outputPath": "dist/soliguia_ad",
+              "index": "src/index.soliguia.ad.html",
+              "optimization": false,
+              "extractLicenses": true,
+              "buildOptimizer": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "6mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            },
+            "development_es": {
+              "outputPath": "dist/soliguia_es",
+              "index": "src/index.soliguia.es.html",
+              "optimization": false,
+              "extractLicenses": true,
+              "buildOptimizer": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "6mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "frontend:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "frontend:build:production"
+            },
+            "development_fr": {
+              "browserTarget": "frontend:build:development_fr"
+            },
+            "development_ad": {
+              "browserTarget": "frontend:build:development_ad"
+            },
+            "development_es": {
+              "browserTarget": "frontend:build:development_es"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "frontend:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"],
+            "cache": true
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "packageManager": "yarn",
+    "schematicCollections": ["@angular-eslint/schematics"],
+    "analytics": false
+  }
+}

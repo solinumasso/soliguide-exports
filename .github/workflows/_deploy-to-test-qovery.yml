@@ -1,0 +1,589 @@
+# Soliguide: Useful information for those who need it
+#
+# SPDX-FileCopyrightText: © 2025 Solinum
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+name: _Deploy to Qovery test environment
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        type: string
+      registry:
+        type: string
+        default: ghcr.io
+      deploy_api:
+        type: boolean
+        default: true
+      deploy_design-system:
+        type: boolean
+        default: true
+      deploy_frontend:
+        type: boolean
+        default: true
+      deploy_location-api:
+        type: boolean
+        default: true
+      deploy_soligare:
+        type: boolean
+        default: true
+      deploy_web-app:
+        type: boolean
+        default: true
+      deploy_widget:
+        type: boolean
+        default: true
+    secrets:
+      QOVERY_CLI_ACCESS_TOKEN:
+      GCORE_API_KEY:
+
+jobs:
+  docker_meta:
+    uses: ./.github/workflows/_docker-meta.yml
+
+  create-qovery-environment:
+    name: Create Qovery environment
+    runs-on: ubuntu-latest
+    env:
+      QOVERY_ORGANIZATION_NAME: ${{ vars.QOVERY_ORGANIZATION_NAME }}
+      QOVERY_PROJECT_NAME: ${{ vars.QOVERY_PROJECT_NAME }}
+      QOVERY_BLUEPRINT_ENVIRONMENT_NAME: ${{ vars.QOVERY_BLUEPRINT_ENVIRONMENT_NAME }}
+      QOVERY_NEW_ENVIRONMENT_NAME: ${{ needs.docker_meta.outputs.tags }}
+      SOLIGUIDE_TAG: ${{ needs.docker_meta.outputs.tags }}
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+    permissions:
+      contents: read
+      pull-requests: write
+    needs:
+      - docker_meta
+    steps:
+      - name: Install Qovery CLI
+        run: curl -s https://get.qovery.com | bash
+      - name: Print debug information
+        run: |
+          echo "Organization name: $QOVERY_ORGANIZATION_NAME"
+          echo "Project name: $QOVERY_PROJECT_NAME"
+          echo "Blueprint name: $QOVERY_BLUEPRINT_ENVIRONMENT_NAME"
+          echo "New environment name: $QOVERY_NEW_ENVIRONMENT_NAME"
+      - name: Create and Qovery environment
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          echo "Let's clone '$QOVERY_BLUEPRINT_ENVIRONMENT_NAME' environment into '$QOVERY_NEW_ENVIRONMENT_NAME' environment"
+          qovery environment clone \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_BLUEPRINT_ENVIRONMENT_NAME" \
+            --new-environment-name "$QOVERY_NEW_ENVIRONMENT_NAME"
+
+      - name: Create the Posthog Proxy custom domain in Qovery
+        id: ph_domain
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery container domain create \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Posthog Proxy" \
+            --domain "ph.$QOVERY_NEW_ENVIRONMENT_NAME.soliguide.dev"
+
+          VALIDATION_DOMAIN=$(qovery container domain list \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Posthog Proxy" \
+            --json \
+            | jq -r '.[] | select(.type == "CUSTOM_DOMAIN") | .validation_domain')
+
+          echo "Validation domain: $VALIDATION_DOMAIN"
+
+          echo "validation_domain=$VALIDATION_DOMAIN" >> "$GITHUB_OUTPUT"
+
+      - name: Create DNS record for the Posthog Proxy
+        uses: solinumasso/gcore-dns-action@v1
+        with:
+          api-key: ${{ secrets.GCORE_API_KEY }}
+          present: true
+          zone: soliguide.dev
+          subdomain: ph.${{ env.QOVERY_NEW_ENVIRONMENT_NAME }}
+          target: ${{ steps.ph_domain.outputs.validation_domain }}.
+          type: CNAME
+
+      - name: Create the RabbitMQ custom domain in Qovery
+        id: rabbitmq_domain
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery container domain create \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "RabbitMQ" \
+            --domain "rabbitmq.$QOVERY_NEW_ENVIRONMENT_NAME.soliguide.dev"
+
+          VALIDATION_DOMAIN=$(qovery container domain list \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "RabbitMQ" \
+            --json \
+            | jq -r '.[] | select(.type == "CUSTOM_DOMAIN") | .validation_domain')
+
+          echo "Validation domain: $VALIDATION_DOMAIN"
+
+          echo "validation_domain=$VALIDATION_DOMAIN" >> "$GITHUB_OUTPUT"
+
+      - name: Create DNS record for the RabbitMQ
+        uses: solinumasso/gcore-dns-action@v1
+        with:
+          api-key: ${{ secrets.GCORE_API_KEY }}
+          present: true
+          zone: soliguide.dev
+          subdomain: rabbitmq.${{ env.QOVERY_NEW_ENVIRONMENT_NAME }}
+          target: ${{ steps.rabbitmq_domain.outputs.validation_domain }}.
+          type: CNAME
+
+      - name: Update API services
+        if: ${{ inputs.deploy_api }}
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery lifecycle update \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --lifecycle "Seed MongoDB" \
+            --branch "$BRANCH_NAME"
+
+          qovery lifecycle update \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --lifecycle "API migrations" \
+            --tag "$SOLIGUIDE_TAG"
+
+          qovery container update \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "API" \
+            --tag "$SOLIGUIDE_TAG"
+
+          qovery container update \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Cron" \
+            --tag "$SOLIGUIDE_TAG"
+
+      - name: Create the API custom domain in Qovery
+        id: api_domain
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery container domain create \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "API" \
+            --domain "api.$QOVERY_NEW_ENVIRONMENT_NAME.soliguide.dev"
+
+          VALIDATION_DOMAIN=$(qovery container domain list \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "API" \
+            --json \
+            | jq -r '.[] | select(.type == "CUSTOM_DOMAIN") | .validation_domain')
+
+          echo "Validation domain: $VALIDATION_DOMAIN"
+
+          echo "validation_domain=$VALIDATION_DOMAIN" >> "$GITHUB_OUTPUT"
+
+      - name: Create DNS record for the API
+        uses: solinumasso/gcore-dns-action@v1
+        with:
+          api-key: ${{ secrets.GCORE_API_KEY }}
+          present: true
+          zone: soliguide.dev
+          subdomain: api.${{ env.QOVERY_NEW_ENVIRONMENT_NAME }}
+          target: ${{ steps.api_domain.outputs.validation_domain }}.
+          type: CNAME
+
+      - name: Update Location API
+        if: ${{ inputs.deploy_location-api }}
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery container update \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Location API" \
+            --tag "$SOLIGUIDE_TAG"
+
+      - name: Create the Location API custom domain in Qovery
+        id: location-api_domain
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery container domain create \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Location API" \
+            --domain "location-api.$QOVERY_NEW_ENVIRONMENT_NAME.soliguide.dev"
+
+          VALIDATION_DOMAIN=$(qovery container domain list \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Location API" \
+            --json \
+            | jq -r '.[] | select(.type == "CUSTOM_DOMAIN") | .validation_domain')
+
+          echo "Validation domain: $VALIDATION_DOMAIN"
+
+          echo "validation_domain=$VALIDATION_DOMAIN" >> "$GITHUB_OUTPUT"
+
+      - name: Create DNS record for the Location API
+        uses: solinumasso/gcore-dns-action@v1
+        with:
+          api-key: ${{ secrets.GCORE_API_KEY }}
+          present: true
+          zone: soliguide.dev
+          subdomain: location-api.${{ env.QOVERY_NEW_ENVIRONMENT_NAME }}
+          target: ${{ steps.location-api_domain.outputs.validation_domain }}.
+          type: CNAME
+
+      - name: Update Soligare
+        if: ${{ inputs.deploy_soligare }}
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery container update \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Soligare" \
+            --tag "$SOLIGUIDE_TAG"
+
+      - name: Create Soligare custom domain in Qovery
+        id: soligare_domain
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery container domain create \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Soligare" \
+            --domain "soligare.$QOVERY_NEW_ENVIRONMENT_NAME.soliguide.dev"
+
+          VALIDATION_DOMAIN=$(qovery container domain list \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Soligare" \
+            --json \
+            | jq -r '.[] | select(.type == "CUSTOM_DOMAIN") | .validation_domain')
+
+          echo "Validation domain: $VALIDATION_DOMAIN"
+
+          echo "validation_domain=$VALIDATION_DOMAIN" >> "$GITHUB_OUTPUT"
+
+      - name: Create DNS record for Soligare
+        uses: solinumasso/gcore-dns-action@v1
+        with:
+          api-key: ${{ secrets.GCORE_API_KEY }}
+          present: true
+          zone: soliguide.dev
+          subdomain: soligare.${{ env.QOVERY_NEW_ENVIRONMENT_NAME }}
+          target: ${{ steps.soligare_domain.outputs.validation_domain }}.
+          type: CNAME
+
+      - name: Update Web app
+        if: ${{ inputs.deploy_web-app }}
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery container update \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Web App" \
+            --tag "$SOLIGUIDE_TAG"
+
+      - name: Create Web app custom domain in Qovery
+        id: web-app_domain
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery container domain create \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Web App" \
+            --domain "app.$QOVERY_NEW_ENVIRONMENT_NAME.soliguide.dev"
+
+          VALIDATION_DOMAIN=$(qovery container domain list \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Web App" \
+            --json \
+            | jq -r '.[] | select(.type == "CUSTOM_DOMAIN") | .validation_domain')
+
+          echo "Validation domain: $VALIDATION_DOMAIN"
+
+          echo "validation_domain=$VALIDATION_DOMAIN" >> "$GITHUB_OUTPUT"
+
+      - name: Create DNS record for Web app
+        uses: solinumasso/gcore-dns-action@v1
+        with:
+          api-key: ${{ secrets.GCORE_API_KEY }}
+          present: true
+          zone: soliguide.dev
+          subdomain: app.${{ env.QOVERY_NEW_ENVIRONMENT_NAME }}
+          target: ${{ steps.web-app_domain.outputs.validation_domain }}.
+          type: CNAME
+
+      - name: Update Frontend
+        if: ${{ inputs.deploy_frontend }}
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery container update \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Frontend" \
+            --tag "${SOLIGUIDE_TAG}"
+
+          qovery container update \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Frontend Proxy" \
+            --tag "${SOLIGUIDE_TAG}-frontend"
+
+      - name: Create Frontend custom domains in Qovery
+        id: frontend_domain
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          # soliguide_fr
+          qovery container domain create \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Frontend Proxy" \
+            --domain "fr.$QOVERY_NEW_ENVIRONMENT_NAME.soliguide.dev"
+
+          qovery container domain create \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Frontend Proxy" \
+            --domain "www.fr.$QOVERY_NEW_ENVIRONMENT_NAME.soliguide.dev"
+
+          # soliguia_es
+          qovery container domain create \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Frontend Proxy" \
+            --domain "es.$QOVERY_NEW_ENVIRONMENT_NAME.soliguide.dev"
+
+          qovery container domain create \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Frontend Proxy" \
+            --domain "www.es.$QOVERY_NEW_ENVIRONMENT_NAME.soliguide.dev"
+
+          # soliguia_ad
+          qovery container domain create \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Frontend Proxy" \
+            --domain "ad.$QOVERY_NEW_ENVIRONMENT_NAME.soliguide.dev"
+
+          qovery container domain create \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Frontend Proxy" \
+            --domain "www.ad.$QOVERY_NEW_ENVIRONMENT_NAME.soliguide.dev"
+
+          VALIDATION_DOMAIN=$(qovery container domain list \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Frontend Proxy" \
+            --json \
+            | jq -r '.[] | select(.type == "CUSTOM_DOMAIN") | .validation_domain' | head -n 1)
+
+          echo "Validation domain: $VALIDATION_DOMAIN"
+
+          echo "validation_domain=$VALIDATION_DOMAIN" >> "$GITHUB_OUTPUT"
+
+      - name: Create DNS record for Frontend soliguide_fr
+        uses: solinumasso/gcore-dns-action@v1
+        with:
+          api-key: ${{ secrets.GCORE_API_KEY }}
+          present: true
+          zone: soliguide.dev
+          subdomain: fr.${{ env.QOVERY_NEW_ENVIRONMENT_NAME }}
+          target: ${{ steps.frontend_domain.outputs.validation_domain }}.
+          type: CNAME
+
+      - name: Create DNS record for Frontend www soliguide_fr
+        uses: solinumasso/gcore-dns-action@v1
+        with:
+          api-key: ${{ secrets.GCORE_API_KEY }}
+          present: true
+          zone: soliguide.dev
+          subdomain: www.fr.${{ env.QOVERY_NEW_ENVIRONMENT_NAME }}
+          target: ${{ steps.frontend_domain.outputs.validation_domain }}.
+          type: CNAME
+
+      - name: Create DNS record for Frontend soliguia_es
+        uses: solinumasso/gcore-dns-action@v1
+        with:
+          api-key: ${{ secrets.GCORE_API_KEY }}
+          present: true
+          zone: soliguide.dev
+          subdomain: es.${{ env.QOVERY_NEW_ENVIRONMENT_NAME }}
+          target: ${{ steps.frontend_domain.outputs.validation_domain }}.
+          type: CNAME
+
+      - name: Create DNS record for Frontend www soliguia_es
+        uses: solinumasso/gcore-dns-action@v1
+        with:
+          api-key: ${{ secrets.GCORE_API_KEY }}
+          present: true
+          zone: soliguide.dev
+          subdomain: www.es.${{ env.QOVERY_NEW_ENVIRONMENT_NAME }}
+          target: ${{ steps.frontend_domain.outputs.validation_domain }}.
+          type: CNAME
+
+      - name: Create DNS record for Frontend soliguia_ad
+        uses: solinumasso/gcore-dns-action@v1
+        with:
+          api-key: ${{ secrets.GCORE_API_KEY }}
+          present: true
+          zone: soliguide.dev
+          subdomain: ad.${{ env.QOVERY_NEW_ENVIRONMENT_NAME }}
+          target: ${{ steps.frontend_domain.outputs.validation_domain }}.
+          type: CNAME
+
+      - name: Create DNS record for Frontend www soliguia_ad
+        uses: solinumasso/gcore-dns-action@v1
+        with:
+          api-key: ${{ secrets.GCORE_API_KEY }}
+          present: true
+          zone: soliguide.dev
+          subdomain: www.ad.${{ env.QOVERY_NEW_ENVIRONMENT_NAME }}
+          target: ${{ steps.frontend_domain.outputs.validation_domain }}.
+          type: CNAME
+
+      - name: Update Widget
+        if: ${{ inputs.deploy_widget }}
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery container update \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Widget" \
+            --tag "${SOLIGUIDE_TAG}"
+
+          qovery container update \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Widget Proxy" \
+            --tag "${SOLIGUIDE_TAG}-widget"
+
+      - name: Create Widget custom domain in Qovery
+        id: widget_domain
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery container domain create \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Widget Proxy" \
+            --domain "widget.$QOVERY_NEW_ENVIRONMENT_NAME.soliguide.dev"
+
+          VALIDATION_DOMAIN=$(qovery container domain list \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --container "Widget Proxy" \
+            --json \
+            | jq -r '.[] | select(.type == "CUSTOM_DOMAIN") | .validation_domain')
+
+          echo "Validation domain: $VALIDATION_DOMAIN"
+
+          echo "validation_domain=$VALIDATION_DOMAIN" >> "$GITHUB_OUTPUT"
+
+      - name: Create DNS record for Widget
+        uses: solinumasso/gcore-dns-action@v1
+        with:
+          api-key: ${{ secrets.GCORE_API_KEY }}
+          present: true
+          zone: soliguide.dev
+          subdomain: widget.${{ env.QOVERY_NEW_ENVIRONMENT_NAME }}
+          target: ${{ steps.widget_domain.outputs.validation_domain }}.
+          type: CNAME
+
+      - name: Deploy the environment
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery environment deploy \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME"
+
+      - id: status
+        name: Get environment status
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery_status_markdown_output=`qovery service list \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_NEW_ENVIRONMENT_NAME" \
+            --markdown`
+
+          echo "QOVERY_STATUS_MARKDOWN_OUTPUT<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$qovery_status_markdown_output" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: PR Comment with URL
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-id: qovery-environment-status
+          message: |
+            ${{ steps.status.outputs.QOVERY_STATUS_MARKDOWN_OUTPUT }}

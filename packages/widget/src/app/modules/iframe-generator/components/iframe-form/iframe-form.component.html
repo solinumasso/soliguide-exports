@@ -1,0 +1,171 @@
+<!--
+Soliguide: Useful information for those who need it
+
+SPDX-FileCopyrightText: © 2024 Solinum
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<header class="p-3 row justify-content-center">
+  <img class="col-2" alt="Soliguide logo" src="assets/images/logo.png" />
+</header>
+
+<main class="container text-primary py-5 my-5">
+  <div class="row justify-content-center">
+    <div class="col-8">
+      <!-- First page -->
+      <app-intro-form
+        *ngIf="currentStep === IframeGeneratorStep.INTRO"
+      ></app-intro-form>
+
+      <app-users-form
+        *ngIf="currentStep === IframeGeneratorStep.USERS"
+        [formValue]="formValue"
+      ></app-users-form>
+
+      <div class="row justify-content-between">
+        <button
+          *ngIf="
+            currentStep === IframeGeneratorStep.INTRO ||
+            currentStep === IframeGeneratorStep.USERS
+          "
+          class="col-6 col-md-2 offset-8 align-self-end fw-bold btn btn-primary"
+          (click)="continueToNextStep()"
+          [disabled]="!allowsGoingToNextStep(currentStep)"
+          type="button"
+        >
+          {{ "CONTINUE" | translate }}
+        </button>
+
+        <!-- Form -->
+        <div *ngIf="0 <= currentStep && currentStep < numberSteps">
+          <div class="position-relative m-4">
+            <div class="progress" style="height: 11px">
+              <div
+                class="progress-bar"
+                role="progressbar"
+                [style]="
+                  'width: ' + (currentStep / (numberSteps - 1)) * 100 + '%'
+                "
+                aria-valuemin="0"
+                [attr.aria-valuenow]="(currentStep / (numberSteps - 1)) * 100"
+                aria-valuemax="100"
+              ></div>
+            </div>
+            <ng-container *ngFor="let step of stepsArray">
+              <button
+                type="button"
+                [class]="
+                  'position-absolute translate-middle btn btn-sm rounded-pill fw-bold start-' +
+                  (step / (numberSteps - 1)) * 100
+                "
+                [ngClass]="{
+                  'btn-primary': step <= currentStep,
+                  'btn-light': step > currentStep
+                }"
+                (click)="breadcrumbGoToStep(step)"
+                style="width: 2.5rem; height: 2.5rem; top: 5px"
+                [disabled]="!allowsGoingToNextStep(step - 1)"
+              >
+                {{ step + 1 }}
+              </button>
+            </ng-container>
+          </div>
+
+          <app-locations-form
+            *ngIf="currentStep === IframeGeneratorStep.LOCATIONS"
+            [formValue]="formValue"
+          ></app-locations-form>
+
+          <app-categories-form
+            *ngIf="currentStep === IframeGeneratorStep.CATEGORIES"
+            [formValue]="formValue"
+          ></app-categories-form>
+
+          <app-publics-form
+            *ngIf="currentStep === IframeGeneratorStep.PUBLICS"
+            [formValue]="formValue"
+          ></app-publics-form>
+
+          <app-modalities-form
+            *ngIf="currentStep === IframeGeneratorStep.MODALITIES"
+            [formValue]="formValue"
+          ></app-modalities-form>
+
+          <app-appearance-form
+            *ngIf="currentStep === IframeGeneratorStep.APPEARANCE"
+            [formValue]="formValue"
+          ></app-appearance-form>
+
+          <div class="row">
+            <div class="col-1 offset-1 align-self-start">
+              <button
+                type="button"
+                class="btn btn-primary rounded-pill arrow-button"
+                (click)="goingBackToPreviousStep()"
+              >
+                <span
+                  ><fa-icon
+                    [icon]="faArrowLeft"
+                    aria-hidden="true"
+                    size="2x"
+                  ></fa-icon
+                ></span>
+              </button>
+            </div>
+            <div class="col-1 offset-8 align-self-end">
+              <button
+                type="button"
+                class="btn btn-primary rounded-pill arrow-button"
+                (click)="forwardToNextStep()"
+                [disabled]="!allowsGoingToNextStep(currentStep)"
+              >
+                <fa-icon
+                  [icon]="faArrowRight"
+                  aria-hidden="true"
+                  size="2x"
+                ></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- GCU -->
+        <app-gcu-form
+          *ngIf="currentStep === IframeGeneratorStep.CGU"
+          [formValue]="formValue"
+        ></app-gcu-form>
+
+        <button
+          type="submit"
+          *ngIf="currentStep === IframeGeneratorStep.CGU"
+          class="col-6 col-md-2 offset-8 align-self-end fw-bold btn btn-primary"
+          (click)="done()"
+          [disabled]="!formValue.gcu"
+        >
+          {{ "FINISH" | translate }}
+        </button>
+
+        <!-- URI display -->
+        <div *ngIf="currentStep === IframeGeneratorStep.URI">
+          <app-uri-display
+            [formValue]="formValue"
+            (restart)="restart()"
+          ></app-uri-display>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

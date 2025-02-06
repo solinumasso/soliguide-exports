@@ -1,0 +1,153 @@
+<!--
+Soliguide: Useful information for those who need it
+
+SPDX-FileCopyrightText: © 2024 Solinum
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<nav class="navbar navbar-expand-lg navbar-light">
+  <div class="navbar-brand">
+    <a
+      routerLink="/"
+      [attr.aria-label]="'NAV_BACK_HOMEPAGE' | translate"
+      [title]="'SOLIGUIDE_HOMEPAGE' | translate"
+    >
+      <img
+        class="d-inline d-sm-none"
+        src="/assets/images/logo_shorter.png"
+        [alt]="'SOLIGUIDE_LOGO' | translate"
+      />
+      <img
+        class="d-none d-md-block"
+        src="/assets/images/logo_short.png"
+        [alt]="'SOLIGUIDE_LOGO' | translate"
+      />
+    </a>
+  </div>
+
+  <div id="translate-flags">
+    <div class="custom-dropdown" ngbDropdown display="dynamic">
+      <button
+        type="button"
+        class="nav-link"
+        ngbDropdownToggle
+        id="navbarDropdownLang"
+      >
+        <img
+          src="/assets/images/langues/{{ currentLang }}.png"
+          [alt]="('LANGUAGE' | translate) + ' ' + currentLang"
+          class="rounded-circle"
+        />
+        {{ "LANGUE_" + currentLang | uppercase | translate }}
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownManual">
+        <ng-container *ngFor="let lang of SUPPORTED_LANGUAGES">
+          <button
+            type="button"
+            *ngIf="lang !== currentLang"
+            ngbDropdownItem
+            (click)="updateLang(lang)"
+            class="clickable"
+          >
+            <img
+              src="/assets/images/langues/{{ lang }}.png"
+              [alt]="('LANGUAGE' | translate) + ' ' + lang"
+              class="rounded-circle"
+            />
+            {{ ALL_SUPPORTED_LANGUAGES_NAME[lang].nativeName }} ({{
+              "LANGUE_" + lang | uppercase | translate
+            }})
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <button
+    *ngFor="let widgetId of WIDGETS_AVAILABLE"
+    class="btn mx-2"
+    type="button"
+    (click)="setWidgetId(widgetId)"
+    [ngClass]="[
+      selectedWidget === widgetId ? 'btn-primary' : 'btn-outline-primary'
+    ]"
+  >
+    {{ WIDGETS[widgetId].name }}
+  </button>
+</nav>
+
+<div class="container">
+  <div class="my-4">
+    <div class="row align-items-center">
+      <div class="col-8">
+        <iframe
+          [attr.aria-label]="'SEARCH_ON_SOLIGUIDE' | translate"
+          height="490px"
+          style="width: 100%; max-width: 100%; display: block; margin: 0 auto"
+          [title]="'SEARCH_ON_SOLIGUIDE' | translate"
+          [src]="
+            widgetUrl +
+              '/search/' +
+              selectedWidget +
+              '/' +
+              currentLang +
+              '/PASS' | safeUrl
+          "
+          frameborder="0"
+        >
+        </iframe>
+      </div>
+
+      <div class="col-4">
+        <code class="my-4">
+          {{ generatedUrlPass }}
+        </code>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+  <ng-container *ngFor="let category of availableCategories">
+    <div class="row align-items-center">
+      <div class="col-8">
+        <iframe
+          [attr.aria-label]="'SEARCH_ON_SOLIGUIDE' | translate"
+          height="490px"
+          style="width: 100%; max-width: 100%; display: block; margin: 0 auto"
+          [title]="'SEARCH_ON_SOLIGUIDE' | translate"
+          [src]="
+            widgetUrl +
+              '/search/' +
+              selectedWidget +
+              '/' +
+              currentLang +
+              '/' +
+              category | safeUrl
+          "
+          frameborder="0"
+        >
+        </iframe>
+      </div>
+
+      <div class="col-4">
+        <code class="my-4">
+          {{ generatedUrls[category] }}
+        </code>
+      </div>
+    </div>
+    <hr />
+  </ng-container>
+</div>

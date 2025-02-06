@@ -1,0 +1,11 @@
+{
+  "watch": ["src", ".env", "e2e", "nodemon.json", "migrations", "resources"],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ext": "js,json,ts",
+  "ignore": ["src/**/*.spec.ts"],
+  "execMap": {
+    "ts": "node --trace-warnings -r ts-node/register/transpile-only"
+  }
+}

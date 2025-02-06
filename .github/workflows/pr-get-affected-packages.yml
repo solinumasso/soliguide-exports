@@ -1,0 +1,71 @@
+# Soliguide: Useful information for those who need it
+#
+# SPDX-FileCopyrightText: © 2024 Solinum
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+name: PR - Get affected packages
+
+on:
+  workflow_call:
+    outputs:
+      to_build:
+        value: ${{ jobs.affected_packages.outputs.to_build }}
+      to_test:
+        value: ${{ jobs.affected_packages.outputs.to_test }}
+      to_deploy:
+        value: ${{ jobs.affected_packages.outputs.to_deploy }}
+      node_version:
+        value: ${{ jobs.affected_packages.outputs.node_version }}
+
+jobs:
+  affected_packages:
+    name: Get affected packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      to_build: ${{ steps.affected_packages.outputs.to_build }}
+      to_test: ${{ steps.affected_packages.outputs.to_test }}
+      to_deploy: ${{ steps.affected_packages.outputs.to_deploy }}
+      node_version: ${{ steps.node_version.outputs.node_version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch the entire history of the repository
+          fetch-depth: 0
+
+      - name: Get node version from root Dockerfile
+        id: node_version
+        run: echo "node_version=$(grep -E 'FROM node:[0-9]+\.[0-9]+' Dockerfile | head -n 1 | sed -E 's/^FROM node:([0-9]+\.[0-9]+).*$/\1/')" >> "$GITHUB_OUTPUT"
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ steps.node_version.outputs.node_version }}
+
+      - name: Get affected packages
+        id: affected_packages
+        run: ./scripts/get-affected-packages.sh
+
+      - name: Debug affected packages
+        run: |
+          echo "to_build=${{ steps.affected_packages.outputs.to_build }}"
+          echo "to_test=${{ steps.affected_packages.outputs.to_test }}"
+          echo "to_deploy=${{ steps.affected_packages.outputs.to_deploy }}"

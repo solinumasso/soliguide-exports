@@ -1,0 +1,66 @@
+<!--
+Soliguide: Useful information for those who need it
+
+SPDX-FileCopyrightText: © 2024 Solinum
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<div class="row justify-content-center py-5">
+  <h1 class="fw-bolder col-12 py-5">
+    {{ "CODE_TO_COPY" | translate | uppercase }}
+  </h1>
+  <div class="col-12 mb-3 p-0">
+    <textarea
+      class="form-control"
+      [placeholder]="'GENERATION_IN_PROGRESS' | translate"
+      rows="5"
+      readonly
+      >{{ uri }}</textarea
+    >
+  </div>
+
+  <div class="col-12">
+    <p>
+      {{ "IFRAME_PASTING_EXPLANATIONS" | translate }}
+    </p>
+    <p>
+      {{ "IFRAME_PASTING_EXAMPLE" | translate }}
+    </p>
+    <p>
+      {{ "WIDGET_DISPLAY_ANNOUNCEMENT" | translate }}
+    </p>
+  </div>
+
+  <div class="col-12">
+    <iframe
+      [attr.aria-label]="'SEARCH_ON_SOLIGUIDE' | translate"
+      height="380px"
+      style="width: 100%; max-width: 100%; display: block; margin: 0 auto"
+      [title]="'SEARCH_ON_SOLIGUIDE' | translate"
+      [src]="searchUri | safeUrl"
+      frameborder="0"
+    >
+    </iframe>
+
+    <button
+      type="button"
+      class="col-6 col-md-2 offset-10 my-5 fw-bold btn btn-primary"
+      (click)="restart.emit()"
+    >
+      {{ "RESTART" | translate }}
+    </button>
+  </div>
+</div>

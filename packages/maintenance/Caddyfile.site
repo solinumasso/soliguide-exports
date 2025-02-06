@@ -1,0 +1,57 @@
+# Soliguide: Useful information for those who need it
+#
+# SPDX-FileCopyrightText: © 2024 Solinum
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+:8080
+
+log {
+	format json
+}
+
+encode zstd gzip
+
+# Client max body size
+request_body {
+	max_size 6MB
+}
+
+# Custom error pages
+handle_errors 404 500 502 503 504 {
+	import maintenance
+}
+
+# Localhost just redirect to maintenance page, usefull for healthcheck for example
+@localhost {
+	host localhost
+}
+handle @localhost {
+	import maintenance
+}
+
+# Redirect www to non-www
+@www header_regexp host Host ^www\.(.+)$
+handle @www {
+	redir https://{re.host.1}{uri} permanent
+}
+
+# Add headers for security
+header {
+	X-XSS-Protection "1; mode=block"
+	X-Content-Type-Options nosniff
+	# enable HSTS
+	Strict-Transport-Security max-age=31536000
+}

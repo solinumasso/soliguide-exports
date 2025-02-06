@@ -1,0 +1,114 @@
+# Soliguide: Useful information for those who need it
+#
+# SPDX-FileCopyrightText: © 2024 Solinum
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+name: PR - Delete related docker images
+
+on:
+  pull_request:
+    types:
+      - closed
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  delete_container_images:
+    name: Delete container images related to this PR (${{ github.event.number }})
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    env:
+      TAGS: pr-${{ github.event.number }}
+    steps:
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete base images
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          package: soliguide/base
+          delete-tags: ${{ env.TAGS }}*
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete api images
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          package: soliguide/api
+          delete-tags: ${{ env.TAGS }}*
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete common images
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          package: soliguide/common
+          delete-tags: ${{ env.TAGS }}*
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete common-angular images
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          package: soliguide/common-angular
+          delete-tags: ${{ env.TAGS }}*
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete design-system images
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          package: soliguide/design-system
+          delete-tags: ${{ env.TAGS }}*
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete frontend images
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          package: soliguide/frontend
+          delete-tags: ${{ env.TAGS }}*
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete location-api images
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          package: soliguide/location-api
+          delete-tags: ${{ env.TAGS }}*
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete soligare images
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          package: soliguide/soligare
+          delete-tags: ${{ env.TAGS }}*
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete web-app images
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          package: soliguide/web-app
+          delete-tags: ${{ env.TAGS }}*
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete widget images
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          package: soliguide/widget
+          delete-tags: ${{ env.TAGS }}*
+          token: ${{ secrets.GITHUB_TOKEN }}

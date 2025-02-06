@@ -1,0 +1,18 @@
+{
+  "exclude": [
+    "mocks",
+    "e2e",
+    "node_modules",
+    "uploads",
+    "public",
+    "jest-setup.ts",
+    "jest.config.ts",
+    "**/*.spec.*"
+  ],
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "inlineSources": true,
+    "sourceMap": true,
+    "sourceRoot": "/"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "private": true,
+  "name": "soliguide",
+  "license": "AGPL-3.0-only",
+  "scripts": {
+    "build": "lerna run build",
+    "watch": "lerna run watch",
+    "lint": "lerna run lint",
+    "format": "lerna run format",
+    "format:fix": "lerna run format:fix",
+    "test": "lerna run test",
+    "start": "lerna run start",
+    "license:root:add": "license-check-and-add add -f license.config.json -r $(date +%Y)",
+    "license:root:check": "license-check-and-add check -f license.config.json -r $(date +%Y)",
+    "license:root:remove": "license-check-and-add remove -f license.config.json -r $(date +%Y)",
+    "license:add": "yarn license:root:add && lerna run license:add",
+    "license:check": "yarn license:root:check && lerna run license:check",
+    "license:remove": "yarn license:root:remove && lerna run license:remove",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.4.1",
+    "@commitlint/config-conventional": "^19.4.1",
+    "@commitlint/config-lerna-scopes": "^19.0.0",
+    "husky": "^9.0.11",
+    "lerna": "^8.1.8",
+    "license-check-and-add": "^4.0.5",
+    "lint-staged": "^15.2.7",
+    "nx": "^19.6.4",
+    "semantic-release": "^24.0.0",
+    "semantic-release-lerna": "^2.6.2"
+  },
+  "resolutions": {
+    "@aws-sdk/client-s3": "3.637.0"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "version": "4.33.3",
+  "packageManager": "yarn@4.4.1"
+}

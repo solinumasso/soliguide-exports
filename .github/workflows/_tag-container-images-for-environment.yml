@@ -1,0 +1,143 @@
+# Soliguide: Useful information for those who need it
+#
+# SPDX-FileCopyrightText: © 2024 Solinum
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+name: _Tag container images
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+      tag:
+        type: string
+        required: true
+      registry:
+        type: string
+        default: ghcr.io
+      deploy_api:
+        type: boolean
+        default: true
+      deploy_design-system:
+        type: boolean
+        default: true
+      deploy_frontend:
+        type: boolean
+        default: true
+      deploy_location-api:
+        type: boolean
+        default: true
+      deploy_soligare:
+        type: boolean
+        default: true
+      deploy_web-app:
+        type: boolean
+        default: true
+      deploy_widget:
+        type: boolean
+        default: true
+jobs:
+  tag_images_for_environment:
+    name: Tag images for ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Install skopeo utils
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install skopeo
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ inputs.registry }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag api image
+        if: ${{ inputs.deploy_api }}
+        run: |
+          export TARGET_IMAGE=$(echo "$SOURCE_IMAGE" | sed -E 's/:.+$/:${{ inputs.environment }}/')
+          skopeo copy "docker://$SOURCE_IMAGE" "docker://$TARGET_IMAGE"
+        env:
+          SOURCE_IMAGE: ${{ inputs.registry }}/${{ github.repository }}/api:${{ inputs.tag }}
+
+      - name: Tag design-system image
+        if: ${{ inputs.deploy_design-system }}
+        run: |
+          export TARGET_IMAGE=$(echo "$SOURCE_IMAGE" | sed -E 's/:.+$/:${{ inputs.environment }}/')
+          skopeo copy "docker://$SOURCE_IMAGE" "docker://$TARGET_IMAGE"
+        env:
+          SOURCE_IMAGE: ${{ inputs.registry }}/${{ github.repository }}/design-system:${{ inputs.tag }}-build
+
+      - name: Tag frontend image
+        if: ${{ inputs.deploy_frontend }}
+        run: |
+          export TARGET_IMAGE=$(echo "$SOURCE_IMAGE" | sed -E 's/:.+$/:${{ inputs.environment }}/')
+          skopeo copy "docker://$SOURCE_IMAGE" "docker://$TARGET_IMAGE"
+        env:
+          SOURCE_IMAGE: ${{ inputs.registry }}/${{ github.repository }}/frontend:${{ inputs.tag }}
+
+      - name: Tag location-api image
+        if: ${{ inputs.deploy_location-api }}
+        run: |
+          export TARGET_IMAGE=$(echo "$SOURCE_IMAGE" | sed -E 's/:.+$/:${{ inputs.environment }}/')
+          skopeo copy "docker://$SOURCE_IMAGE" "docker://$TARGET_IMAGE"
+        env:
+          SOURCE_IMAGE: ${{ inputs.registry }}/${{ github.repository }}/location-api:${{ inputs.tag }}
+
+      - name: Tag maintenance frontend image
+        if: ${{ inputs.deploy_frontend }}
+        run: |
+          export TARGET_IMAGE=$(echo "$SOURCE_IMAGE" | sed -E 's/:.+-frontend$/:${{ inputs.environment }}-frontend/')
+          skopeo copy "docker://$SOURCE_IMAGE" "docker://$TARGET_IMAGE"
+        env:
+          SOURCE_IMAGE: ${{ inputs.registry }}/${{ github.repository }}/maintenance:${{ inputs.tag }}-frontend
+
+      - name: Tag maintenance widget image
+        if: ${{ inputs.deploy_widget }}
+        run: |
+          export TARGET_IMAGE=$(echo "$SOURCE_IMAGE" | sed -E 's/:.+-widget$/:${{ inputs.environment }}-widget/')
+          skopeo copy "docker://$SOURCE_IMAGE" "docker://$TARGET_IMAGE"
+        env:
+          SOURCE_IMAGE: ${{ inputs.registry }}/${{ github.repository }}/maintenance:${{ inputs.tag }}-widget
+
+      - name: Tag soligare image
+        if: ${{ inputs.deploy_soligare }}
+        run: |
+          export TARGET_IMAGE=$(echo "$SOURCE_IMAGE" | sed -E 's/:.+$/:${{ inputs.environment }}/')
+          skopeo copy "docker://$SOURCE_IMAGE" "docker://$TARGET_IMAGE"
+        env:
+          SOURCE_IMAGE: ${{ inputs.registry }}/${{ github.repository }}/soligare:${{ inputs.tag }}
+
+      - name: Tag web-app image
+        if: ${{ inputs.deploy_web-app }}
+        run: |
+          export TARGET_IMAGE=$(echo "$SOURCE_IMAGE" | sed -E 's/:.+$/:${{ inputs.environment }}/')
+          skopeo copy "docker://$SOURCE_IMAGE" "docker://$TARGET_IMAGE"
+        env:
+          SOURCE_IMAGE: ${{ inputs.registry }}/${{ github.repository }}/web-app:${{ inputs.tag }}
+
+      - name: Tag widget image
+        if: ${{ inputs.deploy_widget }}
+        run: |
+          export TARGET_IMAGE=$(echo "$SOURCE_IMAGE" | sed -E 's/:.+$/:${{ inputs.environment }}/')
+          skopeo copy "docker://$SOURCE_IMAGE" "docker://$TARGET_IMAGE"
+        env:
+          SOURCE_IMAGE: ${{ inputs.registry }}/${{ github.repository }}/widget:${{ inputs.tag }}

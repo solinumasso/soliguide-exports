@@ -1,0 +1,59 @@
+<!--
+Soliguide: Useful information for those who need it
+
+SPDX-FileCopyrightText: © 2024 Solinum
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<div id="form_recherche">
+  <div class="row">
+    <div class="col-md-5 col-12">
+      <app-search-category-autocomplete
+        [search]="search"
+        (updateCategory)="updateCategory.emit()"
+        (updateSearchTerm)="updateSearchTerm.emit()"
+        (click)="captureEvent('category-input')"
+        class="search-input"
+      ></app-search-category-autocomplete>
+    </div>
+    <div class="col-md-5 col-12">
+      <div class="search-input">
+        <label for="address-search">
+          {{ "A_PROXIMITE" | translate }}
+        </label>
+        <app-location-autocomplete
+          [addressesOnly]="false"
+          [currentAddress]="search?.location.label"
+          (updateLocation)="updateLocation.emit($event)"
+          (click)="captureEvent('location-input')"
+        ></app-location-autocomplete>
+      </div>
+    </div>
+    <div
+      class="justify-content-center align-self-center text-center col-md-2 col-12"
+    >
+      <button
+        type="button"
+        (click)="localLaunchSearch()"
+        class="search-btn search-btn-lg btn btn-secondary"
+      >
+        <fa-icon [icon]="['fas', 'search']" aria-hidden="true"></fa-icon>
+        <span class="d-sm-none">{{ "SEARCH" | translate }}</span>
+      </button>
+    </div>
+  </div>
+  <br />
+</div>

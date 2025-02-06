@@ -1,0 +1,206 @@
+/*
+ * Soliguide: Useful information for those who need it
+ *
+ * SPDX-FileCopyrightText: © 2024 Solinum
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+$primary: #3e3a71;
+$secondary: #e65a46;
+
+$font-family-sans-serif: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$font-family-monospace: "Lato", SFMono-Regular, Menlo, Monaco, Consolas,
+  "Liberation Mono", "Courier New", monospace;
+
+// BUTTONS
+$btn-border-radius: 0.5rem !default;
+$btn-border-radius-sm: 0.5rem !default;
+$btn-border-radius-lg: 0.5rem !default;
+
+$input-btn-padding-y: 0.4rem !default;
+$input-btn-padding-x: 0.8rem !default;
+
+$zindex-dropdown: 20000;
+
+.fa-location-dot,
+.text-primary {
+  color: var(--bs-primary) !important;
+}
+
+.autocomplete .dropdown-item {
+  padding: 0.45rem 1rem !important;
+  border-bottom: 1px solid #c3c3c3;
+}
+
+.autocomplete .dropdown-menu {
+  padding: 0 !important;
+}
+
+.autocomplete .dropdown-item.active,
+.autocomplete .dropdown-item:active {
+  background-color: var(--bs-primary) !important;
+}
+.autocomplete .dropdown-item.active .text-primary {
+  color: white !important;
+}
+
+$utilities: () !default;
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "start": (
+      property: left,
+      class: start,
+      values: (
+        0: 0,
+        25: 25%,
+        50: 50%,
+        75: 75%,
+        100: 100%,
+      ),
+    ),
+  )
+);
+
+.subtitle-primary {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 23px;
+  color: var(--bs-primary);
+}
+
+.dropdown-toggle {
+  background-color: #ffffff;
+  border: 1px solid #d6d6d6;
+  box-sizing: border-box;
+  border-radius: 5px;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  text-align: left;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 150%;
+  min-height: 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: ease 0.15s;
+}
+
+.dropdown-toggle:hover {
+  border-color: var(--bs-primary);
+}
+
+.dropdown-toggle.disabled,
+.dropdown-toggle:disabled,
+.dropdown-toggle[disabled] {
+  color: #777777;
+  background-color: #eeeeee;
+}
+
+.dropdown-toggle.disabled:hover,
+.dropdown-toggle:disabled:hover,
+.dropdown-toggle[disabled]:hover {
+  border-color: #d6d6d6;
+}
+
+.dropdown-toggle > span {
+  min-width: 93%;
+}
+
+.dropdown-toggle .ng-fa-icon {
+  width: 20px;
+  text-align: right;
+}
+
+.dropdown-item {
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.custom-dropdown .dropdown-menu {
+  min-width: 220px;
+  border-top: 0;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
+  border: none;
+  padding-bottom: 0;
+  background-color: white;
+}
+
+.custom-dropdown {
+  min-width: 100%;
+  width: 100%;
+  padding: 0;
+}
+
+.dropdown-menu {
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
+  border: none;
+  padding-bottom: 0;
+  min-width: 180px;
+  min-width: 100%;
+  background-color: white;
+}
+
+.dropdown-item:hover {
+  background-color: #d6d6d6;
+}
+
+.custom-dropdown .dropdown-item .ng-fa-icon {
+  min-width: 24px;
+}
+
+.custom-dropdown .dropdown-item img {
+  margin-right: 5px;
+}
+
+.custom-dropdown .dropdown-item * {
+  display: inline-block;
+  margin-right: 10px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 150%;
+}
+
+.custom-dropdown .dropdown-item.disabled,
+.custom-dropdown .dropdown-item:disabled,
+.custom-dropdown .dropdown-item[disabled] {
+  color: #777777;
+  pointer-events: none;
+  background-color: #eeeeee;
+}
+
+label,
+.form-label {
+  cursor: pointer;
+  font-style: normal;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  font-size: 1.05rem;
+  color: var(--bs-primary);
+}
+
+@import "bootstrap/scss/bootstrap";
+@import "ngx-toastr/toastr";

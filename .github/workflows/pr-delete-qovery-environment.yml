@@ -1,0 +1,97 @@
+# Soliguide: Useful information for those who need it
+#
+# SPDX-FileCopyrightText: © 2025 Solinum
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+name: PR - Delete qovery environment
+
+on:
+  pull_request:
+    types:
+      - closed
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  QOVERY_ENVIRONMENT_NAME: pr-${{ github.event.number }}
+
+jobs:
+  delete_qovery_environement:
+    name: Delete Qovery environment for  this PR (${{ github.event.number }})
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Install Qovery CLI
+        run: curl -s https://get.qovery.com | bash
+      - name: Print debug information
+        run: |
+          echo "Organization name: $QOVERY_ORGANIZATION_NAME"
+          echo "Project name: $QOVERY_PROJECT_NAME"
+          echo "Environment name: $QOVERY_ENVIRONMENT_NAME"
+      - name: Search for the environment in Qovery
+        id: check_presence
+        continue-on-error: true
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery environment list \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --json \
+            | jq -r '.[] | .name' | grep -e "^${QOVERY_ENVIRONMENT_NAME}$"
+      - name: Delete the environment
+        if: steps.check_presence.outcome == 'success'
+        env:
+          QOVERY_CLI_ACCESS_TOKEN: ${{ secrets.QOVERY_CLI_ACCESS_TOKEN }}
+        run: |
+          qovery environment delete \
+            --organization "$QOVERY_ORGANIZATION_NAME" \
+            --project "$QOVERY_PROJECT_NAME" \
+            --environment "$QOVERY_ENVIRONMENT_NAME"
+
+  delete_dns_zones:
+    name: Delete DNS zones for this PR (${{ github.event.number }})
+    runs-on: ubuntu-latest
+    permissions: {}
+    strategy:
+      matrix:
+        subdomain:
+          - ph
+          - rabbitmq
+          - api
+          - fr
+          - es
+          - ad
+          - www.fr
+          - www.es
+          - www.ad
+          - location-api
+          - soligare
+          - app
+          - widget
+    steps:
+      - name: Delete the DNS record ${{ matrix.subdomain }}.${{ env.QOVERY_ENVIRONMENT_NAME }}.soliguide.dev
+        uses: solinumasso/gcore-dns-action@v1
+        with:
+          api-key: ${{ secrets.GCORE_API_KEY }}
+          present: false
+          zone: soliguide.dev
+          subdomain: ${{ matrix.subdomain }}.${{ env.QOVERY_ENVIRONMENT_NAME }}
+          target: ${{ steps.location-api_domain.outputs.validation_domain }}.
+          type: CNAME
+          ttl: 0

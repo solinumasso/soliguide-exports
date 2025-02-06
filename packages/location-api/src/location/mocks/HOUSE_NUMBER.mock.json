@@ -1,0 +1,128 @@
+{
+  "type": "FeatureCollection",
+  "version": "draft",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.397152, 48.863367]
+      },
+      "properties": {
+        "label": "Paris 20e Arrondissement",
+        "score": 0.5698176496674058,
+        "id": "75120",
+        "type": "municipality",
+        "name": "Paris 20e Arrondissement",
+        "postcode": "75020",
+        "citycode": "75120",
+        "x": 655772.96,
+        "y": 6862761.58,
+        "population": 192120,
+        "city": "Paris 20e Arrondissement",
+        "context": "75, Paris, Île-de-France",
+        "importance": 0.55336,
+        "municipality": "Paris 20e Arrondissement"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.362358, 48.875963]
+      },
+      "properties": {
+        "label": "Paris 10e Arrondissement",
+        "score": 0.54132155844155842,
+        "id": "75110",
+        "type": "municipality",
+        "name": "Paris 10e Arrondissement",
+        "postcode": "75010",
+        "citycode": "75110",
+        "x": 653231.72,
+        "y": 6864182.21,
+        "population": 83459,
+        "city": "Paris 10e Arrondissement",
+        "context": "75, Paris, Île-de-France",
+        "importance": 0.51168,
+        "municipality": "Paris 10e Arrondissement"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.067488, 44.105914]
+      },
+      "properties": {
+        "label": "Le Ségur",
+        "score": 0.52489727272727272,
+        "id": "81280",
+        "type": "municipality",
+        "name": "Le Ségur",
+        "postcode": "81640",
+        "citycode": "81280",
+        "x": 625347.47,
+        "y": 6334541.94,
+        "population": 261,
+        "city": "Le Ségur",
+        "context": "81, Tarn, Occitanie",
+        "importance": 0.22387,
+        "municipality": "Le Ségur"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.294954, 48.841549]
+      },
+      "properties": {
+        "label": "Paris 15e Arrondissement",
+        "score": 0.52336244019138754,
+        "id": "75115",
+        "type": "municipality",
+        "name": "Paris 15e Arrondissement",
+        "postcode": "75015",
+        "citycode": "75115",
+        "x": 648253.88,
+        "y": 6860397.72,
+        "population": 229472,
+        "city": "Paris 15e Arrondissement",
+        "context": "75, Paris, Île-de-France",
+        "importance": 0.56225,
+        "municipality": "Paris 15e Arrondissement"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.348602, 48.891943]
+      },
+      "properties": {
+        "label": "Paris 18e Arrondissement",
+        "score": 0.52253153110047846,
+        "id": "75118",
+        "type": "municipality",
+        "name": "Paris 18e Arrondissement",
+        "postcode": "75018",
+        "citycode": "75118",
+        "x": 652237.45,
+        "y": 6865967.33,
+        "population": 191135,
+        "city": "Paris 18e Arrondissement",
+        "context": "75, Paris, Île-de-France",
+        "importance": 0.55311,
+        "municipality": "Paris 18e Arrondissement"
+      }
+    }
+  ],
+  "attribution": "BAN",
+  "licence": "ETALAB-2.0",
+  "query": "20 avenue de Ségur, Paris",
+  "filters": {
+    "type": "municipality"
+  },
+  "limit": 5
+}

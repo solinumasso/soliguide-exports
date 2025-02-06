@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Soliguide: Useful information for those who need it
+
+SPDX-FileCopyrightText: © 2024 Solinum
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" style="margin:auto;background:0 0;display:block;shape-rendering:auto"
+  width="241" height="241" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.9583333333333334s"
+      repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(15 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.9166666666666666s"
+      repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(30 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.875s" repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(45 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.8333333333333334s"
+      repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(60 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.7916666666666666s"
+      repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(75 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.75s" repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(90 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.7083333333333334s"
+      repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(105 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.6666666666666666s"
+      repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(120 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.625s" repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(135 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.5833333333333334s"
+      repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(150 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.5416666666666666s"
+      repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(165 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.5s" repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(180 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.4583333333333333s"
+      repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(195 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.4166666666666667s"
+      repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(210 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.375s" repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(225 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.3333333333333333s"
+      repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(240 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.2916666666666667s"
+      repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(255 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.25s" repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(270 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.20833333333333334s"
+      repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(285 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.16666666666666666s"
+      repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(300 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.125s" repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(315 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.08333333333333333s"
+      repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(330 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.041666666666666664s"
+      repeatCount="indefinite" />
+  </rect>
+  <rect x="48.5" y="12.5" rx="1.33" ry="1.33" width="3" height="7" fill="#919191" transform="rotate(345 50 50)">
+    <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="0s" repeatCount="indefinite" />
+  </rect>
+</svg>

@@ -1,0 +1,63 @@
+/*
+ * Soliguide: Useful information for those who need it
+ *
+ * SPDX-FileCopyrightText: © 2024 Solinum
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+section {
+  width: 100%;
+  min-height: 100vh;
+  padding: 1rem;
+  background: linear-gradient(180deg, #7d78ba 0%, #635dac 100%);
+}
+
+.notfound {
+  box-shadow: 0px 0px 150px 25px rgba(99, 93, 172, 0.2);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 1);
+  max-width: 800px;
+  margin: 1rem auto;
+  text-align: center;
+}
+
+.notfound img {
+  max-height: 280px;
+  max-width: 80%;
+  width: auto;
+  margin: 0 auto;
+}
+
+#maintenance-text {
+  border-radius: 0 0 20px 20px;
+}
+
+#maintenance-pick {
+  padding-top: 2rem;
+  border-radius: 20px 0 0 20px;
+  background: #b9b6d9;
+}
+
+.notfound h1 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #03191e;
+}
+
+.notfound h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}

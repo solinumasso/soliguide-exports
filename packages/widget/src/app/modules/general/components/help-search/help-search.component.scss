@@ -1,0 +1,233 @@
+/*
+ * Soliguide: Useful information for those who need it
+ *
+ * SPDX-FileCopyrightText: © 2024 Solinum
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+img {
+  margin: 0 4px;
+  cursor: pointer;
+  width: 34px;
+  height: 34px;
+}
+
+code {
+  padding: 10px;
+  background-color: #f9f8f6;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  display: block;
+  color: black;
+}
+
+#nav-menu .btn {
+  margin-right: 10px;
+}
+
+#nav-content {
+  margin: 0 auto;
+  width: 1300px;
+  max-width: 100%;
+}
+
+.navbar {
+  box-shadow: 0 2px 2px -2px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  z-index: 1049; /* Moins que le overlay des modals */
+}
+
+.navbar-brand img {
+  max-height: 45px;
+  max-width: 180px;
+  margin: 0;
+  width: auto;
+}
+
+.navbar-brand span a {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.navbar-brand {
+  display: inline-block;
+  margin-right: 1.5rem;
+  font-size: 1.3rem;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: var(--bs-primary) !important;
+  padding: 0.4rem 0.7rem;
+  min-height: 38px !important;
+}
+
+.signal {
+  border-radius: 100%;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  vertical-align: middle;
+  background-color: #c9c9c9;
+}
+
+.collapsed-menu a {
+  margin: 0 5px 0 5px;
+}
+
+.link:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  color: white;
+}
+
+#translate-flags img {
+  cursor: pointer;
+  width: 22px !important;
+  min-width: 22px !important;
+  height: 22px !important;
+}
+
+.navbar-organisation {
+  color: var(--bs-primary) !important;
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-left: 110px;
+  margin-top: -10px;
+}
+
+.v-divider {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 1px;
+  height: 26px;
+  border-left: 1px solid gray;
+}
+
+.dropdown-toggle {
+  background-color: #ffffff;
+  border: 1px solid #d6d6d6;
+  box-sizing: border-box;
+  border-radius: 5px;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  text-align: left;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 150%;
+  min-height: 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: ease 0.15s;
+}
+
+.dropdown-toggle:hover {
+  border-color: var(--bs-primary);
+}
+
+.dropdown-toggle.disabled,
+.dropdown-toggle:disabled,
+.dropdown-toggle[disabled] {
+  color: #777777;
+  background-color: #eeeeee;
+}
+
+.dropdown-toggle.disabled:hover,
+.dropdown-toggle:disabled:hover,
+.dropdown-toggle[disabled]:hover {
+  border-color: #d6d6d6;
+}
+
+.dropdown-toggle > span {
+  min-width: 93%;
+}
+
+.dropdown-toggle .ng-fa-icon {
+  width: 20px;
+  text-align: right;
+}
+
+.dropdown-item {
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.custom-dropdown .dropdown-menu {
+  min-width: 220px;
+  border-top: 0;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
+  border: none;
+  padding-bottom: 0;
+  background-color: white;
+}
+
+.custom-dropdown {
+  min-width: 100%;
+  width: 100%;
+  padding: 0;
+}
+
+.dropdown-menu {
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
+  border: none;
+  padding-bottom: 0;
+  min-width: 180px;
+  min-width: 100%;
+  background-color: white;
+}
+
+.dropdown-item:hover {
+  background-color: #d6d6d6;
+}
+
+.custom-dropdown .dropdown-item .ng-fa-icon {
+  min-width: 24px;
+}
+
+.custom-dropdown .dropdown-item img {
+  margin-right: 5px;
+}
+
+.custom-dropdown .dropdown-item * {
+  display: inline-block;
+  margin-right: 10px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 150%;
+}
+
+.custom-dropdown .dropdown-item.disabled,
+.custom-dropdown .dropdown-item:disabled,
+.custom-dropdown .dropdown-item[disabled] {
+  color: #777777;
+  pointer-events: none;
+  background-color: #eeeeee;
+}
+
+@media (max-width: 992px) {
+  .navbar-brand img {
+    max-width: 140px;
+  }
+
+  .navbar-brand {
+    margin-right: 0;
+  }
+}

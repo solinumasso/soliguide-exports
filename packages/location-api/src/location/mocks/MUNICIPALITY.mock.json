@@ -1,0 +1,36 @@
+{
+  "type": "FeatureCollection",
+  "version": "draft",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.34416, 48.957567]
+      },
+      "properties": {
+        "label": "Villetaneuse",
+        "score": 0.9473045454545455,
+        "id": "93079",
+        "type": "municipality",
+        "name": "Villetaneuse",
+        "postcode": "93430",
+        "citycode": "93079",
+        "x": 651972.37,
+        "y": 6873267.29,
+        "population": 13433,
+        "city": "Villetaneuse",
+        "context": "93, Seine-Saint-Denis, Île-de-France",
+        "importance": 0.42035,
+        "municipality": "Villetaneuse"
+      }
+    }
+  ],
+  "attribution": "BAN",
+  "licence": "ETALAB-2.0",
+  "query": "villetaneuse",
+  "filters": {
+    "type": "municipality"
+  },
+  "limit": 5
+}

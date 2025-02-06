@@ -1,0 +1,201 @@
+# Soliguide: Useful information for those who need it
+#
+# SPDX-FileCopyrightText: © 2024 Solinum
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+name: _Deploy to environment
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+      tag:
+        type: string
+      registry:
+        type: string
+        default: ghcr.io
+      deploy_api:
+        type: boolean
+        default: true
+      deploy_design-system:
+        type: boolean
+        default: true
+      deploy_frontend:
+        type: boolean
+        default: true
+      deploy_location-api:
+        type: boolean
+        default: true
+      deploy_soligare:
+        type: boolean
+        default: true
+      deploy_web-app:
+        type: boolean
+        default: true
+      deploy_widget:
+        type: boolean
+        default: true
+
+jobs:
+  docker_meta:
+    uses: ./.github/workflows/_docker-meta.yml
+
+  compute_tag:
+    name: Compute tag for the source containers
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.compute_tag.outputs.tag }}
+    needs:
+      - docker_meta
+    steps:
+      # If we're deploying a tag we use it, otherwise we compute the tag with _docker-meta.yml
+      - id: compute_tag
+        run: |
+          [ -n "${{ inputs.tag }}" ] && echo 'tag=${{ inputs.tag }}' >> "$GITHUB_OUTPUT" || echo 'tag=${{ needs.docker_meta.outputs.tags }}' >> "$GITHUB_OUTPUT"
+
+  tag-container-images:
+    name: Tag container images for ${{ inputs.environment }}
+    uses: ./.github/workflows/_tag-container-images-for-environment.yml
+    needs:
+      - compute_tag
+    with:
+      environment: ${{ inputs.environment }}
+      tag: ${{ needs.compute_tag.outputs.tag }}
+      registry: ${{ inputs.registry }}
+      deploy_api: ${{ inputs.deploy_api }}
+      deploy_design-system: ${{ inputs.deploy_design-system }}
+      deploy_frontend: ${{ inputs.deploy_frontend }}
+      deploy_location-api: ${{ inputs.deploy_location-api }}
+      deploy_soligare: ${{ inputs.deploy_soligare }}
+      deploy_web-app: ${{ inputs.deploy_web-app }}
+      deploy_widget: ${{ inputs.deploy_widget }}
+
+  deploy-to-clever-cloud:
+    name: Deploy all apps to ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    environment:
+      name: ${{ inputs.environment }}
+    env:
+      CC_PUSH_HOST: push-n3-par-clevercloud-customers.services.clever-cloud.com
+    permissions:
+      contents: read
+    needs:
+      - tag-container-images
+    steps:
+      - name: Checkout repository (branch)
+        if: ${{ !inputs.tag }}
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Checkout repository (tag)
+        if: ${{ inputs.tag }}
+        uses: actions/checkout@v4
+        with:
+          ref: refs/tags/${{ inputs.tag }}
+          persist-credentials: true
+
+      - name: Install parallel utils
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install parallel
+
+      - name: Create a brand new branch from scratch
+        run: |
+          git checkout --orphan cc
+          git config --global user.email tech@solinum.org
+          git config --global user.name ${{ github.actor }}
+          git commit -m "Commit for Clever Cloud"
+
+      - name: Install SSH key
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.CLEVER_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ env.CC_PUSH_HOST }} > ~/.ssh/known_hosts
+
+      - name: Add api to the list of app to deploy
+        if: ${{ inputs.deploy_api }}
+        run: |
+          git remote add clever-api git+ssh://git@${{ env.CC_PUSH_HOST }}/${{ secrets.API_APP_ID }}.git
+          echo clever-api >>./remotes-to-deploy-to.txt
+
+      - name: Add api cron to the list of app to deploy
+        if: ${{ inputs.deploy_api }}
+        run: |
+          git remote add clever-api-cron git+ssh://git@${{ env.CC_PUSH_HOST }}/${{ secrets.CRON_APP_ID }}.git
+          echo clever-api-cron >>./remotes-to-deploy-to.txt
+
+      - name: Add api migrations to the list of app to deploy
+        if: ${{ inputs.deploy_api }}
+        run: |
+          git remote add clever-api-migrations git+ssh://git@${{ env.CC_PUSH_HOST }}/${{ secrets.API_MIGRATIONS_APP_ID }}.git
+          echo clever-api-migrations >>./remotes-to-deploy-to.txt
+
+      - name: Add design-system to the list of app to deploy
+        if: ${{ inputs.deploy_design-system }}
+        run: |
+          git remote add clever-design-system git+ssh://git@${{ env.CC_PUSH_HOST }}/${{ secrets.DESIGN_SYSTEM_APP_ID }}.git
+          echo clever-design-system >>./remotes-to-deploy-to.txt
+
+      - name: Add frontend to the list of app to deploy
+        if: ${{ inputs.deploy_frontend }}
+        run: |
+          git remote add clever-frontend git+ssh://git@${{ env.CC_PUSH_HOST }}/${{ secrets.FRONTEND_APP_ID }}.git
+          echo clever-frontend >>./remotes-to-deploy-to.txt
+
+      - name: Add location api to the list of app to deploy
+        if: ${{ inputs.deploy_location-api }}
+        run: |
+          git remote add clever-location-api git+ssh://git@${{ env.CC_PUSH_HOST }}/${{ secrets.API_LOCATION_APP_ID }}.git
+          echo clever-location-api >>./remotes-to-deploy-to.txt
+
+      - name: Add maintenance frontend to the list of app to deploy
+        if: ${{ inputs.deploy_frontend }}
+        run: |
+          git remote add clever-maintenance-frontend git+ssh://git@${{ env.CC_PUSH_HOST }}/${{ secrets.MAINTENANCE_FRONTEND_APP_ID }}.git
+          echo clever-maintenance-frontend >>./remotes-to-deploy-to.txt
+
+      - name: Add maintenance widget to the list of app to deploy
+        if: ${{ inputs.deploy_widget }}
+        run: |
+          git remote add clever-maintenance-widget git+ssh://git@${{ env.CC_PUSH_HOST }}/${{ secrets.MAINTENANCE_WIDGET_APP_ID }}.git
+          echo clever-maintenance-widget >>./remotes-to-deploy-to.txt
+
+      - name: Add soligare to the list of app to deploy
+        if: ${{ inputs.deploy_soligare }}
+        run: |
+          git remote add clever-soligare git+ssh://git@${{ env.CC_PUSH_HOST }}/${{ secrets.SOLIGARE_APP_ID }}.git
+          echo clever-soligare >>./remotes-to-deploy-to.txt
+
+      - name: Add web-app to the list of app to deploy
+        if: ${{ inputs.deploy_web-app }}
+        run: |
+          git remote add clever-web-app git+ssh://git@${{ env.CC_PUSH_HOST }}/${{ secrets.WEB_APP_APP_ID }}.git
+          echo clever-web-app >>./remotes-to-deploy-to.txt
+
+      - name: Add widget to the list of app to deploy
+        if: ${{ inputs.deploy_widget }}
+        run: |
+          git remote add clever-widget git+ssh://git@${{ env.CC_PUSH_HOST }}/${{ secrets.WIDGET_APP_ID }}.git
+          echo clever-widget >>./remotes-to-deploy-to.txt
+
+      - name: Deploy all apps to Clever Cloud
+        # Run in parallel 4 git push and retries twice if it fails
+        run: |
+          cat ./remotes-to-deploy-to.txt | parallel --progress -j 4 --retries 2 git push -f {} HEAD:master

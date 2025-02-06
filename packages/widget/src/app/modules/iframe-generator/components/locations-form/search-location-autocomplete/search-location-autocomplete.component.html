@@ -1,0 +1,73 @@
+<!--
+Soliguide: Useful information for those who need it
+
+SPDX-FileCopyrightText: © 2024 Solinum
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<label for="catInput_{{ geoType }}" class="form-label">{{ label }}</label>
+<div class="input-group">
+  <input
+    type="text"
+    class="form-control"
+    [placeholder]="placeholder"
+    autocomplete="off"
+    #searchValueInput
+    [(ngModel)]="searchTerm"
+    [value]="searchTerm"
+    name="catInput_{{ geoType }}"
+    id="catInput_{{ geoType }}"
+    (focus)="showSuggestions = true"
+    [ngClass]="{ 'border-right-less': searchTerm !== '' }"
+    [disabled]="disabled"
+  />
+  <fa-icon
+    [icon]="faTimes"
+    *ngIf="searchTerm !== ''"
+    class="btn"
+    aria-hidden="true"
+    (click)="clearCategoryInput()"
+  ></fa-icon>
+</div>
+
+<div id="autocomplete-results" *ngIf="showSuggestions">
+  <div
+    *ngIf="!searching && !autocompleteResults.length && !searchValueInput.value"
+  >
+    {{ "SAISIR_LETTRES" | translate }}
+  </div>
+  <div *ngIf="searching">
+    <img
+      id="typeLoading"
+      src="assets/svg/typeLoading.svg"
+      [alt]="'LOADING' | translate"
+      aria-hidden="true"
+    />
+  </div>
+  <div class="mb-2" *ngIf="!searching && autocompleteResults.length">
+    <ul>
+      <ng-container *ngFor="let location of autocompleteResults; let i = index">
+        <li *ngIf="i < 10" (click)="addLocation(location)">
+          <ng-container *ngIf="location.geoType !== GeoTypes.POSITION">
+            <b>{{ "GEOTYPE_" + location.geoType.toUpperCase() | translate }}</b>
+            -
+          </ng-container>
+          {{ location.label }}
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</div>

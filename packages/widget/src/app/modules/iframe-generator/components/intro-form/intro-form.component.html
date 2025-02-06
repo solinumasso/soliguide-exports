@@ -1,0 +1,230 @@
+<!--
+Soliguide: Useful information for those who need it
+
+SPDX-FileCopyrightText: © 2024 Solinum
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<div class="row justify-content-center">
+  <h1 class="fw-bolder col-12">
+    {{ "PERSONALIZE_WIDGET" | translate | uppercase }}
+  </h1>
+  <div class="fw-bold col-10 py-4">
+    <p *ngIf="currentLang === SupportedLanguagesCode.FR">
+      Solinum met à disposition un Widget Soliguide reprenant les informations
+      publiées sur
+      <a
+        [href]="frontendUrl + SupportedLanguagesCode.FR"
+        target="_blank"
+        rel="noopener"
+        noreferrer
+        (click)="captureClickSoliguideLink()"
+        >soliguide.fr</a
+      >.
+    </p>
+
+    <p *ngIf="currentLang === SupportedLanguagesCode.AR">
+      يوفر Solinum أداة Soliguide التي تحتوي على المعلومات المنشورة في
+      <a
+        [href]="frontendUrl + SupportedLanguagesCode.AR"
+        target="_blank"
+        rel="noopener"
+        noreferrer
+        (click)="captureClickSoliguideLink()"
+        >soliguide.fr</a
+      >.,
+    </p>
+
+    <p *ngIf="currentLang === SupportedLanguagesCode.EN">
+      Solinum provides a Soliguide Widget containing the information published
+      on
+      <a
+        [href]="frontendUrl + SupportedLanguagesCode.EN"
+        target="_blank"
+        rel="noopener"
+        noreferrer
+        (click)="captureClickSoliguideLink()"
+        >soliguide.fr</a
+      >.,
+    </p>
+
+    <p *ngIf="currentLang === SupportedLanguagesCode.ES">
+      Solinum proporciona un widget de Soliguide que contiene la información
+      publicada en
+      <a
+        [href]="frontendUrl + SupportedLanguagesCode.ES"
+        target="_blank"
+        rel="noopener"
+        noreferrer
+        (click)="captureClickSoliguideLink()"
+        >soliguide.fr</a
+      >.,
+    </p>
+
+    <p *ngIf="currentLang === SupportedLanguagesCode.FA">
+      Solinum یک ویجت Soliguide حاوی اطلاعات منتشر شده در
+      <a
+        [href]="frontendUrl + SupportedLanguagesCode.FA"
+        target="_blank"
+        rel="noopener"
+        noreferrer
+        (click)="captureClickSoliguideLink()"
+        >soliguide.fr</a
+      >.,
+    </p>
+
+    <p *ngIf="currentLang === SupportedLanguagesCode.PS">
+      سولینم د سولیګوایډ ویجیټ چمتو کوي چې په
+      <a
+        [href]="frontendUrl + SupportedLanguagesCode.PS"
+        target="_blank"
+        rel="noopener"
+        noreferrer
+        (click)="captureClickSoliguideLink()"
+        >soliguide.fr</a
+      >.,
+    </p>
+
+    <p *ngIf="currentLang === SupportedLanguagesCode.RU">
+      Solinum предоставляет виджет Soliguide, содержащий информацию,
+      опубликованную на
+      <a
+        [href]="frontendUrl + SupportedLanguagesCode.RU"
+        target="_blank"
+        rel="noopener"
+        noreferrer
+        (click)="captureClickSoliguideLink()"
+        >soliguide.fr</a
+      >.,
+    </p>
+
+    <p *ngIf="currentLang === SupportedLanguagesCode.UK">
+      Solinum надає віджет Soliguide, що містить інформацію, опубліковану на
+      <a
+        [href]="frontendUrl + SupportedLanguagesCode.UK"
+        target="_blank"
+        rel="noopener"
+        noreferrer
+        (click)="captureClickSoliguideLink()"
+        >soliguide.fr</a
+      >.,
+    </p>
+    <p>
+      {{ "DISPLAY_WIDGET_ON_WEBSITE" | translate }}
+    </p>
+    <p>
+      {{ "MULTIPLE_WIDGET_ALLOWED" | translate }}
+    </p>
+
+    <p *ngIf="currentLang === SupportedLanguagesCode.FR">
+      Si vous avez des questions, une documentation est disponible
+      <a
+        href="https://doc-widget.soliguide.fr/Personnaliser-son-Widget-Soliguide-9c04d41692a5451699f0b910cb1bb7fa"
+        >ici</a
+      >
+      et si vous ne trouvez pas votre bonheur, contactez-nous à :
+      <a href="mailto:widget@solinum.org" (click)="captureClickContactEmail()"
+        >widget@solinum.org</a
+      >
+    </p>
+
+    <p *ngIf="currentLang === SupportedLanguagesCode.AR">
+      إذا كانت لديك أية أسئلة ، فالوثائق متاحة
+      <a
+        href="https://doc-widget.soliguide.fr/Personnaliser-son-Widget-Soliguide-9c04d41692a5451699f0b910cb1bb7fa"
+        >هنا</a
+      >
+      وإذا لم تتمكن من العثور على ما تبحث عنه ، فاتصل بنا على:
+      <a href="mailto:widget@solinum.org" (click)="captureClickContactEmail()"
+        >widget@solinum.org</a
+      >",
+    </p>
+
+    <p *ngIf="currentLang === SupportedLanguagesCode.EN">
+      If you have any questions, documentation is available
+      <a
+        href="https://doc-widget.soliguide.fr/Personnaliser-son-Widget-Soliguide-9c04d41692a5451699f0b910cb1bb7fa"
+        >here</a
+      >
+      and if you can't find what you're looking for, contact us at:
+      <a href="mailto:widget@solinum.org" (click)="captureClickContactEmail()"
+        >widget@solinum.org</a
+      >
+    </p>
+
+    <p *ngIf="currentLang === SupportedLanguagesCode.ES">
+      Si tiene alguna pregunta, la documentación está disponible
+      <a
+        href="https://doc-widget.soliguide.fr/Personnaliser-son-Widget-Soliguide-9c04d41692a5451699f0b910cb1bb7fa"
+        >aquí</a
+      >
+      y si no puede encontrar lo que busca, póngase en contacto con nosotros en:
+      <a href="mailto:widget@solinum.org" (click)="captureClickContactEmail()"
+        >widget@solinum.org</a
+      >
+    </p>
+
+    <p *ngIf="currentLang === SupportedLanguagesCode.FA">
+      "WIDGET_DOC_MAIL": "اگر سؤالی دارید، اسناد در
+      <a
+        href="https://doc-widget.soliguide.fr/Personnaliser-son-Widget-Soliguide-9c04d41692a5451699f0b910cb1bb7fa"
+        >اینجا</a
+      >
+      موجود است و اگر چیزی را که به دنبال آن هستید پیدا نکردید، با ما تماس
+      بگیرید:
+      <a href="mailto:widget@solinum.org" (click)="captureClickContactEmail()"
+        >widget@solinum.org</a
+      >",
+    </p>
+
+    <p *ngIf="currentLang === SupportedLanguagesCode.PS">
+      که تاسو کومه پوښتنه لرئ، اسناد شتون لري
+      <a
+        href="https://doc-widget.soliguide.fr/Personnaliser-son-Widget-Soliguide-9c04d41692a5451699f0b910cb1bb7fa"
+        >دلته</a
+      >
+      او که تاسو هغه څه ونه مومئ چې تاسو یې په لټه کې یاست، موږ سره اړیکه ونیسئ:
+      <a href="mailto:widget@solinum.org" (click)="captureClickContactEmail()"
+        >widget@solinum.org</a
+      >
+    </p>
+
+    <p *ngIf="currentLang === SupportedLanguagesCode.RU">
+      Если у вас есть какие-либо вопросы, документация доступна
+      <a
+        href="https://doc-widget.soliguide.fr/Personnaliser-son-Widget-Soliguide-9c04d41692a5451699f0b910cb1bb7fa"
+        >здесь</a
+      >
+      , и если вы не можете найти то, что ищете, свяжитесь с нами по адресу:
+      <a href="mailto:widget@solinum.org" (click)="captureClickContactEmail()"
+        >widget@solinum.org</a
+      >,
+    </p>
+
+    <p *ngIf="currentLang === SupportedLanguagesCode.UK">
+      Якщо у вас виникли запитання, документація доступна
+      <a
+        href="https://doc-widget.soliguide.fr/Personnaliser-son-Widget-Soliguide-9c04d41692a5451699f0b910cb1bb7fa"
+        >тут</a
+      >
+      , а якщо ви не можете знайти те, що шукаєте, зв’яжіться з нами за адресою:
+      <a href="mailto:widget@solinum.org" (click)="captureClickContactEmail()"
+        >widget@solinum.org</a
+      >,
+    </p>
+  </div>
+</div>

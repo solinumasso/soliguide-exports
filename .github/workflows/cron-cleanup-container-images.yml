@@ -1,0 +1,55 @@
+# Soliguide: Useful information for those who need it
+#
+# SPDX-FileCopyrightText: © 2024 Solinum
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+name: Cron - Cleanup images
+
+on:
+  schedule:
+    - cron: 0 0 * * *
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  delete_untagged_container_images:
+    name: Delete 31 days old untagged container images
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    strategy:
+      matrix:
+        package:
+          - soliguide/api
+          - soliguide/base
+          - soliguide/common
+          - soliguide/common-angular
+          - soliguide/design-system
+          - soliguide/frontend
+          - soliguide/location-api
+          - soliguide/soligare
+          - soliguide/web-app
+          - soliguide/widget
+    steps:
+      - name: Delete untagged images of ${{ matrix.package }}
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          package: ${{ matrix.package }}
+          delete-untagged: true
+          older-than: 31 days
+          token: ${{ secrets.GITHUB_TOKEN }}

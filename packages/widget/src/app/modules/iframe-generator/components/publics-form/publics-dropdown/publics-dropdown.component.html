@@ -1,0 +1,58 @@
+<!--
+Soliguide: Useful information for those who need it
+
+SPDX-FileCopyrightText: © 2024 Solinum
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<span class="form-label mb-1">{{ label | translate }}</span>
+<div class="custom-dropdown" autoClose="outside" placement="bottom" ngbDropdown>
+  <button ngbDropdownToggle type="button">
+    <span class="text-truncate">{{ stringToDisplay() | ucFirst }}</span>
+  </button>
+
+  <div ngbDropdownMenu>
+    <button ngbDropdownItem (click)="selectAll()" type="button">
+      <input
+        type="checkbox"
+        [checked]="
+          formValue.publics?.[prop]?.length === FILTERED_PUBLICS.length - 1
+        "
+      />
+
+      <span>{{ ALL_PUBLICS[prop][0].name | translate | ucFirst }}</span>
+    </button>
+    <ng-container *ngFor="let element of FILTERED_PUBLICS">
+      <button
+        *ngIf="element.value !== 'all'"
+        (click)="toggleParameter(element.value)"
+        ngbDropdownItem
+        placement="top"
+        type="button"
+      >
+        <input
+          [checked]="isChecked(element.value)"
+          type="checkbox"
+          name="{{ prop }}_radio"
+        />
+        <span class="itemDropdown">{{
+          element.name | translate | ucFirst
+        }}</span>
+      </button>
+    </ng-container>
+  </div>
+</div>

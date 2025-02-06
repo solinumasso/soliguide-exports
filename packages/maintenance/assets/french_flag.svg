@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Soliguide: Useful information for those who need it
+
+SPDX-FileCopyrightText: © 2024 Solinum
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<svg width="36" height="37" viewBox="0 0 36 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_321_71)">
+<path d="M36 27.5C36 28.5609 35.5786 29.5783 34.8284 30.3284C34.0783 31.0786 33.0609 31.5 32 31.5H24V5.5H32C33.0609 5.5 34.0783 5.92143 34.8284 6.67157C35.5786 7.42172 36 8.43913 36 9.5V27.5Z" fill="#ED2939"/>
+<path d="M4 5.5C2.93913 5.5 1.92172 5.92143 1.17157 6.67157C0.421427 7.42172 0 8.43913 0 9.5L0 27.5C0 28.5609 0.421427 29.5783 1.17157 30.3284C1.92172 31.0786 2.93913 31.5 4 31.5H12V5.5H4Z" fill="#002495"/>
+<path d="M12 5.5H24V31.5H12V5.5Z" fill="#EEEEEE"/>
+</g>
+<defs>
+<clipPath id="clip0_321_71">
+<rect width="36" height="36" fill="white" transform="translate(0 0.5)"/>
+</clipPath>
+</defs>
+</svg>

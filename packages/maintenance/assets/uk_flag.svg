@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Soliguide: Useful information for those who need it
+
+SPDX-FileCopyrightText: © 2024 Solinum
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<svg width="36" height="37" viewBox="0 0 36 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_321_79)">
+<path d="M0 9.559V13.5H5.628L0 9.559ZM4.664 31.5H13V25.663L4.664 31.5ZM23 25.664V31.5H31.335L23 25.664ZM0 23.5V27.441L5.63 23.5H0ZM31.337 5.5H23V11.337L31.337 5.5ZM36 27.442V23.5H30.369L36 27.442ZM36 13.5V9.559L30.371 13.5H36ZM13 5.5H4.664L13 11.337V5.5Z" fill="#00247D"/>
+<path d="M25.14 23.5L34.852 30.301C35.3263 29.8124 35.6672 29.2101 35.842 28.552L28.627 23.5H25.14ZM13 23.5H10.859L1.14798 30.3C1.66898 30.83 2.33698 31.209 3.08598 31.385L13 24.443V23.5ZM23 13.5H25.141L34.852 6.69999C34.322 6.16227 33.6503 5.78602 32.915 5.61499L23 12.557V13.5ZM10.859 13.5L1.14798 6.69999C0.673936 7.18896 0.332797 7.79103 0.156982 8.44899L7.37198 13.5H10.859Z" fill="#CF1B2B"/>
+<path d="M36 21.5H21V31.5H23V25.664L31.335 31.5H32C32.5313 31.5001 33.0572 31.3941 33.5469 31.1882C34.0367 30.9823 34.4804 30.6807 34.852 30.301L25.14 23.5H28.627L35.842 28.552C35.935 28.215 36 27.866 36 27.5V27.442L30.369 23.5H36V21.5ZM0 21.5V23.5H5.63L0 27.441V27.5C0 28.591 0.439 29.578 1.148 30.3L10.859 23.5H13V24.443L3.086 31.384C3.38 31.454 3.684 31.5 4 31.5H4.664L13 25.663V31.5H15V21.5H0ZM36 9.5C36.0006 8.45198 35.5881 7.44595 34.852 6.7L25.141 13.5H23V12.557L32.915 5.615C32.6155 5.54153 32.3084 5.50294 32 5.5H31.337L23 11.337V5.5H21V15.5H36V13.5H30.371L36 9.559V9.5ZM13 5.5V11.337L4.664 5.5H4C3.46862 5.49977 2.94257 5.60581 2.45278 5.8119C1.96299 6.01798 1.51936 6.31993 1.148 6.7L10.859 13.5H7.372L0.157 8.449C0.0577802 8.79071 0.00497341 9.14421 0 9.5L0 9.559L5.628 13.5H0V15.5H15V5.5H13Z" fill="#EEEEEE"/>
+<path d="M21 15.5V5.5H15V15.5H0V21.5H15V31.5H21V21.5H36V15.5H21Z" fill="#CF1B2B"/>
+</g>
+<defs>
+<clipPath id="clip0_321_79">
+<rect width="36" height="36" fill="white" transform="translate(0 0.5)"/>
+</clipPath>
+</defs>
+</svg>

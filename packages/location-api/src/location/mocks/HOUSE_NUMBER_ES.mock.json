@@ -1,0 +1,394 @@
+{
+  "geocoding": {
+    "version": "0.2",
+    "attribution": "https://openrouteservice.org/terms-of-service/#attribution-geocode",
+    "query": {
+      "text": "C/ Sant Lluis 58, bxs.",
+      "size": 10,
+      "private": false,
+      "boundary.country": ["ESP"],
+      "lang": {
+        "name": "Spanish",
+        "iso6391": "es",
+        "iso6393": "spa",
+        "via": "querystring",
+        "defaulted": false
+      },
+      "querySize": 20,
+      "parser": "pelias",
+      "parsed_text": {
+        "subject": "58 C/ Sant Lluis",
+        "street": "C/ Sant Lluis",
+        "housenumber": "58",
+        "admin": "bxs."
+      }
+    },
+    "engine": {
+      "name": "Pelias",
+      "author": "Mapzen",
+      "version": "1.0"
+    },
+    "timestamp": 1711540771770
+  },
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.258014, 39.84958]
+      },
+      "properties": {
+        "id": "way/572410622",
+        "gid": "openstreetmap:address:way/572410622",
+        "layer": "address",
+        "source": "openstreetmap",
+        "source_id": "way/572410622",
+        "name": "Carrer de Sant Lluís 58",
+        "housenumber": "58",
+        "street": "Carrer de Sant Lluís",
+        "postalcode": "07711",
+        "confidence": 1,
+        "match_type": "exact",
+        "accuracy": "point",
+        "country": "España",
+        "country_gid": "whosonfirst:country:85633129",
+        "country_a": "ESP",
+        "macroregion": "Islas Baleares",
+        "macroregion_gid": "whosonfirst:macroregion:404227367",
+        "region": "Islas Baleares",
+        "region_gid": "whosonfirst:region:85682647",
+        "region_a": "PM",
+        "localadmin": "San Luis",
+        "localadmin_gid": "whosonfirst:localadmin:404330845",
+        "locality": "Sant Lluís",
+        "locality_gid": "whosonfirst:locality:101775257",
+        "continent": "Europa",
+        "continent_gid": "whosonfirst:continent:102191581",
+        "label": "Carrer de Sant Lluís 58, Sant Lluís, PM, España"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.161229, 41.405904]
+      },
+      "properties": {
+        "id": "way/451092206",
+        "gid": "openstreetmap:address:way/451092206",
+        "layer": "address",
+        "source": "openstreetmap",
+        "source_id": "way/451092206",
+        "name": "Carrer de Sant Lluís 58",
+        "housenumber": "58",
+        "street": "Carrer de Sant Lluís",
+        "postalcode": "08024",
+        "confidence": 1,
+        "match_type": "exact",
+        "accuracy": "point",
+        "country": "España",
+        "country_gid": "whosonfirst:country:85633129",
+        "country_a": "ESP",
+        "macroregion": "Catalonia",
+        "macroregion_gid": "whosonfirst:macroregion:404227379",
+        "region": "Barcelona",
+        "region_gid": "whosonfirst:region:85682663",
+        "region_a": "CT",
+        "locality": "Barcelona",
+        "locality_gid": "whosonfirst:locality:101748323",
+        "neighbourhood": "la Vila de Gràcia",
+        "neighbourhood_gid": "whosonfirst:neighbourhood:1158844861",
+        "continent": "Europa",
+        "continent_gid": "whosonfirst:continent:102191581",
+        "label": "Carrer de Sant Lluís 58, Barcelona, España"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.104512, 41.153776]
+      },
+      "properties": {
+        "id": "node/10012344715",
+        "gid": "openstreetmap:address:node/10012344715",
+        "layer": "address",
+        "source": "openstreetmap",
+        "source_id": "node/10012344715",
+        "name": "Carrer de Sant Lluis 58",
+        "housenumber": "58",
+        "street": "Carrer de Sant Lluis",
+        "confidence": 1,
+        "match_type": "exact",
+        "accuracy": "point",
+        "country": "España",
+        "country_gid": "whosonfirst:country:85633129",
+        "country_a": "ESP",
+        "macroregion": "Catalonia",
+        "macroregion_gid": "whosonfirst:macroregion:404227379",
+        "region": "Tarragona",
+        "region_gid": "whosonfirst:region:85682851",
+        "region_a": "CT",
+        "localadmin": "Reus",
+        "localadmin_gid": "whosonfirst:localadmin:404343667",
+        "locality": "Reus",
+        "locality_gid": "whosonfirst:locality:101748265",
+        "continent": "Europa",
+        "continent_gid": "whosonfirst:continent:102191581",
+        "label": "Carrer de Sant Lluis 58, Reus, CT, España"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.311129, 41.484018]
+      },
+      "properties": {
+        "id": "way/620607122",
+        "gid": "openstreetmap:address:way/620607122",
+        "layer": "address",
+        "source": "openstreetmap",
+        "source_id": "way/620607122",
+        "name": "Sant Lluís 4",
+        "housenumber": "4",
+        "street": "Sant Lluís",
+        "postalcode": "08320",
+        "confidence": 1,
+        "match_type": "exact",
+        "accuracy": "point",
+        "country": "España",
+        "country_gid": "whosonfirst:country:85633129",
+        "country_a": "ESP",
+        "macroregion": "Catalonia",
+        "macroregion_gid": "whosonfirst:macroregion:404227379",
+        "region": "Barcelona",
+        "region_gid": "whosonfirst:region:85682663",
+        "region_a": "CT",
+        "localadmin": "El Masnou",
+        "localadmin_gid": "whosonfirst:localadmin:404331143",
+        "locality": "El Masnou",
+        "locality_gid": "whosonfirst:locality:101831003",
+        "continent": "Europa",
+        "continent_gid": "whosonfirst:continent:102191581",
+        "label": "Sant Lluís 4, El Masnou, CT, España",
+        "addendum": {
+          "osm": {
+            "website": "http://tennismasnou.com"
+          }
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.267011, 39.884123]
+      },
+      "properties": {
+        "id": "node/6147514011",
+        "gid": "openstreetmap:address:node/6147514011",
+        "layer": "address",
+        "source": "openstreetmap",
+        "source_id": "node/6147514011",
+        "name": "Carrer de Sant Lluís Gonçaga 58",
+        "housenumber": "58",
+        "street": "Carrer de Sant Lluís Gonçaga",
+        "postalcode": "07702",
+        "confidence": 1,
+        "match_type": "exact",
+        "accuracy": "point",
+        "country": "España",
+        "country_gid": "whosonfirst:country:85633129",
+        "country_a": "ESP",
+        "macroregion": "Islas Baleares",
+        "macroregion_gid": "whosonfirst:macroregion:404227367",
+        "region": "Islas Baleares",
+        "region_gid": "whosonfirst:region:85682647",
+        "region_a": "PM",
+        "localadmin": "Mahón",
+        "localadmin_gid": "whosonfirst:localadmin:404330799",
+        "locality": "Mahón",
+        "locality_gid": "whosonfirst:locality:101777801",
+        "continent": "Europa",
+        "continent_gid": "whosonfirst:continent:102191581",
+        "label": "Carrer de Sant Lluís Gonçaga 58, Mahón, PM, España"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.155927, 41.35877]
+      },
+      "properties": {
+        "id": "polyline:12633486",
+        "gid": "openstreetmap:street:polyline:12633486",
+        "layer": "street",
+        "source": "openstreetmap",
+        "source_id": "polyline:12633486",
+        "name": "Sant Lluís",
+        "street": "Sant Lluís",
+        "confidence": 0.8,
+        "match_type": "fallback",
+        "accuracy": "centroid",
+        "country": "España",
+        "country_gid": "whosonfirst:country:85633129",
+        "country_a": "ESP",
+        "macroregion": "Catalonia",
+        "macroregion_gid": "whosonfirst:macroregion:404227379",
+        "region": "Barcelona",
+        "region_gid": "whosonfirst:region:85682663",
+        "region_a": "CT",
+        "locality": "Barcelona",
+        "locality_gid": "whosonfirst:locality:101748323",
+        "neighbourhood": "el Poble Sec",
+        "neighbourhood_gid": "whosonfirst:neighbourhood:85864037",
+        "continent": "Europa",
+        "continent_gid": "whosonfirst:continent:102191581",
+        "label": "Sant Lluís, Barcelona, España"
+      },
+      "bbox": [2.154253, 41.358332, 2.157348, 41.358908]
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.997198, 41.307226]
+      },
+      "properties": {
+        "id": "polyline:12622701",
+        "gid": "openstreetmap:street:polyline:12622701",
+        "layer": "street",
+        "source": "openstreetmap",
+        "source_id": "polyline:12622701",
+        "name": "Carrer Sant Lluís",
+        "street": "Carrer Sant Lluís",
+        "confidence": 0.8,
+        "match_type": "fallback",
+        "accuracy": "centroid",
+        "country": "España",
+        "country_gid": "whosonfirst:country:85633129",
+        "country_a": "ESP",
+        "macroregion": "Catalonia",
+        "macroregion_gid": "whosonfirst:macroregion:404227379",
+        "region": "Barcelona",
+        "region_gid": "whosonfirst:region:85682663",
+        "region_a": "CT",
+        "localadmin": "Viladecans",
+        "localadmin_gid": "whosonfirst:localadmin:404331551",
+        "locality": "Gavà",
+        "locality_gid": "whosonfirst:locality:101753779",
+        "continent": "Europa",
+        "continent_gid": "whosonfirst:continent:102191581",
+        "label": "Carrer Sant Lluís, Gavà, CT, España"
+      },
+      "bbox": [1.993752, 41.306251, 2.000631, 41.308226]
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-0.217638, 40.58445]
+      },
+      "properties": {
+        "id": "polyline:13398852",
+        "gid": "openstreetmap:street:polyline:13398852",
+        "layer": "street",
+        "source": "openstreetmap",
+        "source_id": "polyline:13398852",
+        "name": "Carrer Sant Lluís",
+        "street": "Carrer Sant Lluís",
+        "confidence": 0.8,
+        "match_type": "fallback",
+        "accuracy": "centroid",
+        "country": "España",
+        "country_gid": "whosonfirst:country:85633129",
+        "country_a": "ESP",
+        "macroregion": "Comunidad Valenciana",
+        "macroregion_gid": "whosonfirst:macroregion:404227381",
+        "region": "Castellón",
+        "region_gid": "whosonfirst:region:85682685",
+        "region_a": "VC",
+        "localadmin": "Cinctorres",
+        "localadmin_gid": "whosonfirst:localadmin:404333197",
+        "continent": "Europa",
+        "continent_gid": "whosonfirst:continent:102191581",
+        "label": "Carrer Sant Lluís, Cinctorres, VC, España"
+      },
+      "bbox": [-0.217812, 40.584284, -0.21743, 40.58459]
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.434664, 38.907938]
+      },
+      "properties": {
+        "id": "polyline:14865684",
+        "gid": "openstreetmap:street:polyline:14865684",
+        "layer": "street",
+        "source": "openstreetmap",
+        "source_id": "polyline:14865684",
+        "name": "Carrer Sant Lluís",
+        "street": "Carrer Sant Lluís",
+        "confidence": 0.8,
+        "match_type": "fallback",
+        "accuracy": "centroid",
+        "country": "España",
+        "country_gid": "whosonfirst:country:85633129",
+        "country_a": "ESP",
+        "macroregion": "Islas Baleares",
+        "macroregion_gid": "whosonfirst:macroregion:404227367",
+        "region": "Islas Baleares",
+        "region_gid": "whosonfirst:region:85682647",
+        "region_a": "PM",
+        "localadmin": "Ibiza",
+        "localadmin_gid": "whosonfirst:localadmin:404330785",
+        "locality": "Ibiza",
+        "locality_gid": "whosonfirst:locality:101777557",
+        "continent": "Europa",
+        "continent_gid": "whosonfirst:continent:102191581",
+        "label": "Carrer Sant Lluís, Ibiza, PM, España"
+      },
+      "bbox": [1.434201, 38.907885, 1.435179, 38.908058]
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-0.116655, 38.842171]
+      },
+      "properties": {
+        "id": "polyline:14869168",
+        "gid": "openstreetmap:street:polyline:14869168",
+        "layer": "street",
+        "source": "openstreetmap",
+        "source_id": "polyline:14869168",
+        "name": "carrer Sant Lluís",
+        "street": "carrer Sant Lluís",
+        "confidence": 0.8,
+        "match_type": "fallback",
+        "accuracy": "centroid",
+        "country": "España",
+        "country_gid": "whosonfirst:country:85633129",
+        "country_a": "ESP",
+        "macroregion": "Comunidad Valenciana",
+        "macroregion_gid": "whosonfirst:macroregion:404227381",
+        "region": "Alicante",
+        "region_gid": "whosonfirst:region:85682625",
+        "region_a": "VC",
+        "localadmin": "Pego",
+        "localadmin_gid": "whosonfirst:localadmin:404329479",
+        "locality": "Pego",
+        "locality_gid": "whosonfirst:locality:101777509",
+        "continent": "Europa",
+        "continent_gid": "whosonfirst:continent:102191581",
+        "label": "carrer Sant Lluís, Pego, VC, España"
+      },
+      "bbox": [-0.116738, 38.841256, -0.116455, 38.843099]
+    }
+  ],
+  "bbox": [-0.217812, 38.841256, 4.267011, 41.484018]
+}

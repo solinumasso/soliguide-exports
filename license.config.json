@@ -1,0 +1,34 @@
+{
+  "license": "LICENSE.header",
+  "ignore": [
+    "packages/",
+    "yarn.lock",
+    "**/*.gzip",
+    "**/*.gz",
+    ".husky",
+    ".idea/",
+    ".env",
+    "CHANGELOG.md",
+    ".reuse/",
+    "LICENSES/",
+    ".nx/cache/",
+    "**/*.license"
+  ],
+  "licenseFormats": {
+    "^CODEOWNERS|^Dockerfile|cc|^.releaserc|^.dockerignore|^.gitignore|^.prettierignore|^.editorconfig|yaml|yml|conf|sh|example|toml": {
+      "eachLine": {
+        "prepend": "# "
+      }
+    },
+    "xml|babel|svg": {
+      "prepend": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--",
+      "append": "-->"
+    },
+    "md": {
+      "prepend": "<!--",
+      "append": "-->"
+    }
+  },
+  "trailingWhitespace": "TRIM",
+  "regexIdentifier": "___"
+}

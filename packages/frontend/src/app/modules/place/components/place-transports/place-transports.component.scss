@@ -1,0 +1,66 @@
+/*
+ * Soliguide: Useful information for those who need it
+ *
+ * SPDX-FileCopyrightText: © 2024 Solinum
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+.transport-stop-point {
+  min-width: 35px;
+  padding: 0.25rem;
+  margin: 0.15rem;
+  font-weight: 600;
+  font-size: 1.15rem;
+  border-radius: 4px;
+  text-align: center;
+  letter-spacing: 0.7px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.transport_direction {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #646464;
+}
+
+.ng-fa-icon {
+  color: black;
+  font-size: 1.4rem;
+  width: 22px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.ile-de-france {
+  .SUBWAY {
+    .transport-stop-point {
+      width: 28px;
+      border-radius: 150px;
+      padding: 0.25rem;
+    }
+  }
+}
+
+.hauts-de-france {
+  .SUBWAY {
+    .transport-stop-point {
+      width: 40px;
+      border-radius: 150px;
+      padding: 0.5rem 0.3rem;
+    }
+  }
+}

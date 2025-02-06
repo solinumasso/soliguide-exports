@@ -1,0 +1,69 @@
+/*
+ * Soliguide: Useful information for those who need it
+ *
+ * SPDX-FileCopyrightText: © 2024 Solinum
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+.aa-ItemLink,
+.aa-ItemWrapper {
+  justify-content: left !important;
+}
+
+.aa-PanelLayout {
+  padding: 0 !important;
+}
+.aa-Item {
+  padding: 0.5rem;
+  border-bottom: 1px solid rgb(211, 211, 211);
+}
+
+.aa-ItemLink {
+  img {
+    width: 12px;
+    height: auto;
+  }
+  font-size: 1.05rem;
+}
+
+:host img {
+  width: 14px !important;
+  height: auto !important;
+}
+
+.search-input {
+  min-width: 340px;
+
+  .aa-Label,
+  .aa-InputWrapperSuffix,
+  .aa-SubmitButton {
+    display: none !important;
+  }
+
+  .aa-Form:focus-within,
+  .aa-Form {
+    border: none !important;
+    padding: none !important;
+    box-shadow: none !important;
+  }
+
+  .aa-Autocomplete {
+    button {
+      border: none;
+    }
+  }
+}

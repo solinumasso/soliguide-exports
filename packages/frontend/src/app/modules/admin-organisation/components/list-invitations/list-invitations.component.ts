@@ -1,0 +1,141 @@
+/*
+ * Soliguide: Useful information for those who need it
+ *
+ * SPDX-FileCopyrightText: © 2024 Solinum
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { Subscription } from "rxjs";
+import { ToastrService } from "ngx-toastr";
+import { TranslateService } from "@ngx-translate/core";
+
+import { UserRole } from "@soliguide/common";
+import type { PosthogProperties } from "@soliguide/common-angular";
+
+import { InviteUserService } from "../../services/invite-user.service";
+import type { Organisation } from "../../interfaces";
+import { CurrentLanguageService } from "../../../general/services/current-language.service";
+import type { Invitation, User } from "../../../users/classes";
+
+import { PosthogService } from "../../../analytics/services/posthog.service";
+import { OriginService } from "../../../shared/services";
+
+@Component({
+  selector: "app-list-invitations",
+  templateUrl: "./list-invitations.component.html",
+  styleUrls: ["./list-invitations.component.css"],
+})
+export class ListInvitationsComponent implements OnInit, OnDestroy {
+  @Input() public me!: User | null;
+  @Input() public organisation: Organisation;
+
+  private readonly subscription = new Subscription();
+  public readonly UserRole = UserRole;
+
+  public currentLanguage: string;
+  public frontendUrl: string;
+
+  constructor(
+    private readonly inviteUserService: InviteUserService,
+    private readonly toastr: ToastrService,
+    private readonly currentLanguageService: CurrentLanguageService,
+    private readonly translateService: TranslateService,
+    private readonly posthogService: PosthogService,
+    private readonly originService: OriginService
+  ) {
+    this.currentLanguage = this.currentLanguageService.currentLanguage;
+    this.frontendUrl = this.originService.getFrontendUrl();
+  }
+
+  public ngOnInit(): void {
+    this.subscription.add(
+      this.currentLanguageService.subscribe(
+        (language) => (this.currentLanguage = language)
+      )
+    );
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  public reSendInvite(invitation: Invitation): void {
+    this.captureEvent("click-re-send", {
+      invitationId: invitation._id,
+      createdBy: invitation.createdBy,
+      user_id: invitation.user_id,
+    });
+
+    this.subscription.add(
+      this.inviteUserService
+        .reSendInvite(this.organisation, invitation)
+        .subscribe({
+          next: () => {
+            this.toastr.success(
+              this.translateService.instant("INVITATION_SENT")
+            );
+          },
+          error: () => {
+            this.toastr.error(
+              this.translateService.instant("THERE_WAS_A_PROBLEM")
+            );
+          },
+        })
+    );
+  }
+
+  public deleteInvitation(invitation: Invitation): void {
+    this.captureEvent("click-delete", {
+      invitationId: invitation._id,
+      createdBy: invitation.createdBy,
+      user_id: invitation.user_id,
+    });
+
+    this.subscription.add(
+      this.inviteUserService.deleteInvitation(invitation.token).subscribe({
+        next: () => {
+          this.toastr.success(
+            this.translateService.instant("DELETION_COMPLETED_SUCCESSFULLY")
+          );
+          this.organisation.invitations.splice(
+            this.organisation.invitations.indexOf(invitation),
+            1
+          );
+        },
+        error: () => {
+          this.toastr.error(
+            this.translateService.instant("DELETION_COULD_NOT_BE_COMPLETED")
+          );
+        },
+      })
+    );
+  }
+
+  public onCopiedLinkClick(): void {
+    this.toastr.success(
+      this.translateService.instant("LINK_COPIED_SUCCESSFULLY")
+    );
+  }
+
+  public captureEvent(eventName: string, properties?: PosthogProperties): void {
+    this.posthogService.capture(`admin-orga-list-invitations-${eventName}`, {
+      organizationId: this.organisation._id,
+      organization_id: this.organisation.organization_id,
+      ...properties,
+    });
+  }
+}

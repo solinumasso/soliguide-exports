@@ -1,0 +1,53 @@
+<!--
+Soliguide: Useful information for those who need it
+
+SPDX-FileCopyrightText: © 2024 Solinum
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<h1>{{ "CATEGORIES_CHOICE" | translate }}</h1>
+<div class="subtitle-primary">
+  {{ "PERSONALIZE_WIDGET_CATEGORY" | translate }}
+</div>
+<div class="row pt-3 my-4">
+  <ng-container *ngFor="let category of WIDGET_CATEGORIES | keyvalue">
+    <div class="col-12 col-md-6 col-lg-4 mb-3">
+      <div class="list-group h-100">
+        <div class="list-group-item d-flex align-items-center h-100">
+          <input
+            type="checkbox"
+            name="category_{{ category.key }}"
+            id="category_{{ category.key }}"
+            class="form-check-input flex-shrink-0 me-2 mt-0"
+            [checked]="hasCategory(category.key)"
+            (click)="toggleCategory(category.key)"
+          />
+          <label
+            for="category_{{ category.key }}"
+            class="form-check-label flex-shrink-1 mt-2"
+          >
+            <strong>{{ category.value.title | translate }}</strong>
+            <span *ngIf="category.value.subtitle">
+              <small class="ms-1">{{
+                category.value.subtitle | translate
+              }}</small>
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

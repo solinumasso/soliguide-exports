@@ -1,0 +1,91 @@
+{
+  "geocoding": {
+    "version": "0.2",
+    "attribution": "https://openrouteservice.org/terms-of-service/#attribution-geocode",
+    "query": {
+      "text": "lleida",
+      "size": 10,
+      "layers": [
+        "venue",
+        "street",
+        "country",
+        "macroregion",
+        "region",
+        "county",
+        "localadmin",
+        "locality",
+        "borough",
+        "neighbourhood",
+        "continent",
+        "empire",
+        "dependency",
+        "macrocounty",
+        "macrohood",
+        "microhood",
+        "disputed",
+        "postalcode",
+        "ocean",
+        "marinearea"
+      ],
+      "private": false,
+      "boundary.country": ["ESP"],
+      "lang": {
+        "name": "Catalan",
+        "iso6391": "ca",
+        "iso6393": "cat",
+        "via": "querystring",
+        "defaulted": false
+      },
+      "querySize": 20,
+      "parser": "libpostal",
+      "parsed_text": {
+        "city": "lleida"
+      }
+    },
+    "warnings": ["performance optimization: excluding 'address' layer"],
+    "engine": {
+      "name": "Pelias",
+      "author": "Mapzen",
+      "version": "1.0"
+    },
+    "timestamp": 1718008021280
+  },
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.621968, 41.620162]
+      },
+      "properties": {
+        "id": "101748359",
+        "gid": "whosonfirst:locality:101748359",
+        "layer": "locality",
+        "source": "whosonfirst",
+        "source_id": "101748359",
+        "name": "Lleida",
+        "confidence": 1,
+        "match_type": "exact",
+        "accuracy": "centroid",
+        "country": "Espanya",
+        "country_gid": "whosonfirst:country:85633129",
+        "country_a": "ESP",
+        "macroregion": "Catalonia",
+        "macroregion_gid": "whosonfirst:macroregion:404227379",
+        "region": "Lleida",
+        "region_gid": "whosonfirst:region:85682769",
+        "region_a": "CT",
+        "localadmin": "Lleida",
+        "localadmin_gid": "whosonfirst:localadmin:404337851",
+        "locality": "Lleida",
+        "locality_gid": "whosonfirst:locality:101748359",
+        "continent": "Europa",
+        "continent_gid": "whosonfirst:continent:102191581",
+        "label": "Lleida, Espanya"
+      },
+      "bbox": [0.5902115, 41.5966513431, 0.649371782253, 41.6397745729]
+    }
+  ],
+  "bbox": [0.5902115, 41.5966513431, 0.649371782253, 41.6397745729]
+}

@@ -1,0 +1,40 @@
+{
+  "enabled": true,
+  "extends": [
+    "config:js-app",
+    "docker:enableMajor",
+    ":docker",
+    ":maintainLockFilesMonthly",
+    ":masterIssue",
+    ":preserveSemverRanges",
+    ":prHourlyLimit4",
+    ":semanticCommits",
+    ":semanticCommitScopeDisabled",
+    ":timezone(Europe/Paris)"
+  ],
+  "schedule": "every weekend",
+  "separateMinorPatch": true,
+  "masterIssueAutoclose": true,
+  "packageRules": [
+    {
+      "packageNames": [
+        "@fortawesome/angular-fontawesome",
+        "bootstrap",
+        "typescript"
+      ],
+      "enabled": false
+    },
+    {
+      "depTypeList": ["dependencies"],
+      "updateTypes": ["minor"],
+      "groupName": "all minor dependencies",
+      "groupSlug": "all-minor"
+    },
+    {
+      "depTypeList": ["devDependencies"],
+      "updateTypes": ["minor"],
+      "groupName": "all minor devDependencies",
+      "groupSlug": "all-minor-dev-tools"
+    }
+  ]
+}

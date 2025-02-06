@@ -1,0 +1,80 @@
+<!--
+Soliguide: Useful information for those who need it
+
+SPDX-FileCopyrightText: © 2024 Solinum
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>{{ placeholder "soliguide_title" }}</title>
+    <base href="/" />
+    {{ import "/head.prod.html.tpl" }} {{ template "head" }}
+  </head>
+  <body id="top-site">
+    <script>
+      window.CURRENT_DATA = {
+        THEME: '{{ placeholder "soliguide_theme" }}',
+        env: {
+          apiUrl: '{{ env "SOLIGUIDE_API_URL" }}/',
+          locationApiUrl: '{{ env "SOLIGUIDE_LOCATION_API_URL" }}',
+          environment: '{{ env "SOLIGUIDE_ENV_ID" }}',
+          posthogUrl: '{{ env "SOLIGUIDE_POSTHOG_URL" }}',
+          posthogApiKey: '{{ env "SOLIGUIDE_POSTHOG_API_KEY" }}'.length
+            ? '{{ env "SOLIGUIDE_POSTHOG_API_KEY" }}'
+            : undefined,
+          sentryDsn: '{{ env "SOLIGUIDE_SENTRY_DSN" }}'.length
+            ? '{{ env "SOLIGUIDE_SENTRY_DSN" }}'
+            : undefined,
+          chatWebsiteId: '{{ env "SOLIGUIDE_CHAT_WEBSITE_ID" }}'.length
+            ? '{{ env "SOLIGUIDE_CHAT_WEBSITE_ID" }}'
+            : undefined,
+          territoriesPresent: '{{ env "SOLIGUIDE_TERRITORIES_PRESENT" }}',
+          territorialAnalysis: '{{ env "SOLIGUIDE_TERRITORIAL_ANALYSIS" }}'
+            .length
+            ? '{{ env "SOLIGUIDE_TERRITORIAL_ANALYSIS" }}'
+            : undefined,
+          seasonalAnalysis: '{{ env "SOLIGUIDE_SEASONAL_ANALYSIS" }}'.length
+            ? '{{ env "SOLIGUIDE_SEASONAL_ANALYSIS" }}'
+            : undefined,
+          searchTracking: '{{ env "SOLIGUIDE_SEARCH_TRACKING" }}'.length
+            ? '{{ env "SOLIGUIDE_SEARCH_TRACKING" }}'
+            : undefined,
+          olympicGames: '{{ env "SOLIGUIDE_OLYMPIC_GAMES" }}'.length
+            ? '{{ env "SOLIGUIDE_OLYMPIC_GAMES" }}'
+            : undefined,
+          praticalFilesLink: '{{ env "SOLIGUIDE_PRACTICAL_FILES_LINK" }}'.length
+            ? '{{ env "SOLIGUIDE_PRACTICAL_FILES_LINK" }}'
+            : undefined,
+          becomeTranslatorFormLink:
+            '{{ env "SOLIGUIDE_BECOME_TRANSLATOR_FORM_LINK" }}'.length
+              ? '{{ env "SOLIGUIDE_BECOME_TRANSLATOR_FORM_LINK" }}'
+              : undefined,
+          proAccountCreationFormLink:
+            '{{ env "SOLIGUIDE_PRO_ACCOUNT_CREATION_FORM_LINK" }}'.length
+              ? '{{ env "SOLIGUIDE_PRO_ACCOUNT_CREATION_FORM_LINK" }}'
+              : undefined,
+          donateLink: '{{ env "SOLIGUIDE_DONATE_LINK" }}'.length
+            ? '{{ env "SOLIGUIDE_DONATE_LINK" }}'
+            : undefined,
+        },
+      };
+    </script>
+    <app-root></app-root>
+  </body>
+</html>

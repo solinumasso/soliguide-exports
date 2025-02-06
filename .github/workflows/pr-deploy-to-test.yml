@@ -1,0 +1,96 @@
+# Soliguide: Useful information for those who need it
+#
+# SPDX-FileCopyrightText: © 2024 Solinum
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+name: PR - deploy to test environment
+
+on:
+  pull_request:
+    types:
+      - labeled
+    branches:
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  affected_packages:
+    uses: ./.github/workflows/pr-get-affected-packages.yml
+
+  deploy_test1:
+    name: Deploy test1
+    if: ${{ github.event.label.name == '🚀 test1' }}
+    uses: ./.github/workflows/_deploy-to-environment.yml
+    with:
+      environment: test1
+      deploy_api: ${{ contains(needs.affected_packages.outputs.to_deploy, 'api') }}
+      deploy_design-system: ${{ contains(needs.affected_packages.outputs.to_deploy, 'design-system') }}
+      deploy_frontend: ${{ contains(needs.affected_packages.outputs.to_deploy, 'frontend') }}
+      deploy_location-api: ${{ contains(needs.affected_packages.outputs.to_deploy, 'location-api') }}
+      deploy_soligare: ${{ contains(needs.affected_packages.outputs.to_deploy, 'soligare') }}
+      deploy_web-app: ${{ contains(needs.affected_packages.outputs.to_deploy, 'web-app') }}
+      deploy_widget: ${{ contains(needs.affected_packages.outputs.to_deploy, 'widget') }}
+    needs:
+      - affected_packages
+    secrets: inherit
+
+  deploy_test2:
+    name: Deploy test2
+    if: ${{ github.event.label.name == '🚀 test2' }}
+    uses: ./.github/workflows/_deploy-to-environment.yml
+    with:
+      environment: test2
+      deploy_api: ${{ contains(needs.affected_packages.outputs.to_deploy, 'api') }}
+      deploy_design-system: ${{ contains(needs.affected_packages.outputs.to_deploy, 'design-system') }}
+      deploy_frontend: ${{ contains(needs.affected_packages.outputs.to_deploy, 'frontend') }}
+      deploy_location-api: ${{ contains(needs.affected_packages.outputs.to_deploy, 'location-api') }}
+      deploy_soligare: ${{ contains(needs.affected_packages.outputs.to_deploy, 'soligare') }}
+      deploy_web-app: ${{ contains(needs.affected_packages.outputs.to_deploy, 'web-app') }}
+      deploy_widget: ${{ contains(needs.affected_packages.outputs.to_deploy, 'widget') }}
+    needs:
+      - affected_packages
+    secrets: inherit
+
+  deploy_qovery:
+    name: Deploy to Qovery
+    if: ${{ github.event.label.name == '🚀 qovery' }}
+    uses: ./.github/workflows/_deploy-to-test-qovery.yml
+    needs:
+      - affected_packages
+    secrets: inherit
+
+  remove_deploy_label:
+    name: Remove the deploy label ${{ github.event.label.name }}
+    if: ${{ github.event.label.name == '🚀 test2' || github.event.label.name == '🚀 test1' || github.event.label.name == '🚀 qovery' && always() }}
+    runs-on: ubuntu-latest
+    needs:
+      - deploy_test1
+      - deploy_test2
+      - deploy_qovery
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: octokit/request-action@v2.x
+        with:
+          route: DELETE /repos/{repo}/issues/{issue_number}/labels/{name}
+          repo: ${{ github.repository }}
+          issue_number: ${{ github.event.number }}
+          name: ${{ github.event.label.name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

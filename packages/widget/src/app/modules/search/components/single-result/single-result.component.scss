@@ -1,0 +1,106 @@
+/*
+ * Soliguide: Useful information for those who need it
+ *
+ * SPDX-FileCopyrightText: © 2024 Solinum
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+.btn-primary {
+  color: #fff;
+  font-weight: 600;
+  background-color: var(--bs-primary) !important;
+  border-color: var(--bs-primary) !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--bs-primary-dark) !important;
+  border-color: var(--bs-primary-dark) !important;
+}
+
+.result {
+  padding: 1rem;
+  min-height: 255px;
+  border: 1px solid #dbdbdb;
+  border-radius: 6px;
+  background: white;
+  display: block;
+  text-align: left;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+}
+
+.result:hover {
+  cursor: pointer;
+  border-color: var(--bs-primary-dark) !important;
+}
+
+.result .btn-primary {
+  min-width: 34%;
+}
+
+.result_header {
+  display: block;
+  width: 100%;
+  min-height: 112px;
+  text-align: left;
+  color: #333;
+}
+
+.result_header a,
+.result_header span {
+  text-decoration: none;
+  font-size: 1.08rem;
+  font-weight: 600;
+  display: block;
+  color: #333;
+  min-height: 75px;
+}
+
+.result_header a:hover,
+.result_header span:hover {
+  text-decoration: underline;
+  color: var(--bs-primary-dark) !important;
+}
+.result_schedules,
+.result_distance {
+  display: inline-block;
+  margin-right: 0.5rem;
+  padding: 0.3rem 0.6rem;
+  color: black;
+  background-color: var(--bs-primary-light) !important;
+  border-radius: 6px;
+}
+
+.result_footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  bottom: 1rem;
+  width: calc(100% - 2rem);
+}
+
+.result_footer img {
+  max-width: 103px;
+  max-height: auto;
+}
+
+.result_footer a,
+.result_footer span {
+  color: var(--bs-primary) !important;
+  margin: 0;
+  text-decoration: underline;
+}

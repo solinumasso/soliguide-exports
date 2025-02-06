@@ -1,0 +1,132 @@
+/*
+ * Soliguide: Useful information for those who need it
+ *
+ * SPDX-FileCopyrightText: © 2024 Solinum
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+load(`${__dirname}/utils.mongodb`);
+
+const entityUpdate = async (
+  collection,
+  baseMessage,
+  baseFilters,
+  prefix,
+  id
+) => {
+  const entityFax = async () =>
+    await updateMany(
+      collection,
+      `${baseMessage} ${prefix}entity.fax`,
+      {
+        ...baseFilters,
+        ...stringFieldFilter(`${prefix}entity.fax`),
+      },
+      {
+        $set: {
+          [`${prefix}entity.fax`]: fax,
+        },
+      }
+    );
+  const entityEmail = async () =>
+    await updateMany(
+      collection,
+      `${baseMessage} ${prefix}entity.mail`,
+      {
+        ...baseFilters,
+        ...stringFieldFilter(`${prefix}entity.mail`),
+      },
+      [
+        {
+          $set: emailAggregate(`${prefix}entity.mail`, id),
+        },
+      ]
+    );
+  const urlEntityField = async (field, baseUrl) =>
+    await updateMany(
+      collection,
+      `${baseMessage} ${prefix}entity.${field}`,
+      {
+        ...baseFilters,
+        ...stringFieldFilter(`${prefix}entity.${field}`),
+      },
+      [
+        {
+          $set: {
+            [`${prefix}entity.${field}`]: {
+              $concat: [
+                baseUrl,
+                {
+                  $toString: id,
+                },
+              ],
+            },
+          },
+        },
+      ]
+    );
+  const phoneString = async (phoneField) =>
+    await updateMany(
+      collection,
+      `${baseMessage} ${prefix}entity.${phoneField} string`,
+      {
+        ...baseFilters,
+        $and: [
+          { [`${prefix}entity.${phoneField}`]: { $ne: null } },
+          { [`${prefix}entity.${phoneField}`]: { $type: "string" } },
+          { [`${prefix}entity.${phoneField}`]: { $ne: "" } },
+        ],
+      },
+      {
+        $set: {
+          [`${prefix}entity.${phoneField}`]: phoneNumber,
+        },
+      }
+    );
+  const phoneList = async () =>
+    await updateMany(
+      collection,
+      `${baseMessage} ${prefix}entity.phones`,
+      {
+        ...baseFilters,
+        [`${prefix}entity.phones`]: { $ne: null, $not: { $size: 0 } },
+      },
+      {
+        $set: {
+          [`${prefix}entity.phones.$[element].phoneNumber`]: phoneNumber,
+        },
+      },
+      {
+        arrayFilters: [
+          {
+            $and: [
+              { "element.phoneNumber": { $ne: null } },
+              { "element.phoneNumber": { $ne: "" } },
+            ],
+          },
+        ],
+      }
+    );
+  await Promise.all([
+    entityEmail(),
+    entityFax(),
+    phoneString("phone"),
+    phoneString("phone2"),
+    phoneList(),
+    urlEntityField("facebook", "https://www.facebook.com/"),
+    urlEntityField("instagram", "https://www.instagram.com/"),
+  ]);
+};

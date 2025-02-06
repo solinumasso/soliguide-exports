@@ -1,0 +1,65 @@
+<!--
+Soliguide: Useful information for those who need it
+
+SPDX-FileCopyrightText: © 2024 Solinum
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<section>
+  <div *ngIf="loading">
+    <img src="assets/svg/loading-gray.svg" alt="Chargement en cours" />
+    <br />
+    <b>{{ "SEARCH_IN_PROGRESS" | translate }}</b>
+  </div>
+
+  <div @fadeInOut *ngIf="!loading && places.length === 0">
+    <div class="row align-items-center">
+      <div class="col-md-3 p-3 text-center">
+        <img
+          class="no_result"
+          src="assets/images/search/no_results.svg"
+          [alt]="'NO_SEARCH_RESULT' | translate"
+        />
+      </div>
+      <div class="col-md-9">
+        <h3 class="text-primary">{{ "SEARCH_NO_RESULT_TITLE" | translate }}</h3>
+        <h4>{{ "SEARCH_NO_RESULT_DESCRIPTION" | translate }}</h4>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && places.length > 0" class="carousel">
+    <div #structure *ngFor="let place of places" class="carousel-cell">
+      <app-single-result
+        [place]="place"
+        [currentLang]="currentLang"
+        [disabled]="disabled"
+      ></app-single-result>
+    </div>
+  </div>
+</section>
+
+<div class="px-2 px-md-1 my-3 mx-2">
+  <a
+    *ngIf="soliguideLink"
+    [href]="soliguideLink"
+    class="soliguide_link customizable"
+    target="_blank"
+    (click)="recordClick()"
+  >
+    {{ "VOIR_PLUS_SUR_SOLIGUIDE" | translate }}
+  </a>
+</div>

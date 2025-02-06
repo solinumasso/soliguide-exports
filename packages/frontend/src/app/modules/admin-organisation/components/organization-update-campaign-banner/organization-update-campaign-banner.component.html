@@ -1,0 +1,66 @@
+<!--
+Soliguide: Useful information for those who need it
+
+SPDX-FileCopyrightText: © 2024 Solinum
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<div *ngIf="organisation && needUpdated && campaignIsActive && canEdit">
+  <div class="alert alert-warning py-3">
+    <div class="row align-items-center justify-content-between" *ngIf="me.pro">
+      <div class="col-md-9 fw-bold">
+        {{
+          "SOLIGUIDE_TO_UPDATE_CAMPAIGN_NAME"
+            | translate
+              : {
+                  brandName: THEME_CONFIGURATION.brandName
+                }
+        }}
+      </div>
+      <div class="d-grid gap-2 col-md-3 align-self-end">
+        <a class="btn btn-primary" [routerLink]="[routePrefix, 'campaign']">
+          {{ "UPDATE_CAMPAIGN_NAME" | translate }}
+        </a>
+      </div>
+    </div>
+
+    <div class="row align-items-center justify-content-between" *ngIf="!me.pro">
+      <div class="col-md-9 fw-bold">
+        {{ "STRUCTURE_NEED_UPDATE" | translate }}
+        <br />
+        {{ "STRUCTURE_TERMINATE_UPDATE" | translate }}
+      </div>
+      <div class="col-md-3 text-end">
+        <a
+          class="btn btn-block btn-primary"
+          [routerLink]="[
+            routePrefix,
+            'campaign',
+            'orga',
+            organisation.organization_id
+          ]"
+          (click)="
+            captureEvent('click-complete-campaign-update-banner-button', {
+              campaign: CAMPAIGN_DEFAULT_NAME
+            })
+          "
+        >
+          {{ "COMPLETE_UPDATE" | translate }}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

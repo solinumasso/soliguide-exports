@@ -1,0 +1,145 @@
+<!--
+Soliguide: Useful information for those who need it
+
+SPDX-FileCopyrightText: © 2024 Solinum
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<h1>{{ "GEOGRAPHICAL_DELIMITATION" | translate }}</h1>
+<div class="subtitle-primary">{{ "CHOOSE_SEARCH_PERIMETER" | translate }}</div>
+<div [innerHTML]="'DETAILED_PERIMETER' | translate | safeHtml"></div>
+<div>
+  {{ "MULTIPLE_LOCALITIES_FOR_LOCAL_SCALE" | translate }}
+  <span
+    class="fst-italic"
+    [innerHTML]="
+      'MULTIPLE_LOCALITIES_FOR_LOCAL_SCALE_EXAMPLE' | translate | safeHtml
+    "
+  >
+  </span>
+</div>
+<div class="row pt-3 my-4">
+  <div class="d-flex justify-content-center mb-4">
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        name="allPlaces"
+        id="allPlaces"
+        [checked]="formValue.national"
+        (click)="toggleNational()"
+      />
+      <label for="allPlaces" class="form-check-label">{{
+        "NATIONAL_SCALE" | translate
+      }}</label>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6 mb-4 mb-md-2">
+    <app-search-location-autocomplete
+      [geoType]="GeoTypes.REGION"
+      [label]="'REGIONAL_SCALE' | translate"
+      [placeholder]="'REGIONAL_SCALE_EXAMPLE' | translate"
+      (updateLocation)="updateLocation(GeoTypes.REGION, $event)"
+      [disabled]="
+        this.formValue.national ||
+        this.formValue.departments.length > 0 ||
+        this.formValue.cities.length > 0
+      "
+    ></app-search-location-autocomplete>
+  </div>
+  <div class="col-12 col-md-6 mb-4 mb-md-2 px-4">
+    <div class="row h-100">
+      <ng-container *ngFor="let chosenRegion of formValue.regions">
+        <span
+          class="location col-12 col-lg-5 align-self-end d-flex justify-content-between align-content-baseline mt-1 me-lg-1"
+          [ngClass]="{ disabled: this.formValue.national }"
+        >
+          <span class="my-2">{{ chosenRegion.label }}</span
+          ><fa-icon
+            [icon]="faTimes"
+            class="cross my-2 align-self-center"
+            (click)="addRemoveLocation(chosenRegion, LocationType.REGIONS)"
+          ></fa-icon
+        ></span>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6 my-4">
+    <app-search-location-autocomplete
+      [geoType]="GeoTypes.DEPARTMENT"
+      [label]="'DEPARTEMENTAL_SCALE' | translate"
+      [placeholder]="'DEPARTEMENTAL_SCALE_EXAMPLE' | translate"
+      (updateLocation)="updateLocation(GeoTypes.DEPARTMENT, $event)"
+      [disabled]="
+        this.formValue.national ||
+        this.formValue.regions.length > 0 ||
+        this.formValue.cities.length > 0
+      "
+    ></app-search-location-autocomplete>
+  </div>
+  <div class="col-12 col-md-6 mb-4 my-md-4 px-4">
+    <div class="row h-100">
+      <ng-container *ngFor="let chosenDepartment of formValue.departments">
+        <span
+          class="location col-12 col-lg-5 align-self-end d-flex justify-content-between align-content-baseline mt-1 me-lg-1"
+          [ngClass]="{ disabled: this.formValue.national }"
+        >
+          <span class="my-2"> {{ chosenDepartment.label }}</span
+          ><fa-icon
+            [icon]="faTimes"
+            class="cross my-2 align-self-center"
+            (click)="
+              addRemoveLocation(chosenDepartment, LocationType.DEPARTMENTS)
+            "
+          ></fa-icon
+        ></span>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6 my-4 my-md-2">
+    <app-search-location-autocomplete
+      [geoType]="GeoTypes.CITY"
+      [label]="'CITY_SCALE' | translate"
+      [placeholder]="'CITY_SCALE_EXAMPLE' | translate"
+      (updateLocation)="updateLocation(GeoTypes.CITY, $event)"
+      [disabled]="
+        this.formValue.national ||
+        this.formValue.regions.length > 0 ||
+        this.formValue.departments.length > 0
+      "
+    ></app-search-location-autocomplete>
+  </div>
+  <div class="col-12 col-md-6 mb-4 my-md-2 px-4">
+    <div class="row h-100">
+      <ng-container *ngFor="let chosenCity of formValue.cities">
+        <span
+          class="location col-12 col-lg-5 align-self-end d-flex justify-content-between align-content-baseline mt-1 me-lg-1"
+          [ngClass]="{ disabled: this.formValue.national }"
+        >
+          <span class="my-2"> {{ chosenCity.label }}</span
+          ><fa-icon
+            [icon]="faTimes"
+            class="cross my-2 align-self-center"
+            (click)="addRemoveLocation(chosenCity, LocationType.CITIES)"
+          ></fa-icon
+        ></span>
+      </ng-container>
+    </div>
+  </div>
+</div>

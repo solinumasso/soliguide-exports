@@ -1,0 +1,102 @@
+<!--
+Soliguide: Useful information for those who need it
+
+SPDX-FileCopyrightText: © 2024 Solinum
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<div @fadeInOut class="result">
+  <div class="result_header">
+    <ng-container *ngIf="!disabled; else placenameText">
+      <a [href]="soliguideLink" target="_parent">
+        {{ place.name | limitTo : "95" }}
+      </a>
+    </ng-container>
+    <ng-template #placenameText>
+      <span>{{ place.name | limitTo : "95" }}</span>
+    </ng-template>
+    <div class="result_schedules customizable">
+      {{
+        place.isOpenToday
+          ? ("SEARCH_FILTER_OPEN_TODAY" | translate)
+          : ("SEARCH_FILTER_CLOSED_TODAY" | translate)
+      }}
+    </div>
+    <div *ngIf="place.distance" class="result_distance customizable">
+      {{ place.distance | kmToMeters }}
+    </div>
+  </div>
+
+  <div class="result_body customizable">
+    <ng-container *ngIf="!disabled; else osmLinkText">
+      <a
+        [href]="osmLink"
+        class="btn btn-primary me-2 mt-1"
+        target="_blank"
+        (click)="recordClick('search-result-go-there')"
+      >
+        <span class="me-2">⬆️</span>{{ "BTN_Y_ALLER" | translate }}
+      </a>
+    </ng-container>
+    <ng-template #osmLinkText>
+      <div class="btn btn-primary me-2 mt-1">
+        <span class="me-2">⬆️</span>{{ "BTN_Y_ALLER" | translate }}
+      </div>
+    </ng-template>
+    <ng-container *ngIf="place.entity.phones?.length">
+      <ng-container *ngIf="!disabled; else phoneNumberText">
+        <a
+          (click)="recordClick('search-result-phone')"
+          [href]="
+            'tel:' + (place.entity.phones[0] | formatInternationalPhoneNumber)
+          "
+          class="btn btn-primary mt-1"
+          target="_blank"
+          ><span class="me-2">📱</span
+          >{{ place.entity.phones[0] | formatInternationalPhoneNumber }}</a
+        >
+      </ng-container>
+      <ng-template #phoneNumberText>
+        <div class="btn btn-primary mt-1">
+          <span class="me-2">📱</span
+          >{{ place.entity.phones[0] | formatInternationalPhoneNumber }}
+        </div>
+      </ng-template>
+    </ng-container>
+  </div>
+
+  <div class="result_footer customizable">
+    <ng-container *ngIf="!disabled; else moreInfoText">
+      <a
+        [href]="soliguideLink"
+        target="_blank"
+        (click)="recordClick('search-result-more-info')"
+        >{{ "PLUS_INFOS" | translate }}</a
+      >
+      <a
+        [href]="soliguideLink"
+        target="_blank"
+        (click)="recordClick('search-result-more-info-logo')"
+        ><img src="/assets/images/logo.png" alt="Soliguide"
+      /></a>
+    </ng-container>
+    <ng-template #moreInfoText>
+      <div>
+        <img src="/assets/images/logo.png" alt="Soliguide" />
+      </div>
+    </ng-template>
+  </div>
+</div>

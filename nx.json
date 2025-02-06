@@ -1,0 +1,65 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*"],
+    "prod": ["!{projectRoot}/**/*.spec.ts"],
+    "sharedGlobals": ["{workspaceRoot}/.github/workflows/_build-and-test.yml"]
+  },
+  "targetDefaults": {
+    "build": {
+      "cache": true,
+      "inputs": ["prod", "^prod"],
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/dist", "{workspaceRoot}/dist"]
+    },
+    "build:es": {
+      "cache": true,
+      "inputs": ["prod", "^prod"],
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/dist", "{workspaceRoot}/dist"]
+    },
+    "build:ad": {
+      "cache": true,
+      "inputs": ["prod", "^prod"],
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/dist", "{workspaceRoot}/dist"]
+    },
+    "format:fix": {
+      "dependsOn": []
+    },
+    "format": {
+      "cache": true,
+      "dependsOn": []
+    },
+    "license:add": {
+      "dependsOn": []
+    },
+    "license:check": {
+      "cache": true,
+      "dependsOn": []
+    },
+    "license:remove": {
+      "dependsOn": []
+    },
+    "lint:fix": {
+      "dependsOn": ["^lint:fix"],
+      "outputs": ["{workspaceRoot}/.eslintcache"]
+    },
+    "lint": {
+      "cache": true,
+      "dependsOn": ["^lint"],
+      "outputs": ["{workspaceRoot}/.eslintcache"]
+    },
+    "watch": {
+      "dependsOn": ["^watch"]
+    },
+    "start": {
+      "dependsOn": ["^start"]
+    },
+    "test": {
+      "cache": true,
+      "inputs": ["default", "^prod", "{workspaceRoot}/jest.config.ts"],
+      "dependsOn": ["^test"]
+    }
+  }
+}

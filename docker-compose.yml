@@ -1,0 +1,109 @@
+# Soliguide: Useful information for those who need it
+#
+# SPDX-FileCopyrightText: © 2024 Solinum
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+services:
+  minio:
+    image: quay.io/minio/minio:latest
+    entrypoint: sh
+    command:
+      [
+        "-c",
+        "mkdir -p /data/documents /data/pictures && minio server /data --console-address :9090",
+      ]
+    ports:
+      - 9000:9000
+      - 9090:9090
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - ./packages/api/uploads:/data
+    restart: always
+  mongodb:
+    image: mongo:6.0
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo-data:/data/db
+      - ./data:/data/soliguide
+      - ./scripts/mongo_entrypoint:/docker-entrypoint-initdb.d/
+    restart: always
+    healthcheck:
+      test: echo 'db.runCommand({serverStatus:1}).ok && rs.status().ok' | mongosh admin --quiet | grep 1
+      interval: 5s
+      timeout: 20s
+      retries: 3
+      start_period: 20s
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+  postgres:
+    container_name: soligare-postgres
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/soligare:/data/soligare
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 5s
+      timeout: 20s
+      retries: 3
+      start_period: 20s
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --requirepass redispassword
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: redis-cli -a redispassword ping | grep PONG
+      interval: 5s
+      timeout: 20s
+      retries: 3
+      start_period: 20s
+
+  typesense:
+    image: typesense/typesense:27.0
+    restart: on-failure
+    ports:
+      - 8108:8108
+    volumes:
+      - typesense-data:/data
+    command: "--data-dir /data --api-key=xyz --enable-cors"
+
+volumes:
+  mongo-data:
+  rabbitmq-data:
+  postgres-data:
+  typesense-data:
+  redis-data:

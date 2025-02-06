@@ -1,0 +1,212 @@
+/*
+ * Soliguide: Useful information for those who need it
+ *
+ * SPDX-FileCopyrightText: © 2024 Solinum
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+load(`${__dirname}/utils.mongodb`);
+load(`${__dirname}/entity_update.mongodb`);
+
+const anonymizePlaceChanges = async () => {
+  const defaultFilter = {
+    "userData.status": { $ne: "SOLI_BOT" },
+  };
+  const userEmail = async () =>
+    await updateMany(
+      db.placeChanges,
+      "placeChanges user emails",
+      {
+        ...defaultFilter,
+        ...stringFieldFilter("userData.email"),
+      },
+      [
+        {
+          $set: emailAggregate("userData.email", {
+            $ifNull: ["$userData.user_id", "$user"],
+          }),
+        },
+      ]
+    );
+  const userName = async () =>
+    await updateMany(
+      db.placeChanges,
+      "placeChanges user names",
+      {
+        ...defaultFilter,
+        ...stringFieldFilter("userData.userName"),
+      },
+      [
+        {
+          $set: {
+            "userData.userName": {
+              $concat: [
+                "Firstname Lastname ",
+                {
+                  $toString: {
+                    $ifNull: ["$userData.user_id", "$user"],
+                  },
+                },
+              ],
+            },
+          },
+        },
+      ]
+    );
+  const contactsEmailName = async () =>
+    await updateMany(
+      db.placeChanges,
+      "placeChanges contacts email and name",
+      {
+        section: "contacts",
+        old: { $ne: null, $not: { $size: 0 } },
+      },
+      [
+        {
+          $set: {
+            old: {
+              $map: {
+                input: "$old",
+                as: "elem",
+                in: {
+                  $mergeObjects: [
+                    "$$elem",
+                    {
+                      ...emailAggregate("mail", "$$elem.user_id"),
+                      name: {
+                        $concat: [
+                          "Firstname ",
+                          {
+                            $toString: "$$elem.user_id",
+                          },
+                        ],
+                      },
+                      lastname: {
+                        $concat: [
+                          "Lastname ",
+                          {
+                            $toString: "$$elem.user_id",
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      ]
+    );
+  const contactsPhoneString = async () =>
+    await updateMany(
+      db.placeChanges,
+      "placeChanges contacts phone string",
+      {
+        section: "contacts",
+        old: { $ne: null, $not: { $size: 0 } },
+      },
+      {
+        $set: {
+          "old.$[element].phone": phoneNumber,
+        },
+      },
+      {
+        arrayFilters: [
+          {
+            $and: [
+              { "element.phone": { $ne: null } },
+              { "element.phone": { $type: "string" } },
+              { "element.phone": { $ne: "" } },
+            ],
+          },
+        ],
+      }
+    );
+  const contactsPhoneObject = async () =>
+    await updateMany(
+      db.placeChanges,
+      "placeChanges contacts phone object",
+      {
+        section: "contacts",
+        old: { $ne: null, $not: { $size: 0 } },
+      },
+      {
+        $set: {
+          "old.$[element].phone.phoneNumber": phoneNumber,
+        },
+      },
+      {
+        arrayFilters: [
+          {
+            $and: [
+              { "element.phone": { $ne: null } },
+              { "element.phone": { $type: "object" } },
+              { "element.phone.phoneNumber": { $ne: null } },
+              { "element.phone.phoneNumber": { $ne: "" } },
+            ],
+          },
+        ],
+      }
+    );
+  const contacts = async () =>
+    await Promise.all([
+      contactsEmailName(),
+      contactsPhoneString(),
+      contactsPhoneObject(),
+    ]);
+  const generalInfo = async () =>
+    await Promise.all([
+      entityUpdate(
+        db.placeChanges,
+        `placeChanges generalinfo`,
+        {
+          section: "generalinfo",
+          old: { $ne: null },
+        },
+        `old.`,
+        "$lieu_id"
+      ),
+      entityUpdate(
+        db.placeChanges,
+        `placeChanges generalinfo`,
+        {
+          section: "generalinfo",
+          new: { $ne: null },
+        },
+        `new.`,
+        "$lieu_id"
+      ),
+    ]);
+  const newPlace = async () =>
+    await entityUpdate(
+      db.placeChanges,
+      `placeChanges new`,
+      {
+        section: "new",
+        new: { $ne: null },
+      },
+      `new.`,
+      "$lieu_id"
+    );
+  await Promise.all([
+    userEmail(),
+    userName(),
+    contacts(),
+    generalInfo(),
+    newPlace(),
+  ]);
+};
