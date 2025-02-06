@@ -62,7 +62,7 @@
     "dot-object": "^2.1.5",
     "dotenv": "16.4.5",
     "env-schema": "^6.0.0",
-    "express": "4.19.2",
+    "express": "4.20.0",
     "express-validator": "^7.1.0",
     "fastest-levenshtein": "^1.0.16",
     "fluent-json-schema": "^4.2.1",
