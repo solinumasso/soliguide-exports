@@ -84,6 +84,7 @@ export const getCategorySelectorController = (localCategoryService) => {
       if (!isRoot || oldValue.browserState !== categoryBrowserState.OPEN_ROOT_CATEGORIES) {
         return oldValue;
       }
+
       return /** @type {PageState} */ ({
         ...oldValue,
         browserState: categoryBrowserState.OPEN_CATEGORY_DETAIL,
@@ -135,8 +136,14 @@ export const getCategorySelectorController = (localCategoryService) => {
     });
   };
 
-  /** @type {() => void} */
-  const init = () => pageStore.set(initialState);
+  /** @type {(categorySelected: string|null) => void} */
+  const init = (categorySelected) => {
+    if (categorySelected) {
+      navigateToDetail(/** @type {Categories} */ (categorySelected));
+    } else {
+      pageStore.set(initialState);
+    }
+  };
 
   return {
     subscribe: pageStore.subscribe,

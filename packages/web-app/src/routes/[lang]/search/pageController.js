@@ -372,30 +372,42 @@ export const getSearchPageController = (locationService, categoryService) => {
    */
   const init = async (country, lang, { geoValue, label, category } = {}) => {
     myPageStore.set({ ...initialState, country, lang });
-    if (geoValue && label && category) {
-      myPageStore.set({ ...initialState, loading: true });
-      const locationInfo = await getLocationInfoFromParam(label, geoValue);
-      const categoryInfo = await getCategoryInfoFromParam(category);
 
-      // Stay on step 1 if there is an error or an option needs to be selected
-      const step =
-        locationInfo.error || !locationInfo.selection ? steps.STEP_LOCATION : steps.STEP_CATEGORY;
+    if ((geoValue && label) || category) {
+      myPageStore.update((oldValue) => ({ ...oldValue, loading: true }));
 
-      myPageStore.set({
-        ...initialState,
-        country,
-        lang,
-        currentStep: step,
-        locationSuggestions: locationInfo.suggestions,
-        selectedLocationSuggestion: locationInfo.selection,
-        locationLabel: locationInfo.selection?.suggestionLabel ?? '',
-        locationSuggestionError: locationInfo.error,
-        categorySuggestions: categoryInfo.suggestions,
-        selectedCategory: categoryInfo.selection,
-        categorySuggestionError: categoryInfo.error,
-        focus: focus.FOCUS_NONE,
-        loading: false
-      });
+      if (geoValue && label) {
+        const locationInfo = await getLocationInfoFromParam(label, geoValue);
+
+        // Stay on step 1 if there is an error or an option needs to be selected
+        const step =
+          locationInfo.error || !locationInfo.selection ? steps.STEP_LOCATION : steps.STEP_CATEGORY;
+
+        myPageStore.update((oldValue) => ({
+          ...oldValue,
+          currentStep: step,
+          locationSuggestions: locationInfo.suggestions,
+          selectedLocationSuggestion: locationInfo.selection,
+          locationLabel: locationInfo.selection?.suggestionLabel ?? '',
+          locationSuggestionError: locationInfo.error
+        }));
+      }
+
+      if (category) {
+        const categoryInfo = await getCategoryInfoFromParam(category);
+
+        myPageStore.set({
+          ...initialState,
+          country,
+          lang,
+          categorySuggestions: categoryInfo.suggestions,
+          selectedCategory: categoryInfo.selection,
+          categorySuggestionError: categoryInfo.error,
+          focus: focus.FOCUS_NONE
+        });
+      }
+
+      myPageStore.update((oldValue) => ({ ...oldValue, loading: false }));
     }
   };
 

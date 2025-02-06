@@ -23,40 +23,60 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   import {
     categoryBrowserState,
     getCategorySelectorController
-  } from './CategorySelectorController.js';
-  import getCategoryService from '$lib/services/categoryService.js';
+  } from './CategorySelectorController';
+  import getCategoryService from '$lib/services/categoryService';
   import { THEME_CTX_KEY } from '$lib/theme';
   import CategoryButton from './CategoryButton.svelte';
   import CategoryBrowser from './CategoryBrowser.svelte';
+  import { ROUTES_CTX_KEY } from '$lib/client/routing';
+  import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
 
   /** @type {import('$lib/theme/types').ThemeDefinition} */
   const theme = getContext(THEME_CTX_KEY);
-  const pageStore = getCategorySelectorController(getCategoryService(theme.name));
+  /** @type {import('$lib/client/types').RoutingStore} */
+  const routes = getContext(ROUTES_CTX_KEY);
+  const componentStore = getCategorySelectorController(getCategoryService(theme.name));
   const dispatch = createEventDispatcher();
 
-  pageStore.init();
+  /** @type {import('../../types').PageState} */
+  const pageStore = getContext('PAGE_CONTROLLER_CTX_KEY');
+  const { url } = $page;
+
+  componentStore.init(url.searchParams.get('categorySelected'));
 
   /** @type {(category: import('@soliguide/common').Categories) => void} */
   const selectCategory = (category) => {
-    pageStore.selectCategory(category);
+    componentStore.selectCategory(category);
     dispatch('selectCategory', category);
+  };
+
+  /** @type {(category: import('@soliguide/common').Categories) => void} */
+  const addCategoryParam = (category) => {
+    componentStore.navigateToDetail(category);
+    const searchParams = new URLSearchParams({
+      label: pageStore.locationLabel,
+      geoValue: pageStore.selectedLocationSuggestion?.geoValue ?? '',
+      categorySelected: category
+    });
+    goto(`${$routes.ROUTE_SEARCH}?${searchParams}`);
   };
 </script>
 
 <div class="category-selector">
-  {#each $pageStore.categoryButtons as category}
+  {#each $componentStore.categoryButtons as category}
     <CategoryButton {category} on:click={(event) => selectCategory(event.detail)} />
   {/each}
-  <CategoryButton on:click={() => pageStore.openCategoryBrowser()} />
+  <CategoryButton on:click={() => componentStore.openCategoryBrowser()} />
 </div>
 
-{#if $pageStore.browserState !== categoryBrowserState.CLOSED}
+{#if $componentStore.browserState !== categoryBrowserState.CLOSED}
   <CategoryBrowser
-    state={$pageStore.browserState}
-    categories={$pageStore.categories}
-    parentCategory={$pageStore.parentCategory}
-    on:navigateChild={(event) => pageStore.navigateToDetail(event.detail)}
-    on:navigateParent={pageStore.navigateBack}
+    state={$componentStore.browserState}
+    categories={$componentStore.categories}
+    parentCategory={$componentStore.parentCategory}
+    on:navigateChild={(event) => addCategoryParam(event.detail)}
+    on:navigateParent={componentStore.navigateBack}
     on:selectCategory={(event) => selectCategory(event.detail)}
   />
 {/if}

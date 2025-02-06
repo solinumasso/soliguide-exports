@@ -46,6 +46,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
   const { url } = $page;
 
+  setContext('PAGE_CONTROLLER_CTX_KEY', pageStore);
+
   pageStore.init(theme.country, theme.defaultLanguage, {
     geoValue: url.searchParams.get('location'),
     label: url.searchParams.get('label'),
