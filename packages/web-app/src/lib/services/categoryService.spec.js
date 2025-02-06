@@ -20,7 +20,7 @@
  */
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Themes } from '@soliguide/common';
-import getCategoryService from './categoryService.js';
+import { getCategoryService } from './categoryService.js';
 import { fakeFetch } from '$lib/client';
 
 const apiSuggestions = {

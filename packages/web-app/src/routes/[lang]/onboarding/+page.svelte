@@ -21,12 +21,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 <script>
   import { goto } from '$app/navigation';
   import { Button, Text } from '@soliguide/design-system';
-  import { THEME_CTX_KEY } from '$lib/theme';
+  import { themeStore } from '$lib/theme';
   import { ROUTES_CTX_KEY } from '$lib/client';
   import { getContext } from 'svelte';
+  import { get } from 'svelte/store';
 
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
+  const theme = get(themeStore.getTheme());
   /** @type {import('$lib/client/types').RoutingStore} */
   const routes = getContext(ROUTES_CTX_KEY);
 

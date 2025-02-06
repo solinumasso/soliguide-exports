@@ -20,13 +20,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <script>
   import { getContext, setContext } from 'svelte';
+  import { get } from 'svelte/store';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { InputText, Topbar, PageLoader, FormControl } from '@soliguide/design-system';
   import pageStore from './index.js';
   import { steps, focus, locationErrors, categorieErrors } from './pageController.js';
   import { ROUTES_CTX_KEY, getGeolocation } from '$lib/client';
-  import { THEME_CTX_KEY } from '$lib/theme';
+  import { themeStore } from '$lib/theme';
   import { I18N_CTX_KEY } from '$lib/client/i18n.js';
   import {
     CategorySelector,
@@ -35,8 +36,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     CategorySuggestionList
   } from './components';
 
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
+  const theme = get(themeStore.getTheme());
   /** @type {import('$lib/client/types').I18nStore} */
   const i18n = getContext(I18N_CTX_KEY);
   /** @type {import('$lib/client/types').RoutingStore} */

@@ -29,7 +29,8 @@
 import { writable, get } from 'svelte/store';
 import { Categories } from '@soliguide/common';
 import { getSearchPageController } from '../../pageController';
-import { locationService, categoryService } from '$lib/services';
+import { locationService } from '$lib/services';
+import { categoryService } from '$lib/services/categoryService';
 
 /** @type {Record<string, symbol>} */
 export const categoryBrowserState = {

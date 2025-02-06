@@ -59,11 +59,15 @@ export default (fetcher = fetch) => {
       headers
     });
 
-    return buildSearchResult(placesResult, {
-      geoType: type,
-      coordinates,
-      distance
-    });
+    return buildSearchResult(
+      placesResult,
+      {
+        geoType: type,
+        coordinates,
+        distance
+      },
+      category
+    );
   };
 
   /**

@@ -22,7 +22,7 @@ import { describe, it, expect, beforeEach, afterEach, vi, vitest } from 'vitest'
 import { get } from 'svelte/store';
 import { getSearchPageController, steps, focus, categorieErrors } from './pageController.js';
 import getLocationService from '$lib/services/locationService.js';
-import getCategoryService from '$lib/services/categoryService.js';
+import { getCategoryService } from '$lib/services/categoryService.js';
 import { fakeFetch } from '$lib/client/index.js';
 import {
   GeoTypes,

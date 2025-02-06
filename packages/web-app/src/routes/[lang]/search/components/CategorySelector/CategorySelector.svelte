@@ -19,19 +19,17 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <script>
-  import { createEventDispatcher, getContext } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
+
   import {
     categoryBrowserState,
     getCategorySelectorController
   } from './CategorySelectorController.js';
-  import getCategoryService from '$lib/services/categoryService.js';
-  import { THEME_CTX_KEY } from '$lib/theme';
   import CategoryButton from './CategoryButton.svelte';
   import CategoryBrowser from './CategoryBrowser.svelte';
+  import { categoryService } from '$lib/services/categoryService.js';
 
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
-  const pageStore = getCategorySelectorController(getCategoryService(theme.name));
+  const pageStore = getCategorySelectorController(categoryService);
   const dispatch = createEventDispatcher();
 
   pageStore.init();

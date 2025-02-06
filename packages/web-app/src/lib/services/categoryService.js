@@ -22,18 +22,21 @@ import { env } from '$env/dynamic/public';
 import { CategoriesService, Categories } from '@soliguide/common';
 import { fetch } from '$lib/client';
 import { buildCategorySuggestion } from '$lib/models/categorySuggestion.js';
+import { get } from 'svelte/store';
+import { themeStore } from '$lib/theme';
 
 const apiUrl = env.PUBLIC_API_URL;
 
 /**
  * @typedef {import('@soliguide/common').Categories} CategoriesType
  * @typedef {import('@soliguide/common').FlatCategoriesTreeNode} FlatCategoriesTreeNode
+ * @typedef {import('@soliguide/common').Themes} Themes
  */
 
 /**
  * Associates each category id with its children ids
  * in an object for easy access
- * @param categories {FlatCategoriesTreeNode[]}
+ * @param {FlatCategoriesTreeNode[]} categories
  * @returns {Record<CategoriesType, CategoriesType[]>}
  */
 const buildParentToChildrenStructure = (categories) => {
@@ -45,7 +48,7 @@ const buildParentToChildrenStructure = (categories) => {
 
 /**
  * Remove specialists and  HEALTH_SPECIALISTS's children in global structure
- * @param categories  {FlatCategoriesTreeNode[]}
+ * @param {FlatCategoriesTreeNode[]} categories
  * @returns {FlatCategoriesTreeNode[]}
  */
 const removeSpecialistsFromCategories = (categories) => {
@@ -70,11 +73,11 @@ const removeSpecialistsFromCategories = (categories) => {
  * and provides ad hoc functions and data
  *
  * Gets the category service
- * @param currentThemeName {import('$lib/theme/types').ThemeName}
- * @param fetcher {import('$lib/client/transport.js').Fetcher}
+ * @param  {Themes} currentThemeName
+ * @param  {import('$lib/client/transport.js').Fetcher} fetcher
  * @returns {import('./types').CategoryService}
  */
-export default (currentThemeName, fetcher = fetch) => {
+export const getCategoryService = (currentThemeName, fetcher = fetch) => {
   const svc = new CategoriesService(currentThemeName);
 
   const allCategories = svc.getCategories();
@@ -82,8 +85,15 @@ export default (currentThemeName, fetcher = fetch) => {
   const parentToChildren = buildParentToChildrenStructure(categoriesWithoutSpecialists);
 
   /**
+   * @returns {FlatCategoriesTreeNode[]}
+   */
+  const getAllCategories = () => {
+    return allCategories;
+  };
+
+  /**
    * Checks if a category is a specialty
-   * @param categoryId {Categories}
+   * @param {Categories} categoryId
    * @returns {boolean}
    */
   const isSpecialist = (categoryId) => {
@@ -97,7 +107,7 @@ export default (currentThemeName, fetcher = fetch) => {
 
   /**
    * Finds direct child category ids given a parent
-   * @param categoryId {CategoriesType}
+   * @param {CategoriesType} categoryId
    * @returns {CategoriesType[]}
    */
   const getChildrenCategories = (categoryId) => {
@@ -114,7 +124,7 @@ export default (currentThemeName, fetcher = fetch) => {
 
   /**
    * Auto-complete feature for categories. All apseiclists are filtered from the results
-   * @param searchTerm {string}
+   * @param {string} searchTerm
    * @returns {Promise<import('$lib/models/types').CategorySuggestion[]>}
    */
   const getCategorySuggestions = async (searchTerm) => {
@@ -130,9 +140,13 @@ export default (currentThemeName, fetcher = fetch) => {
   };
 
   return {
+    getAllCategories,
     getRootCategories,
     getChildrenCategories,
     isCategoryRoot,
     getCategorySuggestions
   };
 };
+
+const themeName = get(themeStore.getTheme()).name;
+export const categoryService = getCategoryService(themeName, fetch);
