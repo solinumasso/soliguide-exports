@@ -22,11 +22,11 @@ import { Categories } from "../../categories";
 import { AutoCompleteType } from "../enums";
 
 export interface AutoComplete {
-  categoryId: Categories;
-  expressionId: string;
+  categoryId: Categories | null;
   description?: string;
+  expressionId: string | null;
   label: string;
+  seo: string;
   synonyms?: string;
   type: AutoCompleteType;
-  seo: string;
 }

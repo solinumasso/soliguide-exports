@@ -1,0 +1,1371 @@
+/*
+ * Soliguide: Useful information for those who need it
+ *
+ * SPDX-FileCopyrightText: © 2024 Solinum
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+import {
+  PlaceStatus,
+  PlaceType,
+  PlaceVisibility,
+  Categories,
+  ServiceStyleType,
+  PlaceClosedHolidays,
+  PublicsAdministrative,
+  PublicsFamily,
+  PublicsGender,
+  PublicsOther,
+  ServiceSaturation,
+  CountryCodes,
+  FR_DEPARTMENT_CODES,
+  FR_REGION_CODES,
+  FR_TIMEZONES,
+  PlaceOpeningStatus,
+  SupportedLanguagesCode,
+  type ApiPlace
+} from '@soliguide/common';
+import type { SearchResultItem } from './types';
+
+const samplePlace: ApiPlace = Object.freeze({
+  _id: '5a58c0c7c1797fe45e377324',
+  // eslint-disable-next-line camelcase
+  lieu_id: 154,
+  name: 'Soupe Saint-Eustache',
+  description:
+    "<p>Repas complets servis sur le parvis de l'église Saint-Eustache. Il est conseillé d'arriver en avance.</p><p><strong>Attention : il s'agit d'un dispositif hivernal qui commence le 1er décembre et qui finit le 31 mars.</strong></p>",
+  sourceLanguage: SupportedLanguagesCode.FR,
+  country: CountryCodes.FR,
+  entity: {
+    mail: 'lasoupe@saint-eustache.org',
+    facebook: '',
+    website: 'http://www.soupesainteustache.fr',
+    phones: [
+      {
+        label: '',
+        phoneNumber: '01 42 36 31 05',
+        countryCode: 'fr',
+        isSpecialPhoneNumber: false
+      }
+    ]
+  },
+  updatedAt: '2024-06-11T15:27:13.409Z',
+  // eslint-disable-next-line camelcase
+  seo_url: 'soupe-saint-eustache-paris-154',
+  // eslint-disable-next-line camelcase
+  services_all: [
+    {
+      categorie: 601,
+      close: { actif: false, dateDebut: null, dateFin: null },
+      description: "Repas complets à emporter sur le parvis de l'église Saint-Eustache",
+      differentHours: false,
+      differentModalities: false,
+      differentPublics: false,
+      hours: {
+        closedHolidays: PlaceClosedHolidays.UNKNOWN,
+        description: null,
+        friday: { open: true, timeslot: [{ end: 2015, start: 1930 }] },
+        monday: { open: true, timeslot: [{ end: 2015, start: 1930 }] },
+        saturday: { open: true, timeslot: [{ end: 2015, start: 1930 }] },
+        sunday: { open: true, timeslot: [{ end: 2015, start: 1930 }] },
+        thursday: { open: true, timeslot: [{ end: 2015, start: 1930 }] },
+        tuesday: { open: true, timeslot: [{ end: 2015, start: 1930 }] },
+        wednesday: { open: true, timeslot: [{ end: 2015, start: 1930 }] }
+      },
+      isOpenToday: true,
+      modalities: {
+        inconditionnel: true,
+        appointment: { checked: false, precisions: null },
+        inscription: { checked: false, precisions: null },
+        orientation: { checked: false, precisions: null },
+        price: { checked: false, precisions: null },
+        animal: { checked: true },
+        pmr: { checked: false },
+        other: null,
+        docs: []
+      },
+      name: 'Distribution alimentaire',
+      publics: {
+        accueil: 0,
+        administrative: [
+          PublicsAdministrative.regular,
+          PublicsAdministrative.asylum,
+          PublicsAdministrative.refugee,
+          PublicsAdministrative.undocumented
+        ],
+        age: { max: 99, min: 0 },
+        description: null,
+        familialle: [
+          PublicsFamily.isolated,
+          PublicsFamily.family,
+          PublicsFamily.couple,
+          PublicsFamily.pregnant
+        ],
+        gender: [PublicsGender.men, PublicsGender.women],
+        other: [
+          PublicsOther.violence,
+          PublicsOther.ukraine,
+          PublicsOther.addiction,
+          PublicsOther.handicap,
+          PublicsOther.lgbt,
+          PublicsOther.hiv,
+          PublicsOther.prostitution,
+          PublicsOther.prison,
+          PublicsOther.student
+        ]
+      },
+      saturated: { precision: null, status: ServiceSaturation.LOW },
+      serviceObjectId: '6181a6db8ac6b179ffb9ff3b',
+      createdAt: new Date('2021-11-02T21:00:11.000Z'),
+      category: Categories.FOOD_DISTRIBUTION,
+      categorySpecificFields: { serviceStyleType: [ServiceStyleType.TAKE_AWAY] }
+    }
+  ],
+  languages: ['fr'],
+  modalities: {
+    animal: { checked: true },
+    appointment: { checked: false, precisions: null },
+    inscription: { checked: false, precisions: null },
+    orientation: { checked: false, precisions: null },
+    pmr: { checked: false },
+    price: { checked: false, precisions: null },
+    inconditionnel: true,
+    other: null,
+    docs: []
+  },
+  publics: {
+    age: { min: 0, max: 99 },
+    accueil: 0,
+    administrative: [
+      PublicsAdministrative.regular,
+      PublicsAdministrative.asylum,
+      PublicsAdministrative.refugee,
+      PublicsAdministrative.undocumented
+    ],
+    description: null,
+    familialle: [
+      PublicsFamily.isolated,
+      PublicsFamily.family,
+      PublicsFamily.couple,
+      PublicsFamily.pregnant
+    ],
+    gender: [PublicsGender.men, PublicsGender.women],
+    other: [
+      PublicsOther.violence,
+      PublicsOther.ukraine,
+      PublicsOther.addiction,
+      PublicsOther.handicap,
+      PublicsOther.lgbt,
+      PublicsOther.hiv,
+      PublicsOther.prostitution,
+      PublicsOther.prison,
+      PublicsOther.student
+    ]
+  },
+  newhours: {
+    description: '',
+    friday: { open: true, timeslot: [{ end: 2015, start: 1930 }] },
+    monday: { open: true, timeslot: [{ end: 2015, start: 1930 }] },
+    saturday: { open: true, timeslot: [{ end: 2015, start: 1930 }] },
+    sunday: { open: true, timeslot: [{ end: 2015, start: 1930 }] },
+    thursday: { open: true, timeslot: [{ end: 2015, start: 1930 }] },
+    tuesday: { open: true, timeslot: [{ end: 2015, start: 1930 }] },
+    wednesday: { open: true, timeslot: [{ end: 2015, start: 1930 }] },
+    closedHolidays: PlaceClosedHolidays.UNKNOWN
+  },
+  createdAt: new Date('2018-01-12T14:05:59.000Z'),
+  tempInfos: {
+    closure: {
+      actif: true,
+      dateDebut: '2024-04-01T00:00:00.000Z',
+      dateFin: '2024-11-30T23:59:59.000Z',
+      description: '<p>Dispositif hivernal</p>'
+    },
+    hours: { actif: false, dateDebut: null, dateFin: null, description: null, hours: null },
+    message: { actif: false, dateDebut: null, dateFin: null, description: null, name: null }
+  },
+  placeType: PlaceType.PLACE,
+  position: {
+    adresse: '1 Rue Montmartre, 75001 Paris',
+    codePostal: '75001',
+    complementAdresse: '',
+    departement: 'Paris',
+    departementCode: '75',
+    location: { coordinates: [2.345897, 48.86323609999999], type: 'Point' },
+    pays: 'fr',
+    region: 'Île-de-France',
+    slugs: {
+      ville: 'paris',
+      departement: 'paris',
+      pays: 'fr',
+      department: 'paris',
+      country: 'fr',
+      region: 'ile-de-france',
+      city: 'paris'
+    },
+    ville: 'Paris',
+    address: '1 Rue Montmartre, 75001 Paris',
+    additionalInformation: '',
+    city: 'Paris',
+    postalCode: '75001',
+    cityCode: '75001',
+    department: 'Paris',
+    departmentCode: FR_DEPARTMENT_CODES['75'],
+    country: CountryCodes.FR,
+    regionCode: FR_REGION_CODES['11'],
+    timeZone: FR_TIMEZONES[4]
+  },
+  campaigns: {
+    UKRAINE_2022: { changes: false, date: '2022-04-01T09:36:05.977Z', updated: true },
+    MAJ_ETE_2022: {
+      currentStep: 4,
+      general: {
+        changes: false,
+        endDate: '2022-06-29T12:52:48.657Z',
+        startDate: '2022-06-29T12:52:48.657Z',
+        updated: true
+      },
+      remindMeDate: null,
+      sections: {
+        closed: { changes: false, date: '2022-06-29T12:52:48.658Z', updated: true },
+        hours: { changes: false, date: '2022-06-29T12:52:48.658Z', updated: true },
+        services: { changes: false, date: '2022-06-29T12:52:48.658Z', updated: true },
+        tempMessage: { changes: false, date: '2022-06-29T12:52:48.658Z', updated: true }
+      },
+      status: 'FINISHED',
+      toUpdate: true,
+      autonomy: 'NOT_AUTONOMOUS',
+      source: 'CALL'
+    },
+    MAJ_HIVER_2022: {
+      autonomy: 'NOT_AUTONOMOUS',
+      currentStep: 4,
+      general: {
+        changes: false,
+        endDate: '2022-11-30T11:40:40.410Z',
+        startDate: '2022-11-30T11:40:40.410Z',
+        updated: true
+      },
+      remindMeDate: null,
+      sections: {
+        tempClosure: { changes: false, date: '2022-11-30T11:40:40.410Z', updated: true },
+        hours: { changes: false, date: '2022-11-30T11:40:40.410Z', updated: true },
+        services: { changes: false, date: '2022-11-30T11:40:40.410Z', updated: true },
+        tempMessage: { changes: false, date: '2022-11-30T11:40:40.410Z', updated: true }
+      },
+      status: 'FINISHED',
+      toUpdate: true
+    },
+    MAJ_ETE_2023: {
+      autonomy: 'NOT_AUTONOMOUS',
+      currentStep: 4,
+      general: {
+        changes: false,
+        endDate: '2023-06-13T08:51:24.996Z',
+        startDate: '2023-06-13T08:51:24.996Z',
+        updated: true
+      },
+      remindMeDate: null,
+      sections: {
+        tempClosure: { changes: false, date: '2023-06-13T08:51:24.996Z', updated: true },
+        hours: { changes: false, date: '2023-06-13T08:51:24.996Z', updated: true },
+        services: { changes: false, date: '2023-06-13T08:51:24.996Z', updated: true },
+        tempMessage: { changes: false, date: '2023-06-13T08:51:24.996Z', updated: true }
+      },
+      source: 'CALL',
+      status: 'FINISHED',
+      toUpdate: true
+    },
+    MAJ_HIVER_2023: {
+      autonomy: 'NOT_AUTONOMOUS',
+      currentStep: 4,
+      general: {
+        changes: false,
+        endDate: '2023-11-23T10:06:08.361Z',
+        startDate: '2023-11-23T10:06:08.361Z',
+        updated: true
+      },
+      remindMeDate: null,
+      sections: {
+        tempClosure: { changes: false, date: '2023-11-23T10:06:08.361Z', updated: true },
+        hours: { changes: false, date: '2023-11-23T10:06:08.361Z', updated: true },
+        services: { changes: false, date: '2023-11-23T10:06:08.361Z', updated: true },
+        tempMessage: { changes: false, date: '2023-11-23T10:06:08.361Z', updated: true }
+      },
+      source: 'CALL',
+      status: 'FINISHED',
+      toUpdate: true
+    },
+    MAJ_ETE_2024: {
+      autonomy: 'NOT_AUTONOMOUS',
+      currentStep: 4,
+      general: {
+        changes: false,
+        endDate: '2024-06-11T15:27:13.379Z',
+        startDate: '2024-06-11T15:27:13.379Z',
+        updated: true
+      },
+      remindMeDate: null,
+      sections: {
+        tempClosure: { changes: false, date: '2024-06-11T15:27:13.379Z', updated: true },
+        hours: { changes: false, date: '2024-06-11T15:27:13.379Z', updated: true },
+        services: { changes: false, date: '2024-06-11T15:27:13.379Z', updated: true },
+        tempMessage: { changes: false, date: '2024-06-11T15:27:13.379Z', updated: true }
+      },
+      source: null,
+      status: 'FINISHED',
+      toUpdate: true
+    }
+  },
+  visibility: PlaceVisibility.ALL,
+  isOpenToday: false,
+  atSync: {
+    airtableId: 'XXX',
+    excluded: false,
+    lastSync: '2024-06-14T04:28:31.225Z'
+  },
+  status: PlaceStatus.ONLINE,
+  updatedByUserAt: '2024-06-11T15:27:13.409Z',
+  createdBy: null,
+  auto: false,
+  distance: 478.42644975047216,
+  statusSort: 0,
+  photos: [],
+  parcours: [],
+  organizations: [],
+  stepsDone: {
+    conditions: true,
+    horaires: true,
+    infos: true,
+    photos: true,
+    contacts: true,
+    publics: true,
+    services: true,
+    emplacement: true
+  }
+});
+
+const samplePlaceTransformed: SearchResultItem = Object.freeze({
+  id: 154,
+  seoUrl: 'soupe-saint-eustache-paris-154',
+  name: 'Soupe Saint-Eustache',
+  status: PlaceOpeningStatus.TEMPORARILY_CLOSED,
+  todayInfo: {
+    closingDays: { end: '2024-11-30T23:59:59.000Z', start: '2024-04-01T00:00:00.000Z' }
+  },
+  address: '1 Rue Montmartre, 75001 Paris',
+  distance: 478.42644975047216,
+  services: [Categories.FOOD_DISTRIBUTION],
+  phones: [
+    {
+      label: '',
+      phoneNumber: '01 42 36 31 05',
+      countryCode: CountryCodes.FR,
+      isSpecialPhoneNumber: false
+    }
+  ],
+  banners: { message: null, orientation: false, holidays: PlaceClosedHolidays.UNKNOWN }
+});
+
+const sampleItinerary: ApiPlace = Object.freeze({
+  _id: '643e5053bb2e82804132cd19',
+  sourceLanguage: SupportedLanguagesCode.FR,
+  country: CountryCodes.FR,
+  atSync: {
+    airtableContact: false,
+    airtableId: 'XXX',
+    excluded: false,
+    lastSync: '2024-06-17T10:01:01.854Z'
+  },
+  auto: false,
+  campaigns: {
+    UKRAINE_2022: {
+      changes: false,
+      date: null,
+      updated: false
+    },
+    MAJ_ETE_2022: {
+      autonomy: 'UNKNOWN',
+      currentStep: 0,
+      general: {
+        changes: false,
+        endDate: null,
+        startDate: null,
+        updated: false
+      },
+      remindMeDate: null,
+      sections: {
+        tempClosure: {
+          changes: false,
+          date: null,
+          updated: false
+        },
+        hours: {
+          changes: false,
+          date: null,
+          updated: false
+        },
+        services: {
+          changes: false,
+          date: null,
+          updated: false
+        },
+        tempMessage: {
+          changes: false,
+          date: null,
+          updated: false
+        }
+      },
+      source: null,
+      status: 'TO_DO',
+      toUpdate: false
+    },
+    MAJ_HIVER_2022: {
+      autonomy: 'UNKNOWN',
+      currentStep: 0,
+      general: {
+        changes: false,
+        endDate: null,
+        startDate: null,
+        updated: false
+      },
+      remindMeDate: null,
+      sections: {
+        tempClosure: {
+          changes: false,
+          date: null,
+          updated: false
+        },
+        hours: {
+          changes: false,
+          date: null,
+          updated: false
+        },
+        services: {
+          changes: false,
+          date: null,
+          updated: false
+        },
+        tempMessage: {
+          changes: false,
+          date: null,
+          updated: false
+        }
+      },
+      source: null,
+      status: 'TO_DO',
+      toUpdate: false
+    },
+    MAJ_ETE_2023: {
+      autonomy: 'NOT_AUTONOMOUS',
+      currentStep: 4,
+      general: {
+        changes: false,
+        endDate: '2023-06-13T15:43:37.816Z',
+        startDate: '2023-06-13T15:43:37.816Z',
+        updated: true
+      },
+      remindMeDate: null,
+      sections: {
+        tempClosure: {
+          changes: false,
+          date: '2023-06-13T15:43:37.816Z',
+          updated: true
+        },
+        hours: {
+          changes: false,
+          date: '2023-06-13T15:43:37.816Z',
+          updated: true
+        },
+        services: {
+          changes: false,
+          date: '2023-06-13T15:43:37.816Z',
+          updated: true
+        },
+        tempMessage: {
+          changes: false,
+          date: '2023-06-13T15:43:37.816Z',
+          updated: true
+        }
+      },
+      source: null,
+      status: 'FINISHED',
+      toUpdate: true
+    },
+    MAJ_HIVER_2023: {
+      autonomy: 'NOT_AUTONOMOUS',
+      currentStep: 4,
+      general: {
+        changes: false,
+        endDate: '2023-12-28T14:21:56.191Z',
+        startDate: '2023-12-28T14:21:56.191Z',
+        updated: true
+      },
+      remindMeDate: null,
+      sections: {
+        tempClosure: {
+          changes: false,
+          date: '2023-12-28T14:21:56.191Z',
+          updated: true
+        },
+        hours: {
+          changes: false,
+          date: '2023-12-28T14:21:56.191Z',
+          updated: true
+        },
+        services: {
+          changes: false,
+          date: '2023-12-28T14:21:56.191Z',
+          updated: true
+        },
+        tempMessage: {
+          changes: false,
+          date: '2023-12-28T14:21:56.191Z',
+          updated: true
+        }
+      },
+      source: 'EMAIL',
+      status: 'FINISHED',
+      toUpdate: true
+    },
+    MAJ_ETE_2024: {
+      autonomy: 'NOT_AUTONOMOUS',
+      currentStep: 4,
+      general: {
+        changes: false,
+        endDate: '2024-06-17T10:00:45.063Z',
+        startDate: '2024-06-17T10:00:45.063Z',
+        updated: true
+      },
+      remindMeDate: null,
+      sections: {
+        tempClosure: {
+          changes: false,
+          date: '2024-06-17T10:00:45.063Z',
+          updated: true
+        },
+        hours: {
+          changes: false,
+          date: '2024-06-17T10:00:45.063Z',
+          updated: true
+        },
+        services: {
+          changes: false,
+          date: '2024-06-17T10:00:45.063Z',
+          updated: true
+        },
+        tempMessage: {
+          changes: false,
+          date: '2024-06-17T10:00:45.063Z',
+          updated: true
+        }
+      },
+      source: 'CALL',
+      status: 'FINISHED',
+      toUpdate: true
+    }
+  },
+  description:
+    '<p>La Balade des Lucioles est une association qui organise des maraudes pédestres dans différents arrondissements de Paris.</p><p><strong>Les passages et horaires sont approximatifs.</strong></p><p>Au programme : tour des boulangeries partenaires pour récupérer leurs invendus, confection de sandwichs et distribution aux personnes sans domicile&nbsp;croisées pendant la maraude !</p><p>&nbsp;</p>',
+  entity: {
+    mail: 'labaladedeslucioles@gmail.com',
+    facebook: 'https://www.facebook.com/baladedeslucioles/',
+    website: 'http://labaladedeslucioles.org/',
+    phones: [
+      {
+        label: null,
+        phoneNumber: '07 69 06 74 44',
+        countryCode: 'fr',
+        isSpecialPhoneNumber: false
+      }
+    ]
+  },
+  isOpenToday: true,
+  languages: ['fr'],
+  // eslint-disable-next-line camelcase
+  lieu_id: 30965,
+  modalities: {
+    inconditionnel: true,
+    appointment: {
+      checked: false,
+      precisions: null
+    },
+    inscription: {
+      checked: false,
+      precisions: null
+    },
+    orientation: {
+      checked: false,
+      precisions: null
+    },
+    price: {
+      checked: false,
+      precisions: null
+    },
+    animal: {
+      checked: false
+    },
+    pmr: {
+      checked: false
+    },
+    other: null,
+    docs: []
+  },
+  name: 'Maraude Balades des Lucioles 13e Paris',
+  newhours: {
+    closedHolidays: PlaceClosedHolidays.UNKNOWN,
+    description: null,
+    friday: {
+      open: true,
+      timeslot: [
+        {
+          end: 2215,
+          start: 1950
+        }
+      ]
+    },
+    monday: {
+      open: false,
+      timeslot: []
+    },
+    saturday: {
+      open: false,
+      timeslot: []
+    },
+    sunday: {
+      open: false,
+      timeslot: []
+    },
+    thursday: {
+      open: false,
+      timeslot: []
+    },
+    tuesday: {
+      open: true,
+      timeslot: [
+        {
+          end: 2215,
+          start: 1950
+        }
+      ]
+    },
+    wednesday: {
+      open: true,
+      timeslot: [
+        {
+          end: 2215,
+          start: 1950
+        }
+      ]
+    }
+  },
+  placeType: PlaceType.ITINERARY,
+  publics: {
+    accueil: 0,
+    administrative: [
+      PublicsAdministrative.regular,
+      PublicsAdministrative.asylum,
+      PublicsAdministrative.refugee,
+      PublicsAdministrative.undocumented
+    ],
+    age: {
+      max: 99,
+      min: 0
+    },
+    description: null,
+    familialle: [
+      PublicsFamily.isolated,
+      PublicsFamily.family,
+      PublicsFamily.couple,
+      PublicsFamily.pregnant
+    ],
+    gender: [PublicsGender.men, PublicsGender.women],
+    other: [
+      PublicsOther.violence,
+      PublicsOther.ukraine,
+      PublicsOther.addiction,
+      PublicsOther.handicap,
+      PublicsOther.lgbt,
+      PublicsOther.hiv,
+      PublicsOther.prostitution,
+      PublicsOther.prison,
+      PublicsOther.student
+    ]
+  },
+  // eslint-disable-next-line camelcase
+  seo_url: 'maraude-balades-des-lucioles-13e-paris-30965',
+  status: PlaceStatus.ONLINE,
+  tempInfos: {
+    closure: {
+      actif: false,
+      dateDebut: null,
+      dateFin: null,
+      description: null
+    },
+    hours: {
+      actif: false,
+      dateDebut: null,
+      dateFin: null,
+      description: null,
+      hours: null
+    },
+    message: {
+      actif: false,
+      dateDebut: null,
+      dateFin: null,
+      description: null,
+      name: null
+    }
+  },
+  visibility: PlaceVisibility.ALL,
+  parcours: [
+    {
+      description: '',
+      hours: {
+        closedHolidays: PlaceClosedHolidays.UNKNOWN,
+        description: '',
+        friday: {
+          open: true,
+          timeslot: [
+            {
+              end: 2000,
+              start: 1950
+            }
+          ]
+        },
+        monday: {
+          open: false,
+          timeslot: []
+        },
+        saturday: {
+          open: false,
+          timeslot: []
+        },
+        sunday: {
+          open: false,
+          timeslot: []
+        },
+        thursday: {
+          open: false,
+          timeslot: []
+        },
+        tuesday: {
+          open: true,
+          timeslot: [
+            {
+              end: 2000,
+              start: 1950
+            }
+          ]
+        },
+        wednesday: {
+          open: true,
+          timeslot: [
+            {
+              end: 2000,
+              start: 1950
+            }
+          ]
+        }
+      },
+      photos: [],
+      position: {
+        adresse: '58 Bd Saint-Marcel, 75005 Paris',
+        codePostal: '75005',
+        complementAdresse: 'Point de départ de la maraude',
+        departement: 'Paris',
+        departementCode: '75',
+        location: {
+          coordinates: [2.3554445, 48.8381335],
+          type: 'Point'
+        },
+        pays: 'fr',
+        region: 'Île-de-France',
+        slugs: {
+          ville: 'paris',
+          departement: 'paris',
+          pays: 'fr',
+          department: 'paris',
+          country: 'fr',
+          region: 'ile-de-france',
+          city: 'paris'
+        },
+        ville: 'Paris',
+        address: '58 Bd Saint-Marcel, 75005 Paris',
+        additionalInformation: 'Point de départ de la maraude',
+        city: 'Paris',
+        postalCode: '75005',
+        cityCode: '75005',
+        department: 'Paris',
+        departmentCode: FR_DEPARTMENT_CODES['75'],
+        country: CountryCodes.FR,
+        regionCode: FR_REGION_CODES['11'],
+        timeZone: FR_TIMEZONES[4]
+      }
+    },
+    {
+      description: '',
+      hours: {
+        closedHolidays: PlaceClosedHolidays.UNKNOWN,
+        description: '',
+        friday: {
+          open: true,
+          timeslot: [
+            {
+              end: 2215,
+              start: 2200
+            }
+          ]
+        },
+        monday: {
+          open: false,
+          timeslot: []
+        },
+        saturday: {
+          open: false,
+          timeslot: []
+        },
+        sunday: {
+          open: false,
+          timeslot: []
+        },
+        thursday: {
+          open: false,
+          timeslot: []
+        },
+        tuesday: {
+          open: true,
+          timeslot: [
+            {
+              end: 2215,
+              start: 2200
+            }
+          ]
+        },
+        wednesday: {
+          open: true,
+          timeslot: [
+            {
+              end: 2215,
+              start: 2200
+            }
+          ]
+        }
+      },
+      photos: [],
+      position: {
+        adresse: 'Pl. Louis-Armand, 75012 Paris',
+        codePostal: '75012',
+        complementAdresse: "Point d'arrivée de la maraude",
+        departement: 'Paris',
+        departementCode: '75',
+        location: {
+          coordinates: [2.3743773, 48.84430380000001],
+          type: 'Point'
+        },
+        pays: 'fr',
+        region: 'Île-de-France',
+        slugs: {
+          ville: 'paris',
+          departement: 'paris',
+          pays: 'fr',
+          department: 'paris',
+          country: 'fr',
+          region: 'ile-de-france',
+          city: 'paris'
+        },
+        ville: 'Paris',
+        address: 'Pl. Louis-Armand, 75012 Paris',
+        additionalInformation: "Point d'arrivée de la maraude",
+        city: 'Paris',
+        postalCode: '75012',
+        cityCode: '75012',
+        department: 'Paris',
+        departmentCode: FR_DEPARTMENT_CODES['75'],
+        country: CountryCodes.FR,
+        regionCode: FR_REGION_CODES['11'],
+        timeZone: FR_TIMEZONES[4]
+      }
+    }
+  ],
+  // eslint-disable-next-line camelcase
+  services_all: [
+    {
+      categorie: 601,
+      close: {
+        actif: false,
+        dateDebut: null,
+        dateFin: null
+      },
+      description: '<p>Distribution de denrées alimentaires et de boissons chaudes</p>',
+      differentHours: false,
+      differentModalities: false,
+      differentPublics: false,
+      hours: {
+        closedHolidays: PlaceClosedHolidays.UNKNOWN,
+        description: null,
+        friday: {
+          open: true,
+          timeslot: [
+            {
+              end: 2215,
+              start: 1950
+            }
+          ]
+        },
+        monday: {
+          open: false,
+          timeslot: []
+        },
+        saturday: {
+          open: false,
+          timeslot: []
+        },
+        sunday: {
+          open: false,
+          timeslot: []
+        },
+        thursday: {
+          open: false,
+          timeslot: []
+        },
+        tuesday: {
+          open: true,
+          timeslot: [
+            {
+              end: 2215,
+              start: 1950
+            }
+          ]
+        },
+        wednesday: {
+          open: true,
+          timeslot: [
+            {
+              end: 2215,
+              start: 1950
+            }
+          ]
+        }
+      },
+      isOpenToday: true,
+      modalities: {
+        inconditionnel: true,
+        appointment: { checked: false, precisions: null },
+        inscription: { checked: false, precisions: null },
+        orientation: { checked: false, precisions: null },
+        price: { checked: false, precisions: null },
+        animal: {
+          checked: false
+        },
+        pmr: {
+          checked: false
+        },
+        other: null,
+        docs: []
+      },
+      publics: {
+        accueil: 0,
+        administrative: [
+          PublicsAdministrative.regular,
+          PublicsAdministrative.asylum,
+          PublicsAdministrative.refugee,
+          PublicsAdministrative.undocumented
+        ],
+        age: {
+          max: 99,
+          min: 0
+        },
+        description: null,
+        familialle: [
+          PublicsFamily.isolated,
+          PublicsFamily.family,
+          PublicsFamily.couple,
+          PublicsFamily.pregnant
+        ],
+        gender: [PublicsGender.men, PublicsGender.women],
+        other: [
+          PublicsOther.violence,
+          PublicsOther.ukraine,
+          PublicsOther.addiction,
+          PublicsOther.handicap,
+          PublicsOther.lgbt,
+          PublicsOther.hiv,
+          PublicsOther.prostitution,
+          PublicsOther.prison,
+          PublicsOther.student
+        ]
+      },
+      saturated: {
+        precision: null,
+        status: ServiceSaturation.LOW
+      },
+      serviceObjectId: '643e5603bb2e82804132e381',
+      createdAt: new Date('2023-04-18T08:34:11.000Z'),
+      category: Categories.FOOD_DISTRIBUTION,
+      categorySpecificFields: {
+        serviceStyleType: [ServiceStyleType.TAKE_AWAY]
+      }
+    },
+    {
+      categorie: 305,
+      close: {
+        actif: false,
+        dateDebut: null,
+        dateFin: null
+      },
+      description: '',
+      differentHours: false,
+      differentModalities: false,
+      differentPublics: false,
+      hours: {
+        closedHolidays: PlaceClosedHolidays.UNKNOWN,
+        description: null,
+        friday: {
+          open: true,
+          timeslot: [
+            {
+              end: 2215,
+              start: 1950
+            }
+          ]
+        },
+        monday: {
+          open: false,
+          timeslot: []
+        },
+        saturday: {
+          open: false,
+          timeslot: []
+        },
+        sunday: {
+          open: false,
+          timeslot: []
+        },
+        thursday: {
+          open: false,
+          timeslot: []
+        },
+        tuesday: {
+          open: true,
+          timeslot: [
+            {
+              end: 2215,
+              start: 1950
+            }
+          ]
+        },
+        wednesday: {
+          open: true,
+          timeslot: [
+            {
+              end: 2215,
+              start: 1950
+            }
+          ]
+        }
+      },
+      isOpenToday: true,
+      modalities: {
+        inconditionnel: true,
+        appointment: {
+          checked: false,
+          precisions: null
+        },
+        inscription: {
+          checked: false,
+          precisions: null
+        },
+        orientation: {
+          checked: false,
+          precisions: null
+        },
+        price: {
+          checked: false,
+          precisions: null
+        },
+        animal: {
+          checked: false
+        },
+        pmr: {
+          checked: false
+        },
+        other: null,
+        docs: []
+      },
+      publics: {
+        accueil: 0,
+        administrative: [
+          PublicsAdministrative.regular,
+          PublicsAdministrative.asylum,
+          PublicsAdministrative.refugee,
+          PublicsAdministrative.undocumented
+        ],
+        age: {
+          max: 99,
+          min: 0
+        },
+        description: null,
+        familialle: [
+          PublicsFamily.isolated,
+          PublicsFamily.family,
+          PublicsFamily.couple,
+          PublicsFamily.pregnant
+        ],
+        gender: [PublicsGender.men, PublicsGender.women],
+        other: [
+          PublicsOther.violence,
+          PublicsOther.ukraine,
+          PublicsOther.addiction,
+          PublicsOther.handicap,
+          PublicsOther.lgbt,
+          PublicsOther.hiv,
+          PublicsOther.prostitution,
+          PublicsOther.prison,
+          PublicsOther.student
+        ]
+      },
+      saturated: {
+        precision: null,
+        status: ServiceSaturation.LOW
+      },
+      serviceObjectId: '643e5603bb2e82804132e382',
+      createdAt: new Date('2023-04-18T08:34:11.000Z'),
+      category: Categories.HYGIENE_PRODUCTS
+    },
+    {
+      categorie: 903,
+      close: {
+        actif: false,
+        dateDebut: null,
+        dateFin: null
+      },
+      description: '',
+      differentHours: false,
+      differentModalities: false,
+      differentPublics: false,
+      hours: {
+        closedHolidays: PlaceClosedHolidays.UNKNOWN,
+        description: null,
+        friday: {
+          open: true,
+          timeslot: [
+            {
+              end: 2215,
+              start: 1950
+            }
+          ]
+        },
+        monday: {
+          open: false,
+          timeslot: []
+        },
+        saturday: {
+          open: false,
+          timeslot: []
+        },
+        sunday: {
+          open: false,
+          timeslot: []
+        },
+        thursday: {
+          open: false,
+          timeslot: []
+        },
+        tuesday: {
+          open: true,
+          timeslot: [
+            {
+              end: 2215,
+              start: 1950
+            }
+          ]
+        },
+        wednesday: {
+          open: true,
+          timeslot: [
+            {
+              end: 2215,
+              start: 1950
+            }
+          ]
+        }
+      },
+      isOpenToday: true,
+      modalities: {
+        inconditionnel: true,
+        appointment: {
+          checked: false,
+          precisions: null
+        },
+        inscription: {
+          checked: false,
+          precisions: null
+        },
+        orientation: {
+          checked: false,
+          precisions: null
+        },
+        price: {
+          checked: false,
+          precisions: null
+        },
+        animal: {
+          checked: false
+        },
+        pmr: {
+          checked: false
+        },
+        other: null,
+        docs: []
+      },
+      publics: {
+        accueil: 0,
+        administrative: [
+          PublicsAdministrative.regular,
+          PublicsAdministrative.asylum,
+          PublicsAdministrative.refugee,
+          PublicsAdministrative.undocumented
+        ],
+        age: {
+          max: 99,
+          min: 0
+        },
+        description: null,
+        familialle: [
+          PublicsFamily.isolated,
+          PublicsFamily.family,
+          PublicsFamily.couple,
+          PublicsFamily.pregnant
+        ],
+        gender: [PublicsGender.men, PublicsGender.women],
+        other: [
+          PublicsOther.violence,
+          PublicsOther.ukraine,
+          PublicsOther.addiction,
+          PublicsOther.handicap,
+          PublicsOther.lgbt,
+          PublicsOther.hiv,
+          PublicsOther.prostitution,
+          PublicsOther.prison,
+          PublicsOther.student
+        ]
+      },
+      saturated: {
+        precision: null,
+        status: ServiceSaturation.LOW
+      },
+      serviceObjectId: '643e5603bb2e82804132e383',
+      createdAt: new Date('2023-04-18T08:34:11.000Z'),
+      category: Categories.CLOTHING
+    }
+  ],
+  createdAt: '2023-04-18T08:09:55.275Z',
+  updatedAt: '2024-06-17T10:00:45.084Z',
+  __v: 0,
+  updatedByUserAt: '2024-06-17T10:00:45.084Z',
+  createdBy: 'Isaure Chambourdon',
+  distance: 403.7915416747283,
+  statusSort: 0,
+  photos: [],
+  organizations: [],
+  stepsDone: {
+    conditions: true,
+    horaires: true,
+    infos: true,
+    photos: true,
+    contacts: true,
+    publics: true,
+    services: true,
+    emplacement: true
+  },
+  position: {
+    adresse: '58 Bd Saint-Marcel, 75005 Paris',
+    codePostal: '75005',
+    complementAdresse: 'Point de départ de la maraude',
+    departement: 'Paris',
+    departementCode: '75',
+    location: {
+      coordinates: [2.3554445, 48.8381335],
+      type: 'Point'
+    },
+    pays: 'fr',
+    region: 'Île-de-France',
+    slugs: {
+      ville: 'paris',
+      departement: 'paris',
+      pays: 'fr',
+      department: 'paris',
+      country: 'fr',
+      region: 'ile-de-france',
+      city: 'paris'
+    },
+    ville: 'Paris',
+    address: '58 Bd Saint-Marcel, 75005 Paris',
+    additionalInformation: 'Point de départ de la maraude',
+    city: 'Paris',
+    postalCode: '75005',
+    cityCode: '75005',
+    department: 'Paris',
+    departmentCode: FR_DEPARTMENT_CODES['75'],
+    country: CountryCodes.FR,
+    regionCode: FR_REGION_CODES['11'],
+    timeZone: FR_TIMEZONES[4]
+  }
+});
+
+const sampleItineraryTransformed: SearchResultItem[] = [
+  {
+    id: 30965,
+    seoUrl: 'maraude-balades-des-lucioles-13e-paris-30965',
+    name: 'Maraude Balades des Lucioles 13e Paris',
+    address: '58 Bd Saint-Marcel, 75005 Paris - Point de départ de la maraude',
+    distance: 403.7915416747283,
+    services: [Categories.FOOD_DISTRIBUTION, Categories.HYGIENE_PRODUCTS, Categories.CLOTHING],
+    phones: [
+      {
+        label: null,
+        phoneNumber: '07 69 06 74 44',
+        countryCode: CountryCodes.FR,
+        isSpecialPhoneNumber: false
+      }
+    ],
+    status: PlaceOpeningStatus.OPEN,
+    todayInfo: { openingHours: [{ end: '2215', start: '1950' }] },
+    banners: { message: null, orientation: false, holidays: PlaceClosedHolidays.UNKNOWN }
+  },
+  {
+    id: 30965,
+    seoUrl: 'maraude-balades-des-lucioles-13e-paris-30965',
+    name: 'Maraude Balades des Lucioles 13e Paris',
+    address: "Pl. Louis-Armand, 75012 Paris - Point d'arrivée de la maraude",
+    distance: 403.7915416747283,
+    services: [Categories.FOOD_DISTRIBUTION, Categories.HYGIENE_PRODUCTS, Categories.CLOTHING],
+    phones: [
+      {
+        label: null,
+        phoneNumber: '07 69 06 74 44',
+        countryCode: CountryCodes.FR,
+        isSpecialPhoneNumber: false
+      }
+    ],
+    status: PlaceOpeningStatus.OPEN,
+    todayInfo: { openingHours: [{ end: '2215', start: '1950' }] },
+    banners: { message: null, orientation: false, holidays: PlaceClosedHolidays.UNKNOWN }
+  }
+];
+
+export { samplePlace, samplePlaceTransformed, sampleItinerary, sampleItineraryTransformed };

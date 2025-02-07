@@ -18,39 +18,39 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { createEventDispatcher, getContext } from 'svelte';
   import MoreHoriz from 'svelte-google-materialdesign-icons/More_horiz.svelte';
   import { Topbar } from '@soliguide/design-system';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
   import CategoryListItem from './CategoryListItem.svelte';
   import { CategoryIcon } from '$lib/components';
-  import { categoryBrowserState } from './CategorySelectorController.js';
   import { getCategoryBrowserController } from './CategoryBrowserController';
+  import { CategoryBrowserState } from './types';
+  import type { Categories } from '@soliguide/common';
+  import type { I18nStore } from '$lib/client/types';
+  import type { PosthogCaptureFunction } from '$lib/services/types';
 
-  export let state = categoryBrowserState.CLOSED;
-  /** @type {import('@soliguide/common').Categories | null} */
-  export let parentCategory = null;
-  /** @type {import('@soliguide/common').Categories[]} */
-  export let categories = [];
+  export let state: CategoryBrowserState = CategoryBrowserState.CLOSED;
+  export let parentCategory: Categories | null = null;
+  export let categories: Categories[] = [];
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
   const dispatch = createEventDispatcher();
   const pageStore = getCategoryBrowserController();
 
-  const capture = getContext('CAPTURE_FCTN_CTX_KEY') || pageStore.captureEvent;
+  const capture: PosthogCaptureFunction =
+    getContext('CAPTURE_FCTN_CTX_KEY') || pageStore.captureEvent;
 
   const goBack = () => {
     dispatch('navigateParent', parentCategory);
   };
 
-  /** @param category {import('@soliguide/common').Categories | null} */
-  const clickCategory = (category) => {
+  const clickCategory = (category: Categories | null) => {
     if (!category) {
       return;
     }
-    if (state === categoryBrowserState.OPEN_CATEGORY_DETAIL) {
+    if (state === CategoryBrowserState.OPEN_CATEGORY_DETAIL) {
       dispatch('selectCategory', category);
     } else if (category !== parentCategory) {
       dispatch('navigateChild', category);
@@ -77,7 +77,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </svelte:fragment>
     </CategoryListItem>
 
-    {#if state === categoryBrowserState.OPEN_CATEGORY_DETAIL}
+    {#if state === CategoryBrowserState.OPEN_CATEGORY_DETAIL}
       <CategoryListItem
         title={$i18n.t('ALL_CATEGORY')}
         navigable
@@ -92,7 +92,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         on:click={() => clickCategory(category)}
       >
         <svelte:fragment slot="icon">
-          {#if state === categoryBrowserState.OPEN_ROOT_CATEGORIES}
+          {#if state === CategoryBrowserState.OPEN_ROOT_CATEGORIES}
             <CategoryIcon categoryId={category} variation="filled" />
           {/if}
         </svelte:fragment>

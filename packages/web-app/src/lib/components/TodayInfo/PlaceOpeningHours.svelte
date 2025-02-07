@@ -18,18 +18,18 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { Text } from '@soliguide/design-system';
   import QueryBuilder from 'svelte-google-materialdesign-icons/Query_builder.svelte';
   import { formatTimeRangeToLocale } from '$lib/client';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
   import { getContext } from 'svelte';
+  import type { I18nStore } from '$lib/client/types';
+  import type { HoursRange } from '$lib/models/types';
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
 
-  /**  @type {import('$lib/models/types').HoursRange[]}  */
-  export let openingRange;
+  export let openingRange: HoursRange[];
 
   $: formatedContent = formatTimeRangeToLocale(openingRange)
     .map((range) => `${$i18n.t('OPENING_RANGE', { start: range.start, end: range.end })}`)

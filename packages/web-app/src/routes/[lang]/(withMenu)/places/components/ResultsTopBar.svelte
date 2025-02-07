@@ -18,16 +18,14 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import Search from 'svelte-google-materialdesign-icons/Search.svelte';
   import ChevronLeft from 'svelte-google-materialdesign-icons/Chevron_left.svelte';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
-  /**
-   * @type string
-   */
-  export let title;
+
+  export let title: string;
 </script>
 
 <button role="link" on:click={() => dispatch('goBack')}>

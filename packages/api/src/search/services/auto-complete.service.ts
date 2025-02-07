@@ -19,9 +19,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { SearchAutoCompleteSuggestion } from "@soliguide/common";
 import { AutoCompleteModel } from "../models/auto-complete.model";
 
-export const searchTerm = async (term: string) => {
+export const searchTerm = async (
+  term: string
+): Promise<
+  { _id: "CATEGORY" | "EXPRESSION"; values: SearchAutoCompleteSuggestion[] }[]
+> => {
   return await AutoCompleteModel.aggregate([
     {
       $match: {

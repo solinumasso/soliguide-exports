@@ -18,7 +18,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   // Layout full page
   import { page } from '$app/stores';
   import { beforeNavigate, afterNavigate } from '$app/navigation';
@@ -36,17 +36,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   } from '@soliguide/design-system';
   import '../assets/styles/main.scss';
   import { THEME_CTX_KEY, resolveTheme } from '$lib/theme';
-  import { I18N_CTX_KEY, getI18nStore } from '$lib/client/i18n.js';
+  import { I18N_CTX_KEY, getI18nStore } from '$lib/client/i18n';
   import { ROUTES_CTX_KEY, getRoutes, isLanguageSelected, getZDCookieConsent } from '$lib/client';
-  import { cookieConsent, COOKIE_CTX_KEY } from '$lib/client/cookie.js';
-
-  /** @typedef {import('@soliguide/common').SupportedLanguagesCode} SupportedLanguagesCode */
+  import { cookieConsent, COOKIE_CTX_KEY } from '$lib/client/cookie';
 
   const theme = resolveTheme($page.url.origin);
-  const i18nStore = getI18nStore(
-    /** @type {SupportedLanguagesCode} */ (theme?.defaultLanguage),
-    /** @type {SupportedLanguagesCode[]} */ (theme?.supportedLanguages)
-  );
+  const i18nStore = getI18nStore(theme?.defaultLanguage, theme?.supportedLanguages);
 
   // Derived store for keeping routes synced with language choosed by user
   const routesStore = derived(i18nStore, (i18n) => getRoutes(i18n.language));
@@ -59,7 +54,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   if ($page.params.lang) {
     const langParam = $page.params.lang;
     if (getDesignSystemLocale() !== langParam || $i18nStore.language !== langParam) {
-      $i18nStore.changeLanguage(/** @type {SupportedLanguagesCode} */ langParam);
+      $i18nStore.changeLanguage(langParam);
     }
   } else if (getDesignSystemLocale() !== $i18nStore.language) {
     // Sync design system lang

@@ -18,14 +18,13 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import { ToggleButton } from '@soliguide/design-system';
+  import type { LanguageOption } from './types';
 
-  /** @type {import('./pageController.js').LanguageOption[]} */
-  export let options = [];
-  /** @type {string | null} */
-  export let selectedOption = null;
+  export let options: LanguageOption[] = [];
+  export let selectedOption: string | null = null;
 
   const dispatch = createEventDispatcher();
 </script>

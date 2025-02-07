@@ -18,34 +18,30 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { getContext, setContext } from 'svelte';
   import { goto } from '$app/navigation';
   import { Button, Text } from '@soliguide/design-system';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
-  import { THEME_CTX_KEY } from '$lib/theme/index.js';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
+  import { THEME_CTX_KEY } from '$lib/theme/index';
   import { markLanguageAsSelected, ROUTES_CTX_KEY } from '$lib/client';
-  import { getController } from './pageController.js';
+  import { getController } from './pageController';
   import LanguageSelector from './LanguageSelector.svelte';
+  import type { I18nStore, RoutingStore } from '$lib/client/types';
+  import type { ThemeDefinition } from '$lib/theme/types';
 
-  /** @type {import('./types').LanguagePageController} */
   const pageStore = getController();
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
-  /** @type {import('$lib/client/types').RoutingStore} */
-  const routes = getContext(ROUTES_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
+  const theme: ThemeDefinition = getContext(THEME_CTX_KEY);
+  const routes: RoutingStore = getContext(ROUTES_CTX_KEY);
 
   setContext('CAPTURE_FCTN_CTX_KEY', pageStore.captureEvent);
 
   pageStore.init(theme.supportedLanguages, theme.defaultLanguage);
 
-  /** @type {() => void} */
-  const selectLanguage = () => {
+  const selectLanguage = (): void => {
     pageStore.captureEvent('validate-language', { newLanguage: $pageStore.selectedLanguage });
-
     if ($pageStore.canSubmit) {
       $i18n.changeLanguage(String($pageStore.selectedLanguage));
       markLanguageAsSelected();

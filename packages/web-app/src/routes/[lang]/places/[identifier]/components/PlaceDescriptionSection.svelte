@@ -18,17 +18,17 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+<script lang="ts">
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
   import PlaceDetailsSection from './PlaceDetailsSection.svelte';
   import { Text, TextClamper } from '@soliguide/design-system';
   import { getContext } from 'svelte';
   import DOMPurify from 'isomorphic-dompurify';
+  import type { I18nStore } from '$lib/client/types';
 
-  export let description;
+  export let description: string;
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
 </script>
 
 <PlaceDetailsSection>

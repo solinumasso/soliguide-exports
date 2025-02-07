@@ -18,19 +18,17 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { PhoneButton } from '$lib/components';
   import { getPlaceDetailsPageController } from '../pageController';
+  import type { Phone } from '$lib/models/types';
   import GoToButton from './GoToButton.svelte';
 
-  /** @type {import('$lib/models/types').Phone[]} */
-  export let phones;
+  export let phones: Phone[];
 
-  /** @type {string} */
-  export let address;
+  export let address: string;
 
-  /** @type {boolean} */
-  export let onOrientation;
+  export let onOrientation: boolean;
 
   const placeController = getPlaceDetailsPageController();
 </script>

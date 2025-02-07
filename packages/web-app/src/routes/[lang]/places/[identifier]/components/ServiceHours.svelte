@@ -18,20 +18,20 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { convertHoursToDisplay } from '$lib/client';
   import { I18N_CTX_KEY } from '$lib/client/i18n';
+  import type { I18nStore } from '$lib/client/types';
+  import type { PlaceDetailsOpeningHours } from '$lib/models/types';
+  import type { DayName } from '@soliguide/common';
   import { Text } from '@soliguide/design-system';
   import { getContext } from 'svelte';
   import Schedule from 'svelte-google-materialdesign-icons/Schedule.svelte';
 
-  /** @type  {import('$lib/models/types').PlaceDetailsOpeningHours} */
-  export let hours = {};
-  /** @type {import('@soliguide/common').DayName} */
-  export let currentDay;
+  export let hours: PlaceDetailsOpeningHours = {};
+  export let currentDay: DayName;
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
 </script>
 
 <section class="opening-hours">

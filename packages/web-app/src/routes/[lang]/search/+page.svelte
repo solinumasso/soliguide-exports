@@ -18,32 +18,33 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { getContext, setContext } from 'svelte';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { InputText, Topbar, PageLoader, FormControl } from '@soliguide/design-system';
-  import pageStore from './index.js';
-  import { steps, focus, locationErrors, categorieErrors } from './pageController.js';
+  import pageStore from './index';
+  import { Steps, Focus } from './types';
   import { ROUTES_CTX_KEY, getGeolocation } from '$lib/client';
   import { THEME_CTX_KEY } from '$lib/theme';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
   import {
     CategorySelector,
     MyPositionTile,
     LocationSuggestionList,
     CategorySuggestionList
-  } from './components';
-
-  /** @type {import('$lib/theme/types').ThemeDefinition} */
-  const theme = getContext(THEME_CTX_KEY);
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
-  /** @type {import('$lib/client/types').RoutingStore} */
-  const routes = getContext(ROUTES_CTX_KEY);
+  } from './components/index';
+  import type { I18nStore, RoutingStore } from '$lib/client/types';
+  import type { ThemeDefinition } from '$lib/theme/types';
+  import type { LocationSuggestion } from '$lib/models/locationSuggestion';
+  import type { Categories } from '@soliguide/common';
+  import { CategoriesErrors, LocationErrors } from '$lib/services/types';
 
   setContext('CAPTURE_FCTN_CTX_KEY', pageStore.captureEvent);
 
+  const theme: ThemeDefinition = getContext(THEME_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
+  const routes: RoutingStore = getContext(ROUTES_CTX_KEY);
   const { url } = $page;
 
   pageStore.init(theme.country, theme.defaultLanguage, {
@@ -54,15 +55,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
   $: categoryLabel = $i18n.t(($pageStore.selectedCategory || '').toUpperCase());
   $: topbarTitleKey =
-    $pageStore.currentStep === steps.STEP_LOCATION
+    $pageStore.currentStep === Steps.STEP_LOCATION
       ? 'WHERE_ARE_YOU_LOOKING'
       : 'WHAT_ARE_YOU_LOOKING_FOR';
 
   const goBack = () => {
     pageStore.captureEvent('go-back', {
-      fromStep: $pageStore.currentStep === steps.STEP_LOCATION ? 'location' : 'category'
+      fromStep: $pageStore.currentStep === Steps.STEP_LOCATION ? 'location' : 'category'
     });
-    if (pageStore.getPreviousStep() === steps.HOME) {
+
+    if (pageStore.getPreviousStep() === Steps.HOME) {
       goto($routes.ROUTE_HOME);
     } else {
       pageStore.goToPreviousStep();
@@ -72,17 +74,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   /** If the last criterion is set, we have search params and we can navigate */
   const postSelectSuggestion = () => {
     if ($pageStore.searchParams !== null) {
-      const searchParams = new URLSearchParams($pageStore.searchParams).toString();
+      const searchParams = new URLSearchParams(
+        $pageStore.searchParams as unknown as Record<string, string>
+      ).toString();
       goto(`${$routes.ROUTE_PLACES}?${searchParams}`);
     }
   };
 
-  /** @type {(locationSuggestion: import('$lib/models/types').LocationSuggestion) => void} */
-  const selectLocation = (locationSuggestion) => {
+  const selectLocation = (locationSuggestion: LocationSuggestion): void => {
     pageStore.selectLocationSuggestion(locationSuggestion);
 
     pageStore.captureEvent('location-selected', {
-      location: {
+      completeLocation: {
         geoValue: locationSuggestion.geoValue,
         latitude: locationSuggestion.coordinates[0],
         longitude: locationSuggestion.coordinates[1],
@@ -94,8 +97,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     postSelectSuggestion();
   };
 
-  /** @type {(categorySuggestion: import('@soliguide/common').Categories) => void} */
-  const selectCategory = (categorySuggestion) => {
+  const selectCategory = (categorySuggestion: Categories): void => {
     pageStore.selectCategorySuggestion(categorySuggestion);
     postSelectSuggestion();
   };
@@ -106,42 +108,40 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <section>
     <div class="search-fields">
       <FormControl
-        errorMessage={$pageStore.locationSuggestionError === locationErrors.NO_RESULTS
+        errorMessage={$pageStore.locationSuggestionError === LocationErrors.NO_RESULTS
           ? $i18n.t('LOCALISATION_SUGGESTION_NO_RESULTS')
           : ''}
       >
         <InputText
           name="search-location"
           placeholder={$i18n.t('SEARCH_LOCATION')}
-          on:input={(/** @type {any} */ event) =>
-            pageStore.getLocationSuggestions(event.target.value)}
+          on:input={(event) => pageStore.getLocationSuggestions(event.target)}
           on:clear={pageStore.clearLocation}
           value={$pageStore.locationLabel}
           width="100%"
-          autofocus={$pageStore.focus === focus.FOCUS_LOCATION}
-          {...$pageStore.locationSuggestionError === locationErrors.NO_RESULTS
+          autofocus={$pageStore.focus === Focus.FOCUS_LOCATION}
+          {...$pageStore.locationSuggestionError === LocationErrors.NO_RESULTS
             ? { state: 'error' }
             : {}}
           on:focus={pageStore.editLocation}
           record="true"
         />
       </FormControl>
-      {#if $pageStore.currentStep === steps.STEP_CATEGORY}
+      {#if $pageStore.currentStep === Steps.STEP_CATEGORY}
         <FormControl
-          errorMessage={$pageStore.categorySuggestionError === categorieErrors.NO_RESULTS
+          errorMessage={$pageStore.categorySuggestionError === CategoriesErrors.NO_RESULTS
             ? $i18n.t('CATEGORY_SUGGESTION_NO_RESULTS')
             : ''}
         >
           <InputText
             name="search-category"
             placeholder={$i18n.t('SEARCH_CATEGORY')}
-            on:input={(/** @type {any} */ event) =>
-              pageStore.getCategorySuggestions(event.target.value)}
+            on:input={(event) => pageStore.getCategorySuggestions(event.target)}
             on:clear={pageStore.clearCategory}
             value={categoryLabel}
             width="100%"
-            autofocus={$pageStore.focus === focus.FOCUS_CATEGORY}
-            {...$pageStore.categorySuggestionError === categorieErrors.NO_RESULTS
+            autofocus={$pageStore.focus === Focus.FOCUS_CATEGORY}
+            {...$pageStore.categorySuggestionError === CategoriesErrors.NO_RESULTS
               ? { state: 'error' }
               : {}}
             record="true"
@@ -150,33 +150,33 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       {/if}
     </div>
     <div class="context-block">
-      {#if $pageStore.currentStep === steps.STEP_LOCATION}
+      {#if $pageStore.currentStep === Steps.STEP_LOCATION}
         <MyPositionTile
           headline={$i18n.t('MY_CURRENT_LOCATION')}
           on:click={() => pageStore.useCurrentLocation(getGeolocation)}
           loading={$pageStore.loadingGeolocation}
         />
-      {:else if $pageStore.currentStep === steps.STEP_CATEGORY}
+      {:else if $pageStore.currentStep === Steps.STEP_CATEGORY}
         <CategorySelector on:selectCategory={(event) => selectCategory(event.detail)} />
       {/if}
     </div>
     <div
       class="divider"
-      class:category-context={$pageStore.currentStep === steps.STEP_CATEGORY}
+      class:category-context={$pageStore.currentStep === Steps.STEP_CATEGORY}
     ></div>
 
     {#if $pageStore.currentPositionError}
       <span>Geoloc error: {$i18n.t($pageStore.currentPositionError)}</span>
     {/if}
 
-    {#if $pageStore.currentStep === steps.STEP_LOCATION}
+    {#if $pageStore.currentStep === Steps.STEP_LOCATION}
       <LocationSuggestionList
         items={$pageStore.locationSuggestions}
         on:click={(event) => selectLocation(event.detail)}
         loading={$pageStore.loadingLocationSuggestions}
       />
     {/if}
-    {#if $pageStore.currentStep === steps.STEP_CATEGORY}
+    {#if $pageStore.currentStep === Steps.STEP_CATEGORY}
       <CategorySuggestionList
         items={$pageStore.categorySuggestions}
         on:click={(event) => selectCategory(event.detail)}

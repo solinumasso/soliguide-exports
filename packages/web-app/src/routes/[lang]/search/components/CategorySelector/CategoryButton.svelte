@@ -18,18 +18,18 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import MoreHoriz from 'svelte-google-materialdesign-icons/More_horiz.svelte';
   import { Button, Text } from '@soliguide/design-system';
   import { createEventDispatcher, getContext } from 'svelte';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
   import { CategoryIcon } from '$lib/components';
+  import type { Categories } from '@soliguide/common';
+  import type { I18nStore } from '$lib/client/types';
 
-  /** @type {import('@soliguide/common').Categories | null} */
-  export let category = null;
+  export let category: Categories | null = null;
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
   const dispatch = createEventDispatcher();
 </script>
 

@@ -18,22 +18,20 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { createEventDispatcher, getContext } from 'svelte';
   import Near from 'svelte-google-materialdesign-icons/Near_me.svelte';
   import { Button } from '@soliguide/design-system';
-  import { getMapLink } from '$lib/client/index.js';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+  import { getMapLink } from '$lib/client/index';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
+  import type { I18nStore } from '$lib/client/types';
 
-  /** @type {string} */
-  export let address;
+  export let address: string;
   export let reversed = false;
 
-  /** @type {boolean} */
-  export let onOrientation;
+  export let onOrientation: boolean;
 
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
 
   const disabled = onOrientation;
 

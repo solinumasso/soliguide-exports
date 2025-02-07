@@ -11088,6 +11088,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@soliguide/web-app@workspace:packages/web-app"
   dependencies:
+    "@eslint/compat": "npm:^1.2.3"
     "@playwright/test": "npm:^1.28.1"
     "@sentry/sveltekit": "npm:^8"
     "@soliguide/common": "workspace:*"
@@ -11122,6 +11123,7 @@ __metadata:
     svelte-i18next: "npm:^2.2.2"
     terser: "npm:^5.36.0"
     typescript: "npm:^5.0.0"
+    typescript-eslint: "npm:^8.18.0"
     vite: "npm:^5.0.3"
     vitest: "npm:^2.0.0"
     zod: "npm:^3.23.8"

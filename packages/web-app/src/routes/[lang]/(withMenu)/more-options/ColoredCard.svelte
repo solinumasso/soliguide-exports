@@ -18,12 +18,11 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import { BasicCard, Text, Button } from '@soliguide/design-system';
+  import { BasicCard, Text, Button, type types } from '@soliguide/design-system';
 
-  /** @type {import('@soliguide/design-system').types.BasicCardType} */
-  export let cardType = 'default';
+  export let cardType: types.BasicCardType = 'default';
   export let title = '';
   export let description = '';
   export let actionName;

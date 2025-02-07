@@ -18,12 +18,12 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
+  import type { TodayInfo } from '$lib/models/types';
   import PlaceClosingDays from './PlaceClosingDays.svelte';
   import PlaceOpeningHours from './PlaceOpeningHours.svelte';
 
-  /** @type import('$lib/models/types').TodayInfo */
-  export let todayInfo;
+  export let todayInfo: TodayInfo;
 </script>
 
 {#if todayInfo.openingHours && todayInfo.openingHours.length > 0}

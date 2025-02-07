@@ -18,11 +18,11 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<script>
+<script lang="ts">
   import { goto } from '$app/navigation';
   import { getContext } from 'svelte';
   import { getMapLink, ROUTES_CTX_KEY } from '$lib/client';
-  import { I18N_CTX_KEY } from '$lib/client/i18n.js';
+  import { I18N_CTX_KEY } from '$lib/client/i18n';
   import {
     Button,
     Card,
@@ -38,30 +38,26 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   import PhoneButton from '$lib/components/PhoneButton.svelte';
   import ResultsCardServices from './ResultsCardServices.svelte';
   import { kmOrMeters } from '@soliguide/common';
-  import { getSearchResultPageController } from '../../pageController.js';
+  import { getSearchResultPageController } from '../../pageController';
   import { searchService } from '$lib/services';
-  /** @type {import('$lib/client/types').RoutingStore} */
-  const routes = getContext(ROUTES_CTX_KEY);
-  /** @type {import('$lib/client/types').I18nStore} */
-  const i18n = getContext(I18N_CTX_KEY);
+
+  import type { I18nStore, RoutingStore } from '$lib/client/types';
+  import type { SearchResultItem } from '$lib/models/types';
 
   const { captureEvent } = getSearchResultPageController(searchService);
-  /**
-   * @type {import('$lib/models/types').SearchResultItem}
-   */
-  export let place;
 
-  /**
-   * @type {string}
-   */
-  export let id;
+  const routes: RoutingStore = getContext(ROUTES_CTX_KEY);
+  const i18n: I18nStore = getContext(I18N_CTX_KEY);
+
+  export let place: SearchResultItem;
+
+  export let id: string;
 
   /**
    * Redirect user to place he clicked on
-   * @param {string} seoUrl
    */
-  const gotoPlace = (seoUrl) => {
-    captureEvent('card-info-click', { place: place.id });
+  const gotoPlace = (seoUrl: string) => {
+    captureEvent('card-info-click', { placeId: place.id });
     goto(`${$routes.ROUTE_PLACES}/${seoUrl}`);
   };
 
@@ -72,7 +68,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <a {id} class="card-link" href={`${$routes.ROUTE_PLACES}/${place.seoUrl}`}>
     <CardHeader
       on:click={() => {
-        captureEvent('card-header-click', { place: place.id });
+        captureEvent('card-header-click', { placeId: place.id });
       }}
     >
       <div class="card-header-container">
