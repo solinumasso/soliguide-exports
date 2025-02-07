@@ -97,15 +97,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   /** @type {(categorySuggestion: import('@soliguide/common').Categories) => void} */
   const selectCategory = (categorySuggestion) => {
     pageStore.selectCategorySuggestion(categorySuggestion);
-    if (
-      $pageStore.categorySuggestions.length > 0 &&
-      $pageStore.currentStep === steps.STEP_CATEGORY
-    ) {
-      pageStore.captureEvent('select-showcased-category', {
-        category: categorySuggestion
-      });
-    }
-
     postSelectSuggestion();
   };
 </script>

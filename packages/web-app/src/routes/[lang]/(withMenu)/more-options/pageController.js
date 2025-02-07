@@ -74,7 +74,7 @@ export const getPageController = () => {
    * @param {PosthogProperties} [properties] Optional properties to include with the event
    */
   const captureEvent = (eventName, properties) => {
-    posthogService.capture(`place-page-${eventName}`, properties);
+    posthogService.capture(`more-options-${eventName}`, properties);
   };
 
   return {
