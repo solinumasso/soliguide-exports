@@ -64,6 +64,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     captureEvent('card-info-click', { place: place.id });
     goto(`${$routes.ROUTE_PLACES}/${seoUrl}`);
   };
+
+  const isDisabled = place.banners.orientation;
 </script>
 
 <Card>
@@ -111,7 +113,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           ><NearMe
             slot="icon"
             on:click={() => {
-              captureEvent('go-to-click');
+              captureEvent('go-to-click', { isDisabled });
             }}
           /></ButtonLink
         >
