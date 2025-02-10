@@ -2015,5 +2015,6 @@
   "YOU_CAN_SPECIFY_YOUR_STRUCTURE_ACCESS_ARRANGEMENTS": "À l'étape suivante, vous pourrez indiquer les modalités d'accès de votre structure. Par exemple, si elle est sur rendez-vous, orientation ou inscription.",
   "YOU_HAVE_BEEN_REMOVE_FROM_ORGANIZATION": "Vous avez correctement été retiré(e) de l'organisation",
   "YOU_WONT_HAVE_ACCESS_TO_THIS_PLACE": "Vous n'aurez plus aucun droit d'accès pour modifier cette fiche.",
-  "ZENDESK_CHATBOT": "Chatbot Zendesk"
+  "ZENDESK_CHATBOT": "Chatbot Zendesk",
+  "test": "test"
 }
