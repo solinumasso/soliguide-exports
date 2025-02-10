@@ -41,42 +41,49 @@ export const searchResultMock: SearchResult = {
   nbResults: 3,
   places: [
     {
-      id: 169,
-      seoUrl: 'camions-des-restos-du-coeur-salpetriere-paris-169',
-      name: 'Restos du Coeur - Camion de Paris 5e',
       address: '2 Quai Saint-Bernard, 75005 Paris',
-      distance: -1,
-      services: [Categories.FOOD_DISTRIBUTION],
-      phones: [],
-      status: PlaceOpeningStatus.OPEN,
-      todayInfo: { openingHours: [] },
       banners: {
+        holidays: PlaceClosedHolidays.UNKNOWN,
         message: {
-          start: new Date('2024-06-24T00:00:00.000Z'),
-          end: new Date('2024-07-26T23:59:59.000Z'),
           description:
             "<p>Le camion Austerlitz sera<strong> déplacé au 49 boulevard de l'Hôpital dans le 13ème arrondissement, du 24 juin 2024 au 25 juillet 2024 inclus. </strong>Réouverture prévue le 26 août 2024 sur le site habituel au jardin Tino Rossi.&nbsp;</p>",
-          name: "Attention : changement d'adresse du 24 juin 2024 au 25 juillet 2024 en raison des Jeux Olympiques"
+          end: new Date('2024-07-26T23:59:59.000Z'),
+          name: "Attention : changement d'adresse du 24 juin 2024 au 25 juillet 2024 en raison des Jeux Olympiques",
+          start: new Date('2024-06-24T00:00:00.000Z')
         },
-        orientation: false,
-        holidays: PlaceClosedHolidays.UNKNOWN
-      }
+        orientation: false
+      },
+      distance: -1,
+      id: 169,
+      name: 'Restos du Coeur - Camion de Paris 5e',
+      phones: [],
+      seoUrl: 'camions-des-restos-du-coeur-salpetriere-paris-169',
+      services: [Categories.FOOD_DISTRIBUTION],
+      sources: [],
+      status: PlaceOpeningStatus.OPEN,
+      todayInfo: { openingHours: [] }
     },
     {
-      id: 34120,
-      seoUrl: 'restaurant-emeraude-europe-copie-paris-34120',
-      name: 'Restaurant Emeraude Ave Maria',
       address: "4 Rue de l'Ave Maria, 75004 Paris",
+      banners: {
+        holidays: PlaceClosedHolidays.UNKNOWN,
+        message: null,
+        orientation: false
+      },
       distance: -1,
-      services: [Categories.FOOD_DISTRIBUTION],
+      id: 34120,
+      name: 'Restaurant Emeraude Ave Maria',
       phones: [
         {
-          label: null,
-          phoneNumber: '01 48 87 67 39',
           countryCode: CountryCodes.FR,
-          isSpecialPhoneNumber: false
+          isSpecialPhoneNumber: false,
+          label: null,
+          phoneNumber: '01 48 87 67 39'
         }
       ],
+      seoUrl: 'restaurant-emeraude-europe-copie-paris-34120',
+      services: [Categories.FOOD_DISTRIBUTION],
+      sources: [],
       status: PlaceOpeningStatus.OPEN,
       todayInfo: {
         openingHours: [
@@ -85,54 +92,51 @@ export const searchResultMock: SearchResult = {
             start: '1200'
           }
         ]
-      },
-      banners: {
-        message: null,
-        orientation: false,
-        holidays: PlaceClosedHolidays.UNKNOWN
       }
     },
     {
-      id: 26287,
-      seoUrl: 'co-p1-solidarites-etudiantes-copie-paris-26287',
-      name: 'Cop1 - Solidarités Étudiantes Paris 5',
       address: '19 Rue Santeuil, 75005 Paris',
+      banners: {
+        holidays: PlaceClosedHolidays.UNKNOWN,
+        message: null,
+        orientation: false
+      },
       distance: -1,
-      services: [Categories.FOOD_DISTRIBUTION, Categories.ACTIVITIES],
+      id: 26287,
+      name: 'Cop1 - Solidarités Étudiantes Paris 5',
       phones: [],
+      seoUrl: 'co-p1-solidarites-etudiantes-copie-paris-26287',
+      services: [Categories.FOOD_DISTRIBUTION, Categories.ACTIVITIES],
+      sources: [],
       status: PlaceOpeningStatus.TEMPORARILY_CLOSED,
       todayInfo: {
         closingDays: {
-          start: '2024-07-14T00:00:00.000Z',
-          end: ''
+          end: '',
+          start: '2024-07-14T00:00:00.000Z'
         }
-      },
-      banners: {
-        message: null,
-        orientation: false,
-        holidays: PlaceClosedHolidays.UNKNOWN
       }
     },
     {
+      address: '1 Rue Montmartre, 75001 Paris',
+      banners: { message: null, orientation: false, holidays: PlaceClosedHolidays.UNKNOWN },
+      distance: 478.42644975047216,
       id: 154,
-      seoUrl: 'soupe-saint-eustache-paris-154',
       name: 'Soupe Saint-Eustache',
+      phones: [
+        {
+          countryCode: CountryCodes.FR,
+          isSpecialPhoneNumber: false,
+          label: '',
+          phoneNumber: '01 42 36 31 05'
+        }
+      ],
+      seoUrl: 'soupe-saint-eustache-paris-154',
+      services: [Categories.ACTIVITIES],
+      sources: [],
       status: PlaceOpeningStatus.TEMPORARILY_CLOSED,
       todayInfo: {
         closingDays: { end: '2024-11-30T23:59:59.000Z', start: '2024-04-01T00:00:00.000Z' }
-      },
-      address: '1 Rue Montmartre, 75001 Paris',
-      distance: 478.42644975047216,
-      services: [Categories.ACTIVITIES],
-      phones: [
-        {
-          label: '',
-          phoneNumber: '01 42 36 31 05',
-          countryCode: CountryCodes.FR,
-          isSpecialPhoneNumber: false
-        }
-      ],
-      banners: { message: null, orientation: false, holidays: PlaceClosedHolidays.UNKNOWN }
+      }
     }
   ]
 };

@@ -53,6 +53,12 @@ export interface BannerMessage {
   name: string | null;
 }
 
+export interface Source {
+  label: string;
+  licenseLabel: string;
+  licenseLink: string;
+}
+
 export interface SearchResultItem {
   id: number;
   seoUrl: string;
@@ -62,7 +68,7 @@ export interface SearchResultItem {
   services: Categories[];
   phones: Phone[];
   status: PlaceOpeningStatus;
-  source?: string;
+  sources: Source[];
   banners: {
     message: BannerMessage | null;
     orientation: boolean;
@@ -150,4 +156,10 @@ export interface PlaceDetails {
   status: PlaceOpeningStatus;
   todayInfo: TodayInfo;
   website: string;
+}
+
+export interface SearchLocationParams {
+  geoType: string;
+  coordinates: number[];
+  distance: number;
 }

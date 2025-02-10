@@ -72,9 +72,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       }}
     >
       <div class="card-header-container">
-        {#if place?.source}
+        {#if place?.sources.length}
           <div class="card-header-source">
-            <Text type="caption2">{place.source}</Text>
+            <Text type="caption2" color="inverse">
+              {$i18n.t('SOURCE')}
+              {#each place.sources as source, index}
+                {source.label}
+                {#if source.licenseLabel && source.licenseLink}(<a
+                    href={source.licenseLink}
+                    target="_blank">{source.licenseLabel}</a
+                  >){/if}{#if index < place.sources.length - 1}<span>, </span>
+                {/if}
+              {/each}
+            </Text>
           </div>
         {/if}
         <div class="card-title">
@@ -153,6 +163,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     position: absolute;
     top: -14px;
     right: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+
+  .card-header-source a {
+    text-decoration: revert;
   }
 
   .card-header-infos-container {

@@ -359,25 +359,26 @@ const samplePlace: ApiPlace = Object.freeze({
 });
 
 const samplePlaceTransformed: SearchResultItem = Object.freeze({
+  address: '1 Rue Montmartre, 75001 Paris',
+  banners: { message: null, orientation: false, holidays: PlaceClosedHolidays.UNKNOWN },
+  distance: 478.42644975047216,
   id: 154,
-  seoUrl: 'soupe-saint-eustache-paris-154',
   name: 'Soupe Saint-Eustache',
+  phones: [
+    {
+      countryCode: CountryCodes.FR,
+      isSpecialPhoneNumber: false,
+      label: '',
+      phoneNumber: '01 42 36 31 05'
+    }
+  ],
+  seoUrl: 'soupe-saint-eustache-paris-154',
+  services: [Categories.FOOD_DISTRIBUTION],
+  sources: [],
   status: PlaceOpeningStatus.TEMPORARILY_CLOSED,
   todayInfo: {
     closingDays: { end: '2024-11-30T23:59:59.000Z', start: '2024-04-01T00:00:00.000Z' }
-  },
-  address: '1 Rue Montmartre, 75001 Paris',
-  distance: 478.42644975047216,
-  services: [Categories.FOOD_DISTRIBUTION],
-  phones: [
-    {
-      label: '',
-      phoneNumber: '01 42 36 31 05',
-      countryCode: CountryCodes.FR,
-      isSpecialPhoneNumber: false
-    }
-  ],
-  banners: { message: null, orientation: false, holidays: PlaceClosedHolidays.UNKNOWN }
+  }
 });
 
 const sampleItinerary: ApiPlace = Object.freeze({
@@ -1329,42 +1330,44 @@ const sampleItinerary: ApiPlace = Object.freeze({
 
 const sampleItineraryTransformed: SearchResultItem[] = [
   {
-    id: 30965,
-    seoUrl: 'maraude-balades-des-lucioles-13e-paris-30965',
-    name: 'Maraude Balades des Lucioles 13e Paris',
     address: '58 Bd Saint-Marcel, 75005 Paris - Point de départ de la maraude',
+    banners: { message: null, orientation: false, holidays: PlaceClosedHolidays.UNKNOWN },
     distance: 403.7915416747283,
-    services: [Categories.FOOD_DISTRIBUTION, Categories.HYGIENE_PRODUCTS, Categories.CLOTHING],
+    id: 30965,
+    name: 'Maraude Balades des Lucioles 13e Paris',
     phones: [
       {
-        label: null,
-        phoneNumber: '07 69 06 74 44',
         countryCode: CountryCodes.FR,
-        isSpecialPhoneNumber: false
+        isSpecialPhoneNumber: false,
+        label: null,
+        phoneNumber: '07 69 06 74 44'
       }
     ],
+    seoUrl: 'maraude-balades-des-lucioles-13e-paris-30965',
+    services: [Categories.FOOD_DISTRIBUTION, Categories.HYGIENE_PRODUCTS, Categories.CLOTHING],
+    sources: [],
     status: PlaceOpeningStatus.OPEN,
-    todayInfo: { openingHours: [{ end: '2215', start: '1950' }] },
-    banners: { message: null, orientation: false, holidays: PlaceClosedHolidays.UNKNOWN }
+    todayInfo: { openingHours: [{ end: '2215', start: '1950' }] }
   },
   {
-    id: 30965,
-    seoUrl: 'maraude-balades-des-lucioles-13e-paris-30965',
-    name: 'Maraude Balades des Lucioles 13e Paris',
     address: "Pl. Louis-Armand, 75012 Paris - Point d'arrivée de la maraude",
+    banners: { message: null, orientation: false, holidays: PlaceClosedHolidays.UNKNOWN },
     distance: 403.7915416747283,
-    services: [Categories.FOOD_DISTRIBUTION, Categories.HYGIENE_PRODUCTS, Categories.CLOTHING],
+    id: 30965,
+    name: 'Maraude Balades des Lucioles 13e Paris',
     phones: [
       {
-        label: null,
-        phoneNumber: '07 69 06 74 44',
         countryCode: CountryCodes.FR,
-        isSpecialPhoneNumber: false
+        isSpecialPhoneNumber: false,
+        label: null,
+        phoneNumber: '07 69 06 74 44'
       }
     ],
+    seoUrl: 'maraude-balades-des-lucioles-13e-paris-30965',
+    services: [Categories.FOOD_DISTRIBUTION, Categories.HYGIENE_PRODUCTS, Categories.CLOTHING],
+    sources: [],
     status: PlaceOpeningStatus.OPEN,
-    todayInfo: { openingHours: [{ end: '2215', start: '1950' }] },
-    banners: { message: null, orientation: false, holidays: PlaceClosedHolidays.UNKNOWN }
+    todayInfo: { openingHours: [{ end: '2215', start: '1950' }] }
   }
 ];
 

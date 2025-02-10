@@ -21,12 +21,16 @@
 import {
   type ApiPlace,
   CommonPlacePosition,
+  CommonPlaceSource,
   CommonTimeslot,
   type DayName,
+  EXTERNAL_SOURCE_MAPPING,
+  PairingSources,
   PlaceOpeningStatus,
+  checkIfSourceMustBeDisplayed,
   computeTempIsActive
 } from '@soliguide/common';
-import type { HoursRange, TodayInfo } from './types';
+import type { HoursRange, Source, TodayInfo } from './types';
 
 /**
  * Calculates the complete address to display
@@ -93,3 +97,26 @@ export const computeTodayInfo = (
   }
   return {};
 };
+
+/**
+ * Transform external sources to front ready sources
+ */
+export const buildSources = (sources?: CommonPlaceSource[]): Source[] =>
+  sources
+    ? sources.reduce((acc: Source[], source) => {
+        const toDisplay = checkIfSourceMustBeDisplayed(source.name, source.isOrigin);
+
+        if (toDisplay) {
+          return [
+            ...acc,
+            {
+              label: EXTERNAL_SOURCE_MAPPING[source.name as PairingSources].label ?? '',
+              licenseLabel:
+                EXTERNAL_SOURCE_MAPPING[source.name as PairingSources].licenseLabel ?? '',
+              licenseLink: EXTERNAL_SOURCE_MAPPING[source.name as PairingSources].licenseLink ?? ''
+            }
+          ];
+        }
+        return acc;
+      }, [])
+    : [];
