@@ -21,7 +21,7 @@
 
 import {
   type CommonPlaceSource,
-  PairingSources,
+  checkIfSourceMustBeDisplayed,
   PlaceSourceId,
 } from "@soliguide/common";
 
@@ -41,23 +41,6 @@ export class PlaceSource {
       this.license = source.license;
     }
 
-    this.toDisplay = this.checkIfSourceMustBeDisplayed(
-      source.name,
-      source.isOrigin
-    );
+    this.toDisplay = checkIfSourceMustBeDisplayed(source.name, source.isOrigin);
   }
-
-  public checkIfSourceMustBeDisplayed = (
-    sourceName: string,
-    isOrigin: boolean
-  ): boolean => {
-    switch (sourceName) {
-      case PairingSources.DORA:
-        return isOrigin;
-      case PairingSources.CRF:
-        return true;
-      default:
-        return false;
-    }
-  };
 }

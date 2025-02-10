@@ -18,5 +18,18 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-// @index('./*', f => `export * from '${f.path}'`)
-export * from "./PAIRING_SOURCES.const";
+import { PairingSources } from "../enums";
+
+export const checkIfSourceMustBeDisplayed = (
+  sourceName: string,
+  isOrigin: boolean
+): boolean => {
+  switch (sourceName) {
+    case PairingSources.DORA:
+      return isOrigin;
+    case PairingSources.CRF:
+      return true;
+    default:
+      return false;
+  }
+};

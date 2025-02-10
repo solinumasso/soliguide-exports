@@ -19,30 +19,5 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 // @index('./*', f => `export * from '${f.path}'`)
-export * from "./auto-complete";
-export * from "./autoexport";
-export * from "./campaign";
-export * from "./categories";
-export * from "./contacts";
-export * from "./dates";
-export * from "./general";
-export * from "./holidays";
-export * from "./hours";
-export * from "./location";
-export * from "./modalities";
-export * from "./organization";
-export * from "./phone";
-export * from "./place";
-export * from "./place-changes";
-export * from "./publics";
-export * from "./search-places";
-export * from "./services";
-export * from "./soligare";
-export * from "./sources";
-export * from "./structure";
-export * from "./temp-infos";
-export * from "./themes";
-export * from "./translations";
-export * from "./transports";
-export * from "./users";
-export * from "./widget";
+export * from "./EXTERNAL_SOURCE_MAPPING.const";
+export * from "./PAIRING_SOURCES.const";

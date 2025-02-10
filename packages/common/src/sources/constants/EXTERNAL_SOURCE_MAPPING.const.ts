@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { PairingSources } from "@soliguide/common";
+import { PairingSources } from "../enums";
 
 export const EXTERNAL_SOURCE_MAPPING: Record<
   PairingSources,

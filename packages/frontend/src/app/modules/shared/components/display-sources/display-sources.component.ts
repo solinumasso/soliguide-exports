@@ -19,8 +19,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, Input, OnInit } from "@angular/core";
-import { EXTERNAL_SOURCE_MAPPING } from "../../../../models";
 import { PlaceSource } from "../../../../models/place/classes/place-sources.class";
+import { EXTERNAL_SOURCE_MAPPING } from "@soliguide/common";
 
 @Component({
   selector: "app-display-sources",
