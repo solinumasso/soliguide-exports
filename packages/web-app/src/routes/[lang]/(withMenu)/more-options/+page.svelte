@@ -37,6 +37,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   import { ROUTES_CTX_KEY } from '$lib/client/index';
   import type { I18nStore, RoutingStore } from '$lib/client/types';
   import type { ThemeDefinition } from '$lib/theme/types';
+  import { goto } from '$app/navigation';
 
   const i18n: I18nStore = getContext(I18N_CTX_KEY);
   const theme: ThemeDefinition = getContext(THEME_CTX_KEY);
@@ -64,6 +65,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   const navigateToExternal = (url: string) => {
     window.open(url, '_blank');
   };
+
+  const changeLanguage = () => {
+    pageState.captureEvent('click-change-language');
+    goto(`${$routes.ROUTE_LANGUAGES}?from=more-options`);
+  };
 </script>
 
 <svelte:head>
@@ -88,33 +94,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   />
 
   <BasicCard>
-    <Text type="text2Bold">{theme.brandName}</Text>
+    <Text type="text2Bold">{$i18n.t('SETTINGS')}</Text>
     <div class="group">
       <ListItem
-        type="externalLink"
+        type="actionFull"
         shape="bordered"
         size="small"
-        title={$i18n.t('SEE_SOLINUM_SITE')}
-        href={$pageState.solinumSiteLink}
-        on:click={() => pageState.captureEvent('click-access-solinum')}
-      >
-        <ScreenSearchDesktop variation="filled" slot="icon" size="16" />
-      </ListItem>
-      <ListItem
-        type="externalLink"
-        size="small"
-        title={$i18n.t('BECOME_TRANSLATOR')}
-        href={$pageState.becomeTranslatorLink}
-        on:click={() => pageState.captureEvent('click-become-translator')}
+        title={$i18n.t('CHANGE_LANGUAGE')}
+        on:click={changeLanguage}
       >
         <Transcribe variation="filled" slot="icon" size="16" />
       </ListItem>
-    </div>
-  </BasicCard>
-
-  <BasicCard>
-    <Text type="text2Bold">{$i18n.t('SETTINGS')}</Text>
-    <div class="group">
       {#if !!theme.chatWebsiteId}
         <ListItem
           type="actionFull"
@@ -177,6 +167,30 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         on:click={() => pageState.captureEvent('click-terms-and-conditions')}
       >
         <Mouse variation="filled" slot="icon" size="16" />
+      </ListItem>
+    </div>
+  </BasicCard>
+  <BasicCard>
+    <Text type="text2Bold">{theme.brandName}</Text>
+    <div class="group">
+      <ListItem
+        type="externalLink"
+        shape="bordered"
+        size="small"
+        title={$i18n.t('SEE_SOLINUM_SITE')}
+        href={$pageState.solinumSiteLink}
+        on:click={() => pageState.captureEvent('click-access-solinum')}
+      >
+        <ScreenSearchDesktop variation="filled" slot="icon" size="16" />
+      </ListItem>
+      <ListItem
+        type="externalLink"
+        size="small"
+        title={$i18n.t('BECOME_TRANSLATOR')}
+        href={$pageState.becomeTranslatorLink}
+        on:click={() => pageState.captureEvent('click-become-translator')}
+      >
+        <Transcribe variation="filled" slot="icon" size="16" />
       </ListItem>
     </div>
   </BasicCard>

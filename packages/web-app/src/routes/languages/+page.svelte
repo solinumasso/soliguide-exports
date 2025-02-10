@@ -29,6 +29,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   import LanguageSelector from './LanguageSelector.svelte';
   import type { I18nStore, RoutingStore } from '$lib/client/types';
   import type { ThemeDefinition } from '$lib/theme/types';
+  import { page } from '$app/stores';
 
   const pageStore = getController();
 
@@ -45,7 +46,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     if ($pageStore.canSubmit) {
       $i18n.changeLanguage(String($pageStore.selectedLanguage));
       markLanguageAsSelected();
-      goto($routes.ROUTE_HOME);
+
+      const fromPage = $page.url.searchParams.get('from');
+      goto(fromPage === 'more-options' ? $routes.ROUTE_MORE_OPTIONS : $routes.ROUTE_HOME);
     }
   };
 </script>
