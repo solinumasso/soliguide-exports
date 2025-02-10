@@ -248,6 +248,7 @@
   "CAT_SANTE_TITLE": "Treat me",
   "CAT_VETEMENTS_TITLE": "Dress me",
   "CAT_WIFI_TITLE": "Access wifi",
+  "CHANGE_LANGUAGE": "Change language",
   "CHANGE_PASSWORD": "Change your password",
   "CHANGE_PERSONAL_DETAILS": "Here you can modify your personal information",
   "CHANGE_PHOTO_OF": "Editing photos of {{ placeName }}",
