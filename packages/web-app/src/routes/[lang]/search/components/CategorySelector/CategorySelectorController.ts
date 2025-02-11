@@ -18,11 +18,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 import { Categories } from '@soliguide/common';
-import type { CategoryService, PosthogCaptureFunction } from '$lib/services/types';
-import { posthogService } from '$lib/services/posthogService';
+import type { CategoryService } from '$lib/services/types';
 import { CategoryBrowserState, type CategorySelectorController, type PageState } from './types';
 import { locationService } from '$lib/services';
 import { getSearchPageController } from '../../pageController';
@@ -43,15 +41,10 @@ export const getCategorySelectorController = (
 
   const pageStore = writable(initialState);
 
-  /**
-   * Capture an event with a prefix for route context
-   */
-  const captureEvent: PosthogCaptureFunction = (eventName, properties) => {
-    posthogService.capture(`search-page-${eventName}`, properties);
-  };
+  const searchController = getSearchPageController(locationService, categoryService);
 
   const openCategoryBrowser = () => {
-    captureEvent('all-category');
+    searchController.captureEvent('all-category');
 
     pageStore.update(
       (oldValue): PageState => ({
@@ -104,8 +97,10 @@ export const getCategorySelectorController = (
   };
 
   const selectCategory = (categoryId: Categories) => {
-    const searchController = getSearchPageController(locationService, categoryService);
-    searchController.captureEvent('select-category', { categorySelected: categoryId });
+    const isFromBrowser = get(pageStore).browserState !== CategoryBrowserState.CLOSED;
+    searchController.captureEvent(isFromBrowser ? 'select-category' : 'select-showcased-category', {
+      categorySelected: categoryId
+    });
 
     pageStore.update(
       (oldValue): PageState => ({
@@ -124,7 +119,6 @@ export const getCategorySelectorController = (
     subscribe: pageStore.subscribe,
     openCategoryBrowser,
     navigateToDetail,
-    captureEvent,
     navigateBack,
     selectCategory,
     init

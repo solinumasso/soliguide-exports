@@ -43,7 +43,6 @@ export interface CategorySelectorController {
   navigateBack(): void;
   selectCategory(categoryId: Categories): void;
   init(): void;
-  captureEvent: PosthogCaptureFunction;
 }
 
 export interface CategoryBrowserController {

@@ -83,8 +83,6 @@ export const getSearchPageController = (
 
   const searchLocationSuggestions = async (search: string) => {
     try {
-      captureEvent('search-term', { searchTerm: search });
-
       const result = await locationService.getLocationSuggestions(get(myPageStore).country, search);
       myPageStore.update(
         (oldValue): PageState => ({
@@ -139,6 +137,7 @@ export const getSearchPageController = (
 
     // Do nothing unless the search term has at least 3 characters
     if (searchTerm.length >= SEARCH_LOCATION_MINIMUM_CHARS) {
+      captureEvent('search-term', { searchTerm });
       getDebouncedLocationSuggestions(searchTerm);
     } else {
       myPageStore.update(
@@ -251,7 +250,6 @@ export const getSearchPageController = (
 
     // Get new results based on the label of the selected suggestion
     searchLocationSuggestions(locationSuggestion?.suggestionLabel ?? '');
-    captureEvent('location-selected', { location: locationSuggestion?.geoValue });
   };
 
   /**

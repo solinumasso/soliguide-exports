@@ -18,7 +18,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import { GeoTypes, type LocationAutoCompleteAddress } from '@soliguide/common';
 import { describe, expect, it } from 'vitest';
 import { getLabel, getLine1, getLine2 } from './locationSuggestion';
