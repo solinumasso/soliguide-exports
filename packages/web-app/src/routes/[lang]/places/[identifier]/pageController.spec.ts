@@ -26,13 +26,13 @@ import type { PlaceDetails } from '$lib/models/types';
 import type { PageController } from './types';
 
 const defaultState: PlaceDetails = {
-  id: 7,
   address: '',
   description: '',
   email: '',
   facebook: '',
   fax: '',
   hours: {},
+  id: 7,
   info: [],
   instagram: '',
   lastUpdate: '',
@@ -40,6 +40,7 @@ const defaultState: PlaceDetails = {
   onOrientation: false,
   phones: [],
   services: [],
+  sources: [],
   status: PlaceOpeningStatus.OPEN,
   todayInfo: {},
   website: ''

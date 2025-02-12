@@ -47,7 +47,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   const routesStore = derived(i18nStore, (i18n) => getRoutes(i18n.language));
 
   // No lang selected, init with theme default
-  if (!isLanguageSelected() && !!theme?.defaultLanguage) {
+  if (!isLanguageSelected() && theme?.defaultLanguage) {
     $i18nStore.changeLanguage(String(theme.defaultLanguage));
   }
 
@@ -61,7 +61,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     changeDesignSystemLocale($i18nStore.language);
   }
 
-  cookieConsent.set(!!getZDCookieConsent());
+  cookieConsent.set(getZDCookieConsent());
 
   setContext(I18N_CTX_KEY, i18nStore);
   setContext(ROUTES_CTX_KEY, routesStore);

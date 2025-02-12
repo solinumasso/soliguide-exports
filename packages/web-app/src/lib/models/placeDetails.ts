@@ -46,7 +46,7 @@ import {
   type PlaceTempInfo,
   Categories
 } from '@soliguide/common';
-import { computeTodayInfo, computeAddress, formatTimeslots } from './place';
+import { computeTodayInfo, computeAddress, formatTimeslots, buildSources } from './place';
 import {
   type PlaceDetails,
   type PlaceDetailsInfo,
@@ -339,7 +339,7 @@ const buildServices = (services: CommonNewPlaceService[]): Service[] => {
 const buildPlaceDetails = (placeResult: ApiPlace): PlaceDetails => {
   const status = computePlaceOpeningStatus(placeResult);
 
-  const onOrientation = !!placeResult.modalities.orientation.checked;
+  const onOrientation = Boolean(placeResult.modalities.orientation.checked);
 
   return {
     id: placeResult.lieu_id,
@@ -353,12 +353,13 @@ const buildPlaceDetails = (placeResult: ApiPlace): PlaceDetails => {
     instagram: placeResult.entity.instagram ?? '',
     lastUpdate: new Date(placeResult.updatedByUserAt).toISOString(),
     name: placeResult.name,
-    onOrientation: !!placeResult.modalities.orientation.checked,
+    onOrientation,
     phones: placeResult.entity.phones.map((phone: CommonPhone) => ({
       ...phone,
       countryCode: phone.countryCode as CountryCodes
     })),
     services: buildServices(placeResult.services_all),
+    sources: buildSources(placeResult.sources),
     status: computePlaceOpeningStatus(placeResult),
     todayInfo: computeTodayInfo(placeResult, status),
     website: placeResult.entity.website ?? ''

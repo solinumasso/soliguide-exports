@@ -89,7 +89,7 @@ export const getLabel = (geoType: GeoTypes, line1: string, line2: string): strin
     return line1 ?? '';
   }
 
-  return [line1, line2].filter((line) => !!line).join(', ');
+  return [line1, line2].filter((line) => line).join(', ');
 };
 
 /**
@@ -122,7 +122,7 @@ const buildSuggestion = (data: LocationAutoCompleteAddress): LocationSuggestion 
  * Remove invalid parsed items
  */
 const mapSuggestions = (suggestions: LocationAutoCompleteAddress[]): LocationSuggestion[] =>
-  suggestions.map(buildSuggestion).filter((item) => !!item);
+  suggestions.map(buildSuggestion).filter((item) => item !== null);
 
 /**
  * Determines the default distance to use in a search given a geotype

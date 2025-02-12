@@ -35,7 +35,7 @@ export const isLangValid = (lang: string | SupportedLanguagesCode): boolean => {
 
 // Lang has been choosen
 export const isLanguageSelected = (): boolean => {
-  return !!getStorageItem(STORAGE_KEY_LANGUAGE_CHOOSEN);
+  return Boolean(getStorageItem(STORAGE_KEY_LANGUAGE_CHOOSEN));
 };
 
 export const markLanguageAsSelected = (): void => {

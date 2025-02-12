@@ -36,7 +36,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 <PageLoader {loading}>
   <div class="results-list">
-    {#if !!items.length}
+    {#if items.length}
       <span class="result-title">
         <Text type="text1Bold" as="h2">{$i18n.t('LOCATION_SUGGESTIONS')}</Text>
       </span>

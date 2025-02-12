@@ -68,7 +68,7 @@ const buildAvailableOptions = (
         flag: flagsMap[supportedLanguage] || Xx
       };
     })
-    .filter((item) => !!item)
+    .filter((item) => item)
     .reduce((acc: LanguageOption[], lang: LanguageOption) => {
       // Put theme's defaultLanguage in first place
       return lang.code === defaultLanguage ? [lang, ...acc] : [...acc, lang];
@@ -97,7 +97,7 @@ export const getController = (): LanguagePageController => {
       return {
         ...oldState,
         selectedLanguage: newLang,
-        canSubmit: !!newLang
+        canSubmit: Boolean(newLang)
       };
     });
   };
