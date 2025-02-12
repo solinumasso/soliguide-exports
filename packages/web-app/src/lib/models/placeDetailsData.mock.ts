@@ -630,6 +630,7 @@ const samplePlaceTransformed: PlaceDetails = {
       info: []
     }
   ],
+  sources: [],
   status: PlaceOpeningStatus.OPEN,
   todayInfo: {
     openingHours: [

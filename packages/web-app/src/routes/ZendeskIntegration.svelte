@@ -36,7 +36,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   let ready = false;
   let showCookieModal = false;
 
-  $: useChat = !!theme.chatWebsiteId;
+  $: useChat = Boolean(theme.chatWebsiteId);
   $: scriptSrc = `https://static.zdassets.com/ekr/snippet.js?key=${theme.chatWebsiteId}`;
   $: showContent = (useChat && ready && $cookieConsent) || !$cookieConsent || !useChat;
 

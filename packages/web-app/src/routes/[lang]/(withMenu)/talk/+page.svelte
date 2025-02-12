@@ -33,7 +33,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   const cookieConsent: CookieConsentStore = getContext(COOKIE_CTX_KEY);
   const theme: ThemeDefinition = getContext(THEME_CTX_KEY);
 
-  $: useChat = !!theme.chatWebsiteId;
+  $: useChat = Boolean(theme.chatWebsiteId);
 
   let previousPage: string;
   let nextPage: string;

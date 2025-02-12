@@ -38,13 +38,13 @@ const buildSearchResultItem = (
   place: ApiPlace,
   locationParams: SearchLocationParams
 ): SearchResultItem => {
-  const onOrientation = !!place.modalities.orientation.checked;
+  const onOrientation = Boolean(place.modalities.orientation.checked);
 
   const distance =
     locationParams.geoType === GeoTypes.POSITION &&
     place.status !== PlaceStatus.PERMANENTLY_CLOSED &&
     place.status !== PlaceStatus.DRAFT &&
-    !!place.distance &&
+    typeof place.distance === 'number' &&
     !onOrientation
       ? place.distance
       : -1;
@@ -77,7 +77,7 @@ const buildSearchResultItem = (
     seoUrl: place.seo_url,
     services: place.services_all
       .map((service) => service?.category)
-      .filter((category) => !!category),
+      .filter((category) => typeof category !== 'undefined'),
     sources: buildSources(place.sources),
     status,
     todayInfo: computeTodayInfo(place, status)

@@ -60,20 +60,20 @@ export interface Source {
 }
 
 export interface SearchResultItem {
-  id: number;
-  seoUrl: string;
-  name: string;
   address: string;
-  distance: number;
-  services: Categories[];
-  phones: Phone[];
-  status: PlaceOpeningStatus;
-  sources: Source[];
   banners: {
+    holidays: PlaceClosedHolidays;
     message: BannerMessage | null;
     orientation: boolean;
-    holidays: PlaceClosedHolidays;
   };
+  distance: number;
+  id: number;
+  name: string;
+  phones: Phone[];
+  seoUrl: string;
+  services: Categories[];
+  sources: Source[];
+  status: PlaceOpeningStatus;
   todayInfo: TodayInfo;
 }
 
@@ -153,6 +153,7 @@ export interface PlaceDetails {
   onOrientation: boolean;
   phones: Phone[];
   services: Service[];
+  sources: Source[];
   status: PlaceOpeningStatus;
   todayInfo: TodayInfo;
   website: string;

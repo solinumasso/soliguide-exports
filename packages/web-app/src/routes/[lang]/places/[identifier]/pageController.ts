@@ -49,13 +49,13 @@ const reorderedDays = (hours: PlaceDetailsOpeningHours): PlaceDetailsOpeningHour
 const initialValue: PageState = {
   placeDetails: {
     // lieu_id 7 does not exist in the database
-    id: 7,
     address: '',
     description: '',
     email: '',
     facebook: '',
     fax: '',
     hours: {},
+    id: 7,
     info: [],
     instagram: '',
     lastUpdate: '',
@@ -63,6 +63,7 @@ const initialValue: PageState = {
     onOrientation: false,
     phones: [],
     services: [],
+    sources: [],
     status: PlaceOpeningStatus.OPEN,
     todayInfo: {},
     website: ''

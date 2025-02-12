@@ -102,6 +102,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     <PlaceInfoSection
       info={$pageStore.placeDetails.info}
       lastUpdate={$pageStore.placeDetails.lastUpdate}
+      sources={$pageStore.placeDetails.sources}
     />
     <PlaceDescriptionSection description={$pageStore.placeDetails.description} />
     <OpeningHoursSection

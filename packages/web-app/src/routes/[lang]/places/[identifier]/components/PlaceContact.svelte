@@ -68,7 +68,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             href={`tel:${formattedNumber}`}
             on:click={() => {
               placeController.captureEvent('call', {
-                isClickable: !!formattedNumber
+                isClickable: Boolean(formattedNumber)
               });
             }}
           >

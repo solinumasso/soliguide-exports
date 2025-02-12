@@ -31,6 +31,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   import {
     type PlaceDetailsInfo,
     PlaceDetailsInfoType,
+    type Source,
     type Tag as TagType,
     type TranslatableElement
   } from '$lib/models/types';
@@ -39,7 +40,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
   export let info: PlaceDetailsInfo[] = [];
 
-  export let lastUpdate;
+  export let lastUpdate: string;
+
+  export let sources: Source[] = [];
 
   const i18n: I18nStore = getContext(I18N_CTX_KEY);
 
@@ -94,11 +97,28 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </div>
       {/each}
     </div>
-    <div class="last-update">
-      <AppIcon icon={Update} />
-      <Text type="caption2" color="neutral">
-        {`${$i18n.t('EXPORTS_HEADER_LAST_UPDATE')} : ${formatToDateWithFullMonth(lastUpdate, $i18n.language)}`}
-      </Text>
+    <div class="info-footer">
+      <div class="last-update">
+        <AppIcon icon={Update} />
+        <Text type="caption2" color="neutral">
+          {`${$i18n.t('EXPORTS_HEADER_LAST_UPDATE')} : ${formatToDateWithFullMonth(lastUpdate, $i18n.language)}`}
+        </Text>
+      </div>
+      {#if sources.length}
+        <div class="card-header-source">
+          <Text type="caption2" color="neutral">
+            {$i18n.t('SOURCE')}
+            {#each sources as source, index}
+              {source.label}
+              {#if source.licenseLabel && source.licenseLink}(<a
+                  href={source.licenseLink}
+                  target="_blank">{source.licenseLabel}</a
+                >){/if}{#if index < sources.length - 1}<span>, </span>
+              {/if}
+            {/each}
+          </Text>
+        </div>
+      {/if}
     </div>
   </div>
 </PlaceDetailsSection>
@@ -139,10 +159,26 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     margin-bottom: var(--spacing4XS);
   }
 
+  .info-footer {
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacingXS);
+  }
+
   .last-update {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: var(--spacing2XS);
+    gap: var(--spacingXS);
+  }
+
+  .card-header-source {
+    text-align: center;
+  }
+
+  .card-header-source a {
+    text-decoration: revert;
   }
 </style>

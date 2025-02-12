@@ -207,6 +207,7 @@ export const placeDetailsMock: PlaceDetails = {
     }
   ],
   services: [],
+  sources: [],
   status: PlaceOpeningStatus.OPEN,
   todayInfo: {
     openingHours: [

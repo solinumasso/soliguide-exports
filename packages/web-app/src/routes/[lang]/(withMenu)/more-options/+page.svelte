@@ -105,7 +105,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       >
         <Transcribe variation="filled" slot="icon" size="16" />
       </ListItem>
-      {#if !!theme.chatWebsiteId}
+      {#if theme.chatWebsiteId}
         <ListItem
           type="actionFull"
           shape="bordered"
