@@ -26,9 +26,14 @@ import {
   sampleItinerary,
   sampleItineraryTransformed
 } from './searchResultData.mock';
-import { GeoTypes, PlaceStatus } from '@soliguide/common';
+import { GeoTypes, PlaceOpeningStatus, PlaceStatus, type ApiPlace } from '@soliguide/common';
+import type { SearchLocationParams, SearchResultItem } from './types';
 
-const sampleLocationParams = { geoType: GeoTypes.POSITION, coordinates: [1, 2], distance: 50 };
+const sampleLocationParams: SearchLocationParams = {
+  geoType: GeoTypes.POSITION,
+  coordinates: [1, 2],
+  distance: 50
+};
 
 describe('Search Result', () => {
   describe('Conversion of one place result', () => {
@@ -66,6 +71,8 @@ describe('Search Result', () => {
         orientation: samplePlace.modalities.orientation.checked,
         holidays: samplePlace.newhours.closedHolidays
       });
+
+      expect(resultItem.sources).toStrictEqual([]);
     });
 
     describe('Computation of the distance', () => {
@@ -89,7 +96,7 @@ describe('Search Result', () => {
     });
     describe('Computation of the address', () => {
       it('If the place is accessible with orientation, the address is not precise', () => {
-        const modifiedPlace = {
+        const modifiedPlace: ApiPlace = {
           ...samplePlace,
           modalities: { ...samplePlace.modalities, orientation: { checked: true, precisions: '' } },
           position: {
@@ -98,7 +105,10 @@ describe('Search Result', () => {
             city: 'Superville'
           }
         };
-        const modifiedPlaceResult = { ...samplePlaceTransformed, address: '12345, Superville' };
+        const modifiedPlaceResult: SearchResultItem = {
+          ...samplePlaceTransformed,
+          address: '12345, Superville'
+        };
 
         const result = buildSearchResult(
           { nbResults: 1, places: [modifiedPlace] },
@@ -109,7 +119,7 @@ describe('Search Result', () => {
       });
 
       it('If the place is not accessible with orientation, we use the full address', () => {
-        const modifiedPlace = {
+        const modifiedPlace: ApiPlace = {
           ...samplePlace,
           modalities: {
             ...samplePlace.modalities,
@@ -120,7 +130,7 @@ describe('Search Result', () => {
             address: '1 rue du marché, 12345 Cityname'
           }
         };
-        const modifiedPlaceResult = {
+        const modifiedPlaceResult: SearchResultItem = {
           ...samplePlaceTransformed,
           address: '1 rue du marché, 12345 Cityname'
         };
@@ -134,7 +144,7 @@ describe('Search Result', () => {
       });
 
       it('should be the address and the additionnal info if there is some', () => {
-        const modifiedPlace = {
+        const modifiedPlace: ApiPlace = {
           ...samplePlace,
           position: {
             ...samplePlace.position,
@@ -142,7 +152,7 @@ describe('Search Result', () => {
           }
         };
 
-        const modifiedPlaceResult = {
+        const modifiedPlaceResult: SearchResultItem = {
           ...samplePlaceTransformed,
           address: `${modifiedPlace.position.address} - ${modifiedPlace.position.additionalInformation}`
         };
@@ -159,14 +169,17 @@ describe('Search Result', () => {
     describe('Determination of the status', () => {
       it('Temporarily closed if tempInfos closure is effective', () => {
         vi.setSystemTime(new Date('2024-11-10'));
-        const modifiedPlace = {
+        const modifiedPlace: ApiPlace = {
           ...samplePlace,
           tempInfos: {
             ...samplePlace.tempInfos,
             closure: { ...samplePlace.tempInfos.closure, actif: true }
           }
         };
-        const modifiedPlaceResult = { ...samplePlaceTransformed, status: 'temporarilyClosed' };
+        const modifiedPlaceResult: SearchResultItem = {
+          ...samplePlaceTransformed,
+          status: PlaceOpeningStatus.TEMPORARILY_CLOSED
+        };
 
         const result = buildSearchResult(
           { nbResults: 1, places: [modifiedPlace] },
@@ -177,7 +190,7 @@ describe('Search Result', () => {
       });
 
       it('Closed status if not opened today, has opening hours set, has no opened services, has no active closure', () => {
-        const modifiedPlace = {
+        const modifiedPlace: ApiPlace = {
           ...samplePlace,
           isOpenToday: false,
           newhours: {
@@ -195,7 +208,10 @@ describe('Search Result', () => {
             closure: { ...samplePlace.tempInfos.closure, actif: false }
           }
         };
-        const modifiedPlaceResult = { ...samplePlaceTransformed, status: 'closed' };
+        const modifiedPlaceResult: SearchResultItem = {
+          ...samplePlaceTransformed,
+          status: PlaceOpeningStatus.CLOSED
+        };
 
         const result = buildSearchResult(
           { nbResults: 1, places: [modifiedPlace] },
@@ -206,7 +222,7 @@ describe('Search Result', () => {
       });
 
       it('Partially open if closed, has opening hours set, has opened services, has no active closure', () => {
-        const modifiedPlace = {
+        const modifiedPlace: ApiPlace = {
           ...samplePlace,
           newhours: {
             ...samplePlace.newhours,
@@ -223,7 +239,10 @@ describe('Search Result', () => {
             closure: { ...samplePlace.tempInfos.closure, actif: false }
           }
         };
-        const modifiedPlaceResult = { ...samplePlaceTransformed, status: 'partiallyOpen' };
+        const modifiedPlaceResult: SearchResultItem = {
+          ...samplePlaceTransformed,
+          status: PlaceOpeningStatus.PARTIALLY_OPEN
+        };
 
         const result = buildSearchResult(
           { nbResults: 1, places: [modifiedPlace] },
@@ -234,7 +253,7 @@ describe('Search Result', () => {
       });
 
       it('Open if is opened today, has ONLINE state, has no active closure', () => {
-        const modifiedPlace = {
+        const modifiedPlace: ApiPlace = {
           ...samplePlace,
           isOpenToday: true,
           status: PlaceStatus.ONLINE,
@@ -243,7 +262,10 @@ describe('Search Result', () => {
             closure: { ...samplePlace.tempInfos.closure, actif: false }
           }
         };
-        const modifiedPlaceResult = { ...samplePlaceTransformed, status: 'open' };
+        const modifiedPlaceResult: SearchResultItem = {
+          ...samplePlaceTransformed,
+          status: PlaceOpeningStatus.OPEN
+        };
 
         const result = buildSearchResult(
           { nbResults: 1, places: [modifiedPlace] },
@@ -254,7 +276,7 @@ describe('Search Result', () => {
       });
 
       it('Unknown if not open today, has no opening hours, has not DRAFT state', () => {
-        const modifiedPlace = {
+        const modifiedPlace: ApiPlace = {
           ...samplePlace,
           isOpenToday: false,
           newhours: {
@@ -273,7 +295,10 @@ describe('Search Result', () => {
             closure: { ...samplePlace.tempInfos.closure, actif: false }
           }
         };
-        const modifiedPlaceResult = { ...samplePlaceTransformed, status: 'unknown' };
+        const modifiedPlaceResult: SearchResultItem = {
+          ...samplePlaceTransformed,
+          status: PlaceOpeningStatus.UNKNOWN
+        };
 
         const result = buildSearchResult(
           { nbResults: 1, places: [modifiedPlace] },
@@ -287,7 +312,7 @@ describe('Search Result', () => {
     describe('Determination of today info', () => {
       it('If open today, we have opening hours', () => {
         vi.setSystemTime(new Date('2024-09-16')); // It's a monday
-        const modifiedPlace = {
+        const modifiedPlace: ApiPlace = {
           ...samplePlace,
           isOpenToday: true,
           status: PlaceStatus.ONLINE,
@@ -300,9 +325,9 @@ describe('Search Result', () => {
             monday: { open: true, timeslot: [{ start: 902, end: 1901 }] }
           }
         };
-        const modifiedPlaceResult = {
+        const modifiedPlaceResult: SearchResultItem = {
           ...samplePlaceTransformed,
-          status: 'open',
+          status: PlaceOpeningStatus.OPEN,
           todayInfo: { openingHours: [{ start: '0902', end: '1901' }] }
         };
 
@@ -316,7 +341,7 @@ describe('Search Result', () => {
 
       it('If partially open, we have ?? opening hours', () => {
         vi.setSystemTime(new Date('2024-09-16')); // It's a monday
-        const modifiedPlace = {
+        const modifiedPlace: ApiPlace = {
           ...samplePlace,
           newhours: {
             ...samplePlace.newhours,
@@ -333,9 +358,9 @@ describe('Search Result', () => {
             closure: { ...samplePlace.tempInfos.closure, actif: false }
           }
         };
-        const modifiedPlaceResult = {
+        const modifiedPlaceResult: SearchResultItem = {
           ...samplePlaceTransformed,
-          status: 'partiallyOpen',
+          status: PlaceOpeningStatus.PARTIALLY_OPEN,
           todayInfo: { openingHours: [{ end: '2015', start: '1930' }] }
         };
 
@@ -348,7 +373,7 @@ describe('Search Result', () => {
       });
 
       it('If temporarily closed, it is closed for holidays and we get the dates', () => {
-        const modifiedPlace = {
+        const modifiedPlace: ApiPlace = {
           ...samplePlace,
           tempInfos: {
             ...samplePlace.tempInfos,
@@ -360,9 +385,9 @@ describe('Search Result', () => {
             }
           }
         };
-        const modifiedPlaceResult = {
+        const modifiedPlaceResult: SearchResultItem = {
           ...samplePlaceTransformed,
-          status: 'temporarilyClosed',
+          status: PlaceOpeningStatus.TEMPORARILY_CLOSED,
           todayInfo: {
             closingDays: { end: '2024-11-30T23:59:59.000Z', start: '2024-04-01T00:00:00.000Z' }
           }
@@ -370,7 +395,6 @@ describe('Search Result', () => {
 
         const result = buildSearchResult(
           { nbResults: 1, places: [modifiedPlace] },
-
           sampleLocationParams
         );
         const [resultItem] = result.places;
@@ -378,7 +402,7 @@ describe('Search Result', () => {
       });
 
       it('If closed, we do not have hours information', () => {
-        const modifiedPlace = {
+        const modifiedPlace: ApiPlace = {
           ...samplePlace,
           isOpenToday: false,
           newhours: {
@@ -399,7 +423,6 @@ describe('Search Result', () => {
 
         const result = buildSearchResult(
           { nbResults: 1, places: [modifiedPlace] },
-
           sampleLocationParams
         );
         const [resultItem] = result.places;
@@ -407,7 +430,7 @@ describe('Search Result', () => {
       });
 
       it('If unknown state, we do not have hours information', () => {
-        const modifiedPlace = {
+        const modifiedPlace: ApiPlace = {
           ...samplePlace,
           isOpenToday: false,
           newhours: {
@@ -429,7 +452,6 @@ describe('Search Result', () => {
 
         const result = buildSearchResult(
           { nbResults: 1, places: [modifiedPlace] },
-
           sampleLocationParams
         );
         const [resultItem] = result.places;
@@ -439,7 +461,7 @@ describe('Search Result', () => {
 
     describe('Banners', () => {
       it('If tempInfos has no active message, the message banner is null', () => {
-        const modifiedPlace = {
+        const modifiedPlace: ApiPlace = {
           ...samplePlace,
           tempInfos: {
             ...samplePlace.tempInfos,
@@ -452,15 +474,15 @@ describe('Search Result', () => {
 
         const result = buildSearchResult(
           { nbResults: 1, places: [modifiedPlace] },
-
           sampleLocationParams
         );
+
         const [resultItem] = result.places;
         expect(resultItem.banners.message).toBeNull();
       });
 
       it('If tempInfos has an active message, the message banner is set', () => {
-        const modifiedPlace = {
+        const modifiedPlace: ApiPlace = {
           ...samplePlace,
           tempInfos: {
             ...samplePlace.tempInfos,
@@ -477,7 +499,6 @@ describe('Search Result', () => {
 
         const result = buildSearchResult(
           { nbResults: 1, places: [modifiedPlace] },
-
           sampleLocationParams
         );
         const [resultItem] = result.places;
@@ -487,6 +508,83 @@ describe('Search Result', () => {
           description: 'This is the message message',
           name: 'information message'
         });
+      });
+    });
+
+    describe('Determination of the source', () => {
+      it('should be an empty array if there is no sources', () => {
+        const modifiedPlace: ApiPlace = {
+          ...samplePlace,
+          sources: []
+        };
+        const modifiedPlaceResult: SearchResultItem = { ...samplePlaceTransformed, sources: [] };
+
+        const result = buildSearchResult(
+          { nbResults: 1, places: [modifiedPlace] },
+          sampleLocationParams
+        );
+        const [resultItem] = result.places;
+        expect(resultItem.sources).toStrictEqual(modifiedPlaceResult.sources);
+      });
+
+      it('should be an empty array if there is no sources', () => {
+        const modifiedPlace: ApiPlace = {
+          ...samplePlace,
+          sources: [
+            {
+              name: 'toDisplay1',
+              ids: [{ id: 'id', url: 'https://url' }],
+              isOrigin: true,
+              license: 'License1'
+            },
+            {
+              name: 'toDisplay2',
+              ids: [],
+              isOrigin: false,
+              license: 'License2'
+            },
+            {
+              name: 'toNotDisplay1',
+              ids: [],
+              isOrigin: true
+            }
+          ]
+        };
+        const modifiedPlaceResult: SearchResultItem = {
+          ...samplePlaceTransformed,
+          sources: [
+            {
+              label: 'toDisplay1',
+              licenseLabel: 'LicenceLabel1',
+              licenseLink: 'https://licenceLink1'
+            },
+            { label: 'toDisplay2', licenseLabel: '', licenseLink: '' }
+          ]
+        };
+
+        vi.mock(import('@soliguide/common'), async (importOriginal) => {
+          const modules = await importOriginal();
+
+          return {
+            ...modules,
+            EXTERNAL_SOURCE_MAPPING: {
+              toDisplay1: {
+                label: 'toDisplay1',
+                licenseLink: 'https://licenceLink1',
+                licenseLabel: 'LicenceLabel1'
+              },
+              toDisplay2: { label: 'toDisplay2' }
+            },
+            checkIfSourceMustBeDisplayed: (name: string) => name.includes('toDisplay')
+          };
+        });
+
+        const result = buildSearchResult(
+          { nbResults: 1, places: [modifiedPlace] },
+          sampleLocationParams
+        );
+        const [resultItem] = result.places;
+        expect(resultItem.sources).toStrictEqual(modifiedPlaceResult.sources);
       });
     });
   });

@@ -28,14 +28,8 @@ import {
   type ApiSearchResults
 } from '@soliguide/common';
 import { sort } from '$lib/ts';
-import { computeTodayInfo, computeAddress } from './place';
-import type { SearchResult, SearchResultItem } from './types';
-
-interface SearchLocationParams {
-  geoType: string;
-  coordinates: number[];
-  distance: number;
-}
+import { computeTodayInfo, computeAddress, buildSources } from './place';
+import type { SearchLocationParams, SearchResult, SearchResultItem } from './types';
 
 /**
  * Transformation
@@ -58,33 +52,34 @@ const buildSearchResultItem = (
   const status = computePlaceOpeningStatus(place);
 
   return {
-    id: place.lieu_id,
-    seoUrl: place.seo_url,
-    name: place.name,
     address: computeAddress(place.position, onOrientation),
+    banners: {
+      holidays: place.newhours.closedHolidays,
+      message: place.tempInfos.message.actif
+        ? {
+            description: place.tempInfos.message.description,
+            end: place.tempInfos.message.dateFin,
+            name: place.tempInfos.message.name,
+            start: place.tempInfos.message.dateDebut
+          }
+        : null,
+      orientation: onOrientation
+    },
     distance,
-    services: place.services_all
-      .map((service) => service?.category)
-      .filter((category) => !!category),
+    id: place.lieu_id,
+    name: place.name,
     phones: [
       ...place.entity.phones.map((phone: CommonPhone) => ({
         ...phone,
         countryCode: phone.countryCode as CountryCodes
       }))
     ],
+    seoUrl: place.seo_url,
+    services: place.services_all
+      .map((service) => service?.category)
+      .filter((category) => !!category),
+    sources: buildSources(place.sources),
     status,
-    banners: {
-      message: place.tempInfos.message.actif
-        ? {
-            start: place.tempInfos.message.dateDebut,
-            end: place.tempInfos.message.dateFin,
-            description: place.tempInfos.message.description,
-            name: place.tempInfos.message.name
-          }
-        : null,
-      orientation: onOrientation,
-      holidays: place.newhours.closedHolidays
-    },
     todayInfo: computeTodayInfo(place, status)
   };
 };

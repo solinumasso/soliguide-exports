@@ -20,4 +20,3 @@
  */
 // @index('./*', f => `export * from '${f.path}'`)
 export * from "./PUBLICS_KEYS_ERRORS.const";
-export * from "./EXTERNAL_SOURCE_MAPPING.const";
