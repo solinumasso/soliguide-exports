@@ -65,7 +65,7 @@
     "@soliguide/common": "workspace:*",
     "posthog-js": "^1.154.1",
     "rxjs": "^7.8.1",
-    "zone.js": "~0.14.7"
+    "zone.js": "~0.15.0"
   },
   "lint-staged": {
     "*!(.ts)": "prettier --cache --ignore-unknown -w",
