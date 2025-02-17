@@ -22,6 +22,8 @@ on:
   push:
     branches:
       - develop
+      # FIXME develop
+      - ci-demo
 
 jobs:
   commitlint:
@@ -35,13 +37,4 @@ jobs:
     needs:
       - commitlint
       - licenses-check
-    secrets: inherit
-
-  deploy:
-    name: Deploy to develop
-    needs:
-      - all
-    uses: ./.github/workflows/_deploy-to-environment.yml
-    with:
-      environment: develop
     secrets: inherit

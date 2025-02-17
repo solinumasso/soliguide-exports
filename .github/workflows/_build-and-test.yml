@@ -204,7 +204,8 @@ jobs:
 
   update_qovery_environment:
     name: Update Qovery environment with new tags
-    if: ${{ startsWith(github.ref, 'refs/pull/') && always() }}
+    # FIXME develop
+    if: ${{ (startsWith(github.ref, 'refs/pull/') || github.ref == 'refs/heads/ci-demo') && always() }}
     uses: ./.github/workflows/_deploy-to-test-qovery.yml
     with:
       deploy_api: ${{ contains(needs.affected_packages.outputs.to_deploy, 'api') }}
@@ -214,7 +215,8 @@ jobs:
       deploy_soligare: ${{ contains(needs.affected_packages.outputs.to_deploy, 'soligare') }}
       deploy_web-app: ${{ contains(needs.affected_packages.outputs.to_deploy, 'web-app') }}
       deploy_widget: ${{ contains(needs.affected_packages.outputs.to_deploy, 'widget') }}
-      create: false
+      # FIXME develop
+      create: ${{ github.ref == 'refs/heads/ci-demo' }}
     needs:
       - affected_packages
       - build-api
