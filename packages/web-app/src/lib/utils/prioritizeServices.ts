@@ -88,6 +88,10 @@ const sortServicesByRelevance = (
   category: Categories,
   allCategoriesByTheme: FlatCategoriesTreeNode[]
 ): CommonNewPlaceService[] => {
+  if (!Object.values(Categories).includes(category)) {
+    return services;
+  }
+
   return (
     // eslint-disable-next-line fp/no-mutating-methods
     services
