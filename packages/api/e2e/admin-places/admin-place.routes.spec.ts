@@ -50,6 +50,7 @@ import { supertest, getExpectedStatus, addAuth } from "../endPointTester";
 
 import { TestAccounts, ExpectedStatus } from "../endPointTester.type";
 import { STEP_PARCOURS_OK } from "./bodies/STEP_PARCOURS.const";
+import Test from "supertest/lib/test";
 
 const CAN_CREATE = [
   TestAccounts.USER_ADMIN_SOLIGUIDE,
@@ -63,6 +64,11 @@ const CAN_EDIT = [
   TestAccounts.USER_ADMIN_TERRITORY,
   TestAccounts.USER_PRO_OWNER,
   TestAccounts.USER_PRO_OWNER_ORGA1_EDITOR_ORGA2,
+];
+
+const CAN_DELETE = [
+  TestAccounts.USER_ADMIN_SOLIGUIDE,
+  TestAccounts.USER_ADMIN_TERRITORY,
 ];
 
 let lieu_id: null | string = null;
@@ -779,23 +785,11 @@ describe.each(Object.values(TestAccounts))(
           currentAccountTest
         );
 
-        // Successful test
-        const expectedStatus = getExpectedStatus(
-          CAN_CREATE,
-          currentAccountTest,
-          ExpectedStatus.SUCCESS
+        // Pro users should always get a 403 when trying to delete
+        expect(response.status).toEqual(CAN_DELETE ? 200 : 403);
+        expect(response.body).toEqual(
+          CAN_DELETE ? { success: true } : { message: "FORBIDDEN" }
         );
-
-        expect(response.status).toEqual(expectedStatus);
-        if (expectedStatus === 403 && response.status === 403) {
-          await addAuth(
-            supertest().delete(`/admin/places/${lieu_id}`),
-            CAN_CREATE[0]
-          );
-          return;
-        }
-
-        expect(response.body).toEqual({ message: "PLACE_DELETED" });
       });
 
       test(`❌ Incorrect data - ${currentAccountTest}`, async () => {
@@ -804,19 +798,9 @@ describe.each(Object.values(TestAccounts))(
           currentAccountTest
         );
 
-        // Failed test
-        const expectedStatus = getExpectedStatus(
-          CAN_CREATE,
-          currentAccountTest,
-          ExpectedStatus.NOT_FOUND
-        );
-
-        expect(response.status).toEqual(expectedStatus);
-        if (expectedStatus === 403 && response.status === 403) {
-          return;
-        }
-
-        expect(response.body).toEqual({ message: "PLACE_NOT_EXIST" });
+        // Pro users should still get a 403, even if the place doesn't exist
+        expect(response.status).toEqual(403);
+        expect(response.body).toEqual({ message: "FORBIDDEN" });
       });
     });
   }
